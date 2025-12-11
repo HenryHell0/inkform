@@ -2,7 +2,7 @@
 import PopMenu from '@/components/ui/PopMenu.vue'
 import { useWidgetStore } from '@/stores/useWidgetStore'
 import { GraphData, ExpressionData, graphColors } from '@/utils/widgetData'
-import { ref } from 'vue'
+import { nextTick, ref } from 'vue'
 
 const props = defineProps<{
 	id: string
@@ -24,8 +24,15 @@ function convertToExpression(expression: ExpressionData) {
 		expression.x = widget.x
 		expression.y = widget.y
 	}
+
 	// add the widget to store
 	widgetStore.addWidget(expression)
+
+	// put it above (wait since this has an update afterwards)
+	setTimeout(() => {
+		widgetStore.bringWidgetToFront(expression)
+	}, 1)
+
 }
 
 // function changecolor(expression: ExpressionData, color: string) {
