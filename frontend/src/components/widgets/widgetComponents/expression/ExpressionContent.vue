@@ -3,6 +3,7 @@ import { toRef } from 'vue'
 import { useWidgetStore } from '@/stores/useWidgetStore'
 import { storeToRefs } from 'pinia'
 import { ExpressionData } from '@/utils/widgetData'
+
 const props = defineProps({ id: String })
 const widgetStore = useWidgetStore()
 const widget = storeToRefs(widgetStore).widgets.value.find((e) => e.id === props.id)

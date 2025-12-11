@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Widget from '@/components/widgets/widgetTemplate/Widget.vue'
-import Expression from '@/components/widgets/widgetComponents/Expression.vue'
+import Expression from '@/components/widgets/widgetComponents/expression/Expression.vue'
 import Graph from '@/components/widgets/widgetComponents/graph/Graph.vue'
 import { useWidgetStore } from '@/stores/useWidgetStore'
 import { addTestWidgets } from '@/utils/debug'
