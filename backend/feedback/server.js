@@ -1,16 +1,10 @@
 import express from "express"
 import path from "path"
 import fs from "fs"
-import cors from "cors"
 import { cwd } from "process"
 
 const app = express()
 app.use(express.json())
-app.use(
-	cors({
-		origin: "https://henryhell0.github.io",
-	})
-)
 
 const filePath = cwd() + "/data/feedback.txt"
 
