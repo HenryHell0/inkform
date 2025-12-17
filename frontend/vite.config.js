@@ -12,7 +12,7 @@ export default defineConfig({
 			'@': fileURLToPath(new URL('./src', import.meta.url)),
 		},
 	},
-	base: '/HMER-whiteboard/', // this is needed for github pages to work :)
+	base: '/hmer-whiteboard/', // this is needed for github pages to work :)
 	server: {
 		proxy: {
 			'/api/predict': {
