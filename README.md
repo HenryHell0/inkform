@@ -11,7 +11,7 @@ An interactive, Handwritten Mathematical Expression Regonition (HMER)-based whit
 - 📋See TODO.md
 
 ### Progress:
-Try out a newly-updated(⭐!) demo on [Github Pages](https://henryhell0.github.io/HMER-whiteboard/)!
+Try out a newly-updated(⭐!) demo on [Github Pages](https://henryhell0.github.io/hmer-whiteboard/)!
 
 https://github.com/user-attachments/assets/10f42054-18e7-4dbe-8120-f94bb7aa1970
 
