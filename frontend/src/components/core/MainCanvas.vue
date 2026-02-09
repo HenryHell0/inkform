@@ -33,7 +33,7 @@ function SVGMouseMove(event: MouseEvent | PointerEvent) {
 	}
 }
 
-function SVGMouseUp(event: MouseEvent | PointerEvent) {
+function SVGMouseUp() {
 	if (sessionStore.inputMode != 'drawing') return
 	sessionStore.inputMode = 'idle'
 
@@ -56,6 +56,8 @@ function SVGMouseUp(event: MouseEvent | PointerEvent) {
 	height: 100vh;
 	border: none;
 	cursor: crosshair;
+
+	background: --color-bg;
 }
 
 .stroke {

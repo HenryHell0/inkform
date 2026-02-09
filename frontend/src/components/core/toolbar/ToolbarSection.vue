@@ -26,9 +26,9 @@ function setIdleInputMode() {
 	justify-content: center;
 	gap: 10px;
 
-	background-color: white;
+	background-color: var(--toolbar-background);
 	border-radius: 1000px;
-	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+	box-shadow: 0 4px 10px var(--color-box-shadow);
 	z-index: 100;
 	user-select: none;
 }

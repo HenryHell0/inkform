@@ -4,8 +4,6 @@ import { toolList } from '@/utils/drawingTools'
 import ToolbarSection from './ToolbarSection.vue'
 import ToolbarButton from './ToolbarButton.vue'
 const sessionStore = useSessionStore()
-
-// make elemnt transparent when drawing over it
 </script>
 <template>
 	<div ref="element" class="toolbar-container">

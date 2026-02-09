@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useWidgetStore } from '@/stores/useWidgetStore'
-import { ExpressionData, type Widget } from '@/utils/widgetData'
+import { type Widget } from '@/utils/widgetData'
 const widgetStore = useWidgetStore()
 
 const { isDragging, widget } = defineProps<{
@@ -36,7 +36,7 @@ const { isDragging, widget } = defineProps<{
 .toolbar {
 	border-top-left-radius: inherit;
 	border-top-right-radius: inherit;
-	background-color: rgb(240, 240, 240);
+	background-color: var(--color-widget-toolbar-bg);
 	width: 100%;
 	position: relative;
 
@@ -48,7 +48,7 @@ const { isDragging, widget } = defineProps<{
 }
 
 .title {
-	color: rgb(29, 29, 29);
+	color: var(--color-widget-title);
 	font-size: 100%;
 	padding: 0.5em;
 	align-self: flex-start;
@@ -70,7 +70,7 @@ const { isDragging, widget } = defineProps<{
 }
 
 .x-button:hover {
-	background-color: darkgray;
+	background-color: var(--color-widget-toolbar-x-hover);
 }
 
 .button-container {
@@ -94,13 +94,14 @@ const { isDragging, widget } = defineProps<{
 
 	cursor: pointer;
 
-	background-color: rgb(201, 201, 201);
-	box-shadow: 0 0 4px rgb(243, 243, 243);
-	transition: background ease-in-out 0.1s;
+	background-color: var(--color-widget-toolbar-icon-background);
+	box-shadow: 0 0 4px var(--color-widget-toolbar-icon-box-shadow);
+	transition:
+		background ease-in-out 0.1s;
 }
 
 .toolbar-button:hover {
-	background-color: rgb(172, 172, 172);
-	box-shadow: 0 0 6px rgb(192, 192, 192);
+	background-color: var(--color-widget-toolbar-icon-hover-background);
+	box-shadow: 0 0 6px var(--color-widget-toolbar-icon-hover-box-shadow);
 }
 </style>

@@ -128,14 +128,14 @@ onUnmounted(() => {
 	overflow: hidden;
 
 	border-radius: 0.5em;
-	background: rgb(250, 250, 250);
-	box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+	background: var(--color-widget-background);
+	box-shadow: 2px 2px 10px var(--color-box-shadow);
 
 	pointer-events: fill;
 }
 
 .dragging {
-	box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.2);
+	box-shadow: 10px 10px 15px var(--color-box-shadow);
 	opacity: 80%;
 }
 
@@ -151,7 +151,7 @@ onUnmounted(() => {
 	width: 1em;
 	height: 1em;
 	cursor: se-resize;
-	fill: black;
+	fill: var(--color-icon);
 	z-index: 2;
 }
 </style>

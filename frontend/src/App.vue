@@ -22,19 +22,5 @@ import FeedbackDialog from './components/ui/FeedbackDialog.vue'
 </template>
 
 <style>
-.template {
-	font-family: 'Noto Sans', sans-serif;
-	font-optical-sizing: auto;
-	font-weight: 500;
-	font-style: normal;
-	/* font-variation-settings:
-    "wdth" 100; */
-}
 
-textarea {
-	font-family: 'Noto Sans', sans-serif;
-	font-optical-sizing: auto;
-	font-weight: 500;
-	font-style: normal;
-}
 </style>

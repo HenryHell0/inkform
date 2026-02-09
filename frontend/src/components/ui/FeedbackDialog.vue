@@ -55,15 +55,15 @@ function handleSubmit() {
 	align-items: center;
 
 	backdrop-filter: blur(3px);
-	background-color: rgba(177, 177, 177, 0.5);
+	background-color: var(--feedback-dialog-backdrop);
 }
 
 .container {
 	width: 400px;
 	min-width: 10em;
-	border: 2px solid grey;
+	border: 2px solid var(--feedback-dialog-border);
 	border-radius: 5px;
-	background: white;
+	background: var(--feedback-dialog-background);
 
 	text-align: center;
 	padding: 20px;
@@ -88,13 +88,13 @@ function handleSubmit() {
 }
 
 button {
-	background-color: rgb(42, 147, 207);
+	background-color: var(--feedback-dialog-submit-button-background);
 	border: none;
 	border-radius: 5px;
 	width: 10em;
 	height: 2em;
 
-	color: white;
+	color: var(--feedback-dialog-submit-button-text);
 }
 </style>
 ``

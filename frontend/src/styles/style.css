@@ -1,0 +1,62 @@
+:root {
+	/* ===== MAIN PALLETE ======== */
+	--gray-main: var(--color-zinc-500);
+	--gray-light: var(--color-gray-50);
+	/* --gray-darK: var(); */
+
+
+	/* ====== GENERAL ========== */
+	--color-box-shadow: rgba(0, 0, 0, 0.2);
+	--color-icon: black;
+	--color-bg: white;
+	--color-bg-bright: white;
+	--color-bg-medium: var(--gray-light);
+	--color-border-medium: var(--gray-main);
+
+	--color-danger: red;
+
+
+	/* ====== TOOLBAR ====== */
+	--color-toolbar-button-hover: rgb(226, 226, 226);
+	--color-toolbar-button-active: #c0c0c0;
+	--color-toolbar-button-active-hover: #c0c0c0;
+	--color-toolbar-background: var(--color-bg-primary);
+
+
+	/* ====== WIDGETS ======= */
+	--color-widget-background: var(--color-bg-medium);
+	--color-widget-toolbar-bg: rgb(240, 240, 240);
+	--color-widget-title: rgb(29, 29, 29);
+	--color-widget-toolbar-x-hover: darkgray;
+	--color-widget-toolbar-icon-background: rgb(201, 201, 201);
+	--color-widget-toolbar-icon-box-shadow: rgb(243, 243, 243);
+	--color-widget-toolbar-icon-hover-background: rgb(172, 172, 172);
+	--color-widget-toolbar-icon-hover-box-shadow: rgb(192, 192, 192);
+
+
+	/* ====== FEEDBACK ====== */
+	--feedback-dialog-backdrop: rgba(177, 177, 177, 0.5);
+	--feedback-dialog-border: gray;
+	--feedback-dialog-background: white;
+	--feedback-dialog-submit-button-background:rgb(42, 147, 207);
+	--feedback-dialog-submit-button-text:white;
+
+
+}
+
+
+* {
+	font-family: 'Noto Sans', sans-serif;
+	font-optical-sizing: auto;
+	font-weight: 500;
+	font-style: normal;
+	/* font-variation-settings:
+    "wdth" 100; */
+}
+
+textarea {
+	font-family: 'Noto Sans', sans-serif;
+	font-optical-sizing: auto;
+	font-weight: 500;
+	font-style: normal;
+}

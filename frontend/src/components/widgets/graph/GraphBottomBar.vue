@@ -73,7 +73,7 @@ function changeColor(expression: ExpressionData, color: string) {
 						</svg>
 					</div>
 					<div class="popmenu-button" @click="convertToExpressionWidget(expression)">Convert to Expression</div>
-					<div class="popmenu-button" @click="widget.deleteExpression(expression)" style="color: red">
+					<div class="popmenu-button delete-button" @click="widget.deleteExpression(expression)">
 						Delete
 					</div>
 				</template>
@@ -115,7 +115,7 @@ function changeColor(expression: ExpressionData, color: string) {
 }
 
 .color-svg:hover {
-	outline: 3px solid gray;
+	outline: 3px solid var(--color-border-medium);
 	border-radius: 100px;
 	outline-offset: -3px;
 }
@@ -177,5 +177,9 @@ function changeColor(expression: ExpressionData, color: string) {
 	margin: 0 auto; /* horizontally center */
 	object-fit: contain;
 	padding: 0.2em;
+}
+
+.delete-button {
+	color: var(--color-danger);
 }
 </style>

@@ -16,7 +16,7 @@ defineProps<{
 
 	width: 1.5em;
 	height: 1.5em;
-	fill: black;
+	fill: var(--color-icon);
 	transition: rotate 0.2s ease;
 	transform: scale(1.2);
 }
@@ -36,16 +36,16 @@ button {
 
 button:hover {
 	transform: scale(1.1);
-	background: rgb(226, 226, 226);
+	background: var(--color-toolbar-button-hover);
 }
 
 button.active {
-	background-color: #c0c0c0;
+	background-color: var(--color-toolbar-button-active);
 	transform: scale(1.1);
 }
 
 button.active:hover {
-	background-color: #c0c0c0;
+	background-color: var(--color-toolbar-button-active-hover);
 	transform: scale(1.2);
 }
 </style>
