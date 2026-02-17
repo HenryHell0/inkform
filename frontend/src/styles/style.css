@@ -20,40 +20,10 @@
 
 	/* --- Status --- */
 	--color-danger: red;
+	--color-submit: var(--color-sky-500);
 
 	/* --- Shadows --- */
 	--color-box-shadow: rgba(0, 0, 0, 0.2);
-
-	/* =========================================================
-	   COMPONENT-LEVEL GLOBALS (SHOULD MOVE IN-COMPONENT LATER)
-	   Keeping for now so nothing visually changes.
-
-	/* NOTE: references undefined --color-bg-primary before.
-	   Using --color-bg keeps same visual intent. */
-
-	/* ================= WIDGETS ================= */
-
-
-
-	--color-widget-toolbar-x-hover: darkgray; /* should stay in-component */
-
-	--color-widget-toolbar-icon-bg: rgb(201, 201, 201); /* should stay in-component */
-	--color-widget-toolbar-icon-box-shadow: rgb(243, 243, 243); /* should stay in-component */
-
-	--color-widget-toolbar-icon-hover-bg: rgb(172, 172, 172); /* should stay in-component */
-	--color-widget-toolbar-icon-hover-box-shadow: rgb(192, 192, 192); /* should stay in-component */
-
-	/* ================= FEEDBACK ================= */
-
-	--feedback-dialog-backdrop: rgba(177, 177, 177, 0.5); /* should stay in-component */
-
-	--feedback-dialog-border: gray; /* close to --color-border-medium */
-
-	--feedback-dialog-bg: white;
-	/* almost identical to --color-bg */
-
-	--feedback-dialog-submit-button-bg: rgb(42, 147, 207); /* should stay in-component */
-	--feedback-dialog-submit-button-text: white; /* same as --color-bg */
 }
 
 * {
