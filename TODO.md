@@ -1,6 +1,8 @@
 ## THE PLAN!!!:
 - ↩️ add undo/redo
 - 🔗 add save/load with the link (shareable!!)
+- 🐱 add github icon that links to the github page
+- ℹ️ add info button that shows a dialog of info about myself etc... - figure out a better dialog system
 - 😜 refactor widgets to organize and follow best pracitces of like vue architecture organization... --- NOTE: tf does this mean
 
 
