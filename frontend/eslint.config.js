@@ -11,8 +11,9 @@ export default [
 		languageOptions: {
 			parser: vueParser,
 			parserOptions: {
-				parser: tsParser, // <-- TypeScript inside <script lang="ts">
-				project: ['./tsconfig.json'],
+				parser: tsParser,
+				project: './tsconfig.json',
+				tsconfigRootDir: import.meta.dirname,
 				extraFileExtensions: ['.vue'],
 				ecmaVersion: 'latest',
 				sourceType: 'module',
@@ -32,7 +33,9 @@ export default [
 				'error',
 				{ ignores: ['Widget', 'Toolbar', 'Expression', 'Graph', 'Widgets'] },
 			],
+			'@typescript-eslint/no-unused-vars': 'warning',
 		},
+		x,
 	},
 
 	{
@@ -54,6 +57,7 @@ export default [
 
 		rules: {
 			...tsPlugin.configs.recommended.rules,
+			'@typescript-eslint/no-unused-vars': 'warning',
 		},
 	},
 
