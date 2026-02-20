@@ -1,13 +1,14 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import type { ToolName } from '@/utils/drawingTools.js'
+import type { Path } from './useCanvasStore'
 
 interface Position {
 	x: number
 	y: number
 }
 
-type InputModeName = 'idle' | 'drawing' | 'widget' | 'feedback'
+type InputModeName = 'idle' | 'drawing' | 'widget' | 'feedback' // eventually this will be "dialog" not feedback ...
 
 export const useSessionStore = defineStore('session', () => {
 	const currentStroke = ref<Position[]>([])
@@ -28,6 +29,9 @@ export const useSessionStore = defineStore('session', () => {
 	const inputMode = ref<InputModeName>('idle')
 
 	const heldWidgetId = ref<string>('')
+	const undos = ref<Path[]>([])
 
-	return { currentStroke, currentPath, previousMousePos, activeTool, inputMode, heldWidgetId }
+
+
+	return { currentStroke, currentPath, previousMousePos, activeTool, inputMode, heldWidgetId, undos }
 })

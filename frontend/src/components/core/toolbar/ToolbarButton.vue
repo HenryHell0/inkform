@@ -17,14 +17,22 @@ defineProps<{
 	width: 1.5em;
 	height: 1.5em;
 	fill: var(--color-icon);
-	transition: rotate 0.2s ease;
-	transform: scale(1.2);
+	transform: scale(1.3);
 }
 
 button {
+	--scale-1: 1.12;
+	--scale-2: 1.2;
+
 	all: unset;
-	padding: 8px 10px;
+	padding: 10px 10px;
 	border-radius: 10000px;
+
+	/* center image */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
 	border: none;
 	/* background-color: #eee; */
 	cursor: pointer;
@@ -35,17 +43,17 @@ button {
 }
 
 button:hover {
-	transform: scale(1.1);
+	transform: scale(var(--scale-2));
 	background: var(--color-bg-1);
 }
 
 button.active {
+	transform: scale(var(--scale-1));
 	background-color: var(--color-bg-3);
-	transform: scale(1.1);
 }
 
 button.active:hover {
+	transform: scale(var(--scale-2));
 	background-color: var(--color-bg-2);
-	transform: scale(1.2);
 }
 </style>
