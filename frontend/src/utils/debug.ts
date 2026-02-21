@@ -2,11 +2,13 @@ import { ExpressionData, GraphData } from './widgetData.js'
 import { useWidgetStore } from '@/stores/useWidgetStore.js'
 
 export const DEBUG = {
-	createTestExpression: true,
-	createTestGraph: true,
-	logMouseMovements: false,
+	createTestExpression: false,
+	createTestGraph: false,
+	doLogMouseMovements: false,
 	downloadPNG: false,
 	logLatex: true,
+	addTestWidgets: addTestWidgets,
+	logMouseMovements: logMouseMovement,
 }
 
 export function addTestWidgets() {
@@ -24,4 +26,11 @@ export function addTestWidgets() {
 			]),
 		)
 	}
+}
+
+export function logMouseMovement(event: PointerEvent) {
+	if (!DEBUG.doLogMouseMovements) return
+	console.log(
+		`ClientX: ${event.clientX}  ClientY: ${event.clientY}. \n OffsetX: ${event.offsetX}  OffsetY: ${event.offsetY}`,
+	)
 }
