@@ -4,6 +4,8 @@ import VueMathjax from 'vue-mathjax-next'
 import { createPinia } from 'pinia'
 //import custom directives
 import { vTouchPrevent } from './directives/vTouchPrevent'
+import { vDrawingOpacity } from './directives/vDrawingOpacity'
+
 // import styles
 import './styles/pallete.css'
 import './styles/style.css'
@@ -15,5 +17,7 @@ app.use(pinia)
 
 // register custom directives
 app.directive('touch-prevent', vTouchPrevent)
+app.directive('drawing-opacity', vDrawingOpacity)
+
 
 app.mount('#app')

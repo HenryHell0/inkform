@@ -1,20 +1,14 @@
 <script setup lang="ts">
 import { useSessionStore } from '@/stores/useSessionStore'
-import { useDrawingOpacity } from '@/composables/useDrawingOpacity'
-import { ref } from 'vue'
 
 const sessionStore = useSessionStore()
-
-// add drawing opacity composable
-const element = ref<HTMLElement | null>(null)
-useDrawingOpacity(element)
 
 function setIdleInputMode() {
 	sessionStore.inputMode = 'idle'
 }
 </script>
 <template>
-	<div ref="element" class="toolbar-section" @mouseenter="setIdleInputMode">
+	<div v-drawing-opacity class="toolbar-section" @mouseenter="setIdleInputMode">
 		<slot></slot>
 	</div>
 </template>

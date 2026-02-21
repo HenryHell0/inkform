@@ -2,7 +2,6 @@
 import { ref, toRef, computed, onMounted, onUnmounted, watch } from 'vue'
 
 import { useDrag, useResize } from '@/composables/useDraggables'
-import { useDrawingOpacity } from '@/composables/useDrawingOpacity'
 
 import { useWidgetStore } from '@/stores/useWidgetStore'
 import { useSessionStore } from '@/stores/useSessionStore'
@@ -20,7 +19,6 @@ const widget = widgetStore.getWidgetById(props.id)
 // ALL of this should be composables
 // ======================================
 var element = ref<HTMLElement | null>(null)
-useDrawingOpacity(element)
 
 const { dragStart, dragMove, dragEnd, isDragging } = useDrag(toRef(widget, 'x'), toRef(widget, 'y'))
 const { resizeStart, resizeMove, resizeEnd, isResizing } = useResize(toRef(widget, 'width'), toRef(widget, 'height'))
@@ -110,7 +108,7 @@ onUnmounted(() => {
 })
 </script>
 <template>
-	<div ref="element" class="template" :class="classes" :style="styles">
+	<div v-drawing-opacity ref="element" class="template" :class="classes" :style="styles">
 		<WidgetToolbar @toolbarClicked="toolbarClicked" :widget :isDragging></WidgetToolbar>
 
 		<div @click="bringToFront" style="height: 100%">
