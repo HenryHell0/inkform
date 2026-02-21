@@ -1,4 +1,6 @@
 ## THE PLAN!!!:
+- make widgets display properly on mobile
+- make undo/redo work with erasing!!
 - 🗨️ fix dialog architecture 
 - 😄 make intro dialog with GIFs!!!!!!!
 - 🔗 add save/load
@@ -11,6 +13,7 @@
 
 - right now you can't exit the feedback dialog. either add an X button OR make it so clicking the background closes it
 - 8 editable expression component!
+    - AND make it so you can put expressions back into text, and it'll scale down what you wrote to fit the resized expression (this means storing the size of the original cutout and paths deleted in the expression, converting the paths back into strokes, and then finding x and y scale factors and looping through the strokes, scaliong down and adusting position accordinly. Should be fun!!!)
 - 6 infinite pannable camera 
     - grab icon panning tool
     - home icon tool that bring you to original position
@@ -39,3 +42,4 @@
 - 🖌️ add global color scheme with :root so its nice and easy 
 - ↩️ add undo/redo
 - 📞 make it work on phones
+- make widget toolbar clickable on mobile!! (touch not registering)

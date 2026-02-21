@@ -23,13 +23,13 @@ const { isDragging, widget } = defineProps<{
 				v-for="(button, i) in widget.toolbarButtons"
 				:key="i"
 				:src="`./assets/${button.icon}.svg`"
-				@click="button.onClick"
+				@pointerup="button.onClick"
 				draggable="false"
 			/>
 		</div>
 
 		<div class="x-button-container">
-			<img src="/assets/x.svg" @click="widgetStore.deleteWidget(widget.id)" class="x-button" draggable="false" />
+			<img src="/assets/x.svg" @pointerup="widgetStore.deleteWidget(widget.id)" class="x-button" draggable="false" />
 		</div>
 	</div>
 </template>

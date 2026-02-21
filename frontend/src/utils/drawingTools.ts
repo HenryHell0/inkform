@@ -8,18 +8,18 @@ import { useSessionStore } from '@/stores/useSessionStore.js'
 import { DEBUG } from './debug.js'
 
 export interface Tool {
-	onDown?: (event: MouseEvent | PointerEvent) => void
-	onMove?: (event: MouseEvent | PointerEvent) => void
+	onDown?: (event: PointerEvent) => void
+	onMove?: (event: PointerEvent) => void
 	onUp?: () => void
 }
 
 const pen = new (class implements Tool {
-	onDown(event: MouseEvent | PointerEvent) {
+	onDown(event: PointerEvent) {
 		const sessionStore = useSessionStore()
 		let startPos = { x: event.offsetX, y: event.offsetY }
 		sessionStore.currentStroke = [startPos]
 	}
-	onMove(event: MouseEvent | PointerEvent) {
+	onMove(event: PointerEvent) {
 		const sessionStore = useSessionStore()
 
 		if (sessionStore.inputMode !== 'drawing') return
@@ -36,7 +36,7 @@ const pen = new (class implements Tool {
 	}
 })()
 const eraser = new (class implements Tool {
-	onMove(event: MouseEvent | PointerEvent) {
+	onMove(event: PointerEvent) {
 		const sessionStore = useSessionStore()
 		if (sessionStore.inputMode !== 'drawing') return
 		const canvasStore = useCanvasStore()
@@ -109,14 +109,14 @@ export const selector: SelectorTool = reactive(
 			return Math.abs(this.endY - this.startY)
 		}
 
-		onDown(event: MouseEvent | PointerEvent) {
+		onDown(event: PointerEvent) {
 			this.startY = event.clientY
 			this.startX = event.clientX
 			this.endX = event.clientX
 			this.endY = event.clientY
 			this.isActive = true
 		}
-		onMove(event: MouseEvent | PointerEvent) {
+		onMove(event: PointerEvent) {
 			if (!this.isActive) return
 			this.endX = event.clientX
 			this.endY = event.clientY
