@@ -13,7 +13,7 @@ export function useDrawingOpacity(element: Ref<HTMLElement | null>, options: Dra
 
 	const { drawOpacity = 0.8, drawPointerEvents = 'none', normalOpacity = 1, normalPointerEvents = 'auto' } = options
 
-	function changeDrawingOpacity(event: MouseEvent) {
+	function changeDrawingOpacity(event: PointerEvent) {
 		if (!element.value) throw new Error("element doesen't exist :(")
 		if (sessionStore.inputMode !== 'drawing') return
 
@@ -32,10 +32,10 @@ export function useDrawingOpacity(element: Ref<HTMLElement | null>, options: Dra
 		(mode) => {
 			if (!element.value) return
 			if (mode === 'drawing') {
-				document.addEventListener('mousemove', changeDrawingOpacity)
+				document.addEventListener('pointermove', changeDrawingOpacity)
 				element.value.style.pointerEvents = drawPointerEvents
 			} else {
-				document.removeEventListener('mousemove', changeDrawingOpacity)
+				document.removeEventListener('pointermove', changeDrawingOpacity)
 				element.value.style.pointerEvents = normalPointerEvents
 				element.value.style.opacity = normalOpacity.toString()
 			}
@@ -44,6 +44,6 @@ export function useDrawingOpacity(element: Ref<HTMLElement | null>, options: Dra
 	)
 
 	onUnmounted(() => {
-		document.removeEventListener('mousemove', changeDrawingOpacity)
+		document.removeEventListener('pointermove', changeDrawingOpacity)
 	})
 }

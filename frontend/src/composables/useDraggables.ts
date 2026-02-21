@@ -11,7 +11,7 @@ export function useMouseDelta() {
 	const deltaY = ref(0)
 	const moving = ref(false)
 
-	function start(event: MouseEvent) {
+	function start(event: PointerEvent) {
 		moving.value = true
 		sessionStore.inputMode = 'widget'
 
@@ -20,7 +20,7 @@ export function useMouseDelta() {
 		deltaX.value = 0
 		deltaY.value = 0
 	}
-	function move(event: MouseEvent) {
+	function move(event: PointerEvent) {
 		// returns true if succesful and false if not dragging/clicking :)
 		if (!moving.value || event.buttons !== 1) return false
 
@@ -43,14 +43,14 @@ export function useDrag(elementX: Ref<number>, elementY: Ref<number>) {
 	let initialElementX: number
 	let initialElementY: number
 
-	function dragStart(event: MouseEvent) {
+	function dragStart(event: PointerEvent) {
 		start(event)
 
 		initialElementX = elementX.value
 		initialElementY = elementY.value
 	}
 
-	function dragMove(event: MouseEvent) {
+	function dragMove(event: PointerEvent) {
 		if (!move(event)) return false
 
 		elementX.value = initialElementX + deltaX.value
@@ -71,13 +71,13 @@ export function useResize(elementWidth: Ref<number>, elementHeight: Ref<number>)
 	let initialWidth: number
 	let initialHeight: number
 
-	function resizeStart(event: MouseEvent) {
+	function resizeStart(event: PointerEvent) {
 		start(event)
 		initialWidth = elementWidth.value
 		initialHeight = elementHeight.value
 	}
 
-	function resizeMove(event: MouseEvent) {
+	function resizeMove(event: PointerEvent) {
 		if (!move(event)) return
 
 		elementWidth.value = initialWidth + deltaX.value
