@@ -12,14 +12,14 @@ import { DEBUG } from '@/utils/debug'
 const sessionStore = useSessionStore()
 const canvasStore = useCanvasStore()
 
-function SVGMouseDown(event: MouseEvent | PointerEvent) {
+function SVGMouseDown(event: PointerEvent) {
 	if (sessionStore.inputMode != 'idle') return
 	sessionStore.inputMode = 'drawing'
 
 	tools[sessionStore.activeTool].onDown?.(event)
 }
 
-function SVGMouseMove(event: MouseEvent | PointerEvent) {
+function SVGMouseMove(event: PointerEvent) {
 	if (sessionStore.inputMode == 'drawing') {
 		tools[sessionStore.activeTool].onMove?.(event)
 	}
@@ -28,15 +28,26 @@ function SVGMouseMove(event: MouseEvent | PointerEvent) {
 	DEBUG.logMouseMovements(event)
 }
 
-function SVGMouseUp() {
+function SVGMouseUp(event: PointerEvent) {
 	if (sessionStore.inputMode != 'drawing') return
 	sessionStore.inputMode = 'idle'
 
 	tools[sessionStore.activeTool].onUp?.()
 }
+
+
+
+
 </script>
 <template>
-	<svg id="inputSVG" class="inputSVG" @mousedown="SVGMouseDown" @mouseup="SVGMouseUp" @mousemove="SVGMouseMove">
+	<svg id="inputSVG" class="inputSVG" @pointerdown.prevent="SVGMouseDown"
+ 		@pointermove.prevent="SVGMouseMove"
+ 		@pointerup.prevent="SVGMouseUp"
+ 		@pointercancel.prevent="SVGMouseUp"
+		@touchstart.prevent
+		@touchmove.prevent
+		@touchend.prevent
+ 		@contextmenu.prevent>
 		<path v-for="path in canvasStore.paths" :d="path.d" class="stroke" :key="path.id" :data-id="path.id" />
 
 		<path v-if="sessionStore.currentStroke.length > 1" :d="sessionStore.currentPath" class="stroke" />
