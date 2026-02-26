@@ -16,6 +16,7 @@
 
 	/* --- Text & icons --- */
 	--color-icon: black;
+	--color-icon-unavailable: var(--color-zinc-700);
 	--color-text-dark: black;
 
 	/* --- Status --- */
