@@ -4,8 +4,9 @@ import { useCanvasStore } from '@/stores/useCanvasStore'
 import { toolList } from '@/utils/drawingTools'
 import ToolbarSection from './ToolbarSection.vue'
 import ToolbarButton from './ToolbarButton.vue'
+import { useHistoryStore } from '@/stores/useHistoryStore'
 const sessionStore = useSessionStore()
-const canvasStore = useCanvasStore()
+const historyStore = useHistoryStore()
 
 </script>
 <template>
@@ -18,10 +19,10 @@ const canvasStore = useCanvasStore()
 
 		<div class="center-toolbar">
 			<ToolbarSection class="undo-redo">
-				<ToolbarButton @click="canvasStore.undo()">
+				<ToolbarButton @click="historyStore.undo()">
 					<img src="/assets/undo.svg" />
 				</ToolbarButton>
-				<ToolbarButton @click="canvasStore.redo()">
+				<ToolbarButton @click="historyStore.redo()">
 					<img src="/assets/redo.svg" />
 				</ToolbarButton>
 			</ToolbarSection>

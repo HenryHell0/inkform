@@ -1,3 +1,5 @@
+import { useCanvasStore } from '@/stores/useCanvasStore'
+
 export interface Position {
 	x: number
 	y: number
@@ -6,11 +8,4 @@ export interface Position {
 export interface Path {
 	d: string
 	id: string
-}
-
-export type Action = PathAction
-
-export interface PathAction {
-  type: 'add' | 'remove'
-  path: Path
 }

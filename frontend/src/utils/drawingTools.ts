@@ -1,11 +1,13 @@
 import { reactive } from 'vue'
-import { cropCanvas, downloadCanvasPNG, svgToCanvas, recognizeCanvas } from './svgCanvasUtils.js'
-import { ExpressionData } from './widgetData.js'
-import { erasePathsInRect } from './svgCanvasUtils.js'
-import { useWidgetStore } from '@/stores/useWidgetStore.js'
-import { useCanvasStore } from '@/stores/useCanvasStore.js'
-import { useSessionStore } from '@/stores/useSessionStore.js'
-import { DEBUG } from './debug.js'
+import { cropCanvas, downloadCanvasPNG, svgToCanvas, recognizeCanvas } from './svgCanvasUtils'
+import { ExpressionData } from './widgetData'
+import { erasePathsInRect } from './svgCanvasUtils'
+import { useWidgetStore } from '@/stores/useWidgetStore'
+import { useCanvasStore } from '@/stores/useCanvasStore'
+import { useSessionStore } from '@/stores/useSessionStore'
+import { AddPathAction, RemovePathAction } from './actions'
+import { DEBUG } from './debug'
+import { useHistoryStore } from '@/stores/useHistoryStore'
 
 export interface Tool {
 	onDown?: (event: PointerEvent) => void
@@ -24,13 +26,17 @@ const pen = new (class implements Tool {
 
 		if (sessionStore.inputMode !== 'drawing') return
 		let point = { x: event.offsetX, y: event.offsetY }
+
 		sessionStore.currentStroke.push(point)
 	}
 	onUp() {
 		const sessionStore = useSessionStore()
-		const canvasStore = useCanvasStore()
-		// "d" is the path param for <path> elemtn
-		canvasStore.paths.push({ d: sessionStore.currentPath, id: crypto.randomUUID() })
+		const historyStore = useHistoryStore()
+
+		const path = { d: sessionStore.currentPath, id: crypto.randomUUID() }
+		const action = new AddPathAction(path)
+		historyStore.execute(action)
+
 		// clear path
 		sessionStore.currentStroke = []
 	}
@@ -40,7 +46,6 @@ const eraser = new (class implements Tool {
 		const sessionStore = useSessionStore()
 		if (sessionStore.inputMode !== 'drawing') return
 		const canvasStore = useCanvasStore()
-
 
 		const startPos = sessionStore.previousMousePos
 		const endPos = { x: event.clientX, y: event.clientY }
@@ -56,13 +61,17 @@ const eraser = new (class implements Tool {
 
 			const elements = document.elementsFromPoint(x, y)
 
+			const history = useHistoryStore()
+
 			for (let pathElement of elements) {
 				if (!(pathElement instanceof SVGPathElement)) continue
 
 				const id = pathElement.dataset.id
-				// NOTICE this changes in indicies
-				// we could instead just set it to 0 or something
-				canvasStore.paths = canvasStore.paths.filter((p) => p.id != id)
+				const path = canvasStore.paths.find((p) => p.id === id)
+				if (!path) continue
+
+				const action = new RemovePathAction(path)
+				history.execute(action)
 			}
 		}
 	}
@@ -126,18 +135,15 @@ export const selector: SelectorTool = reactive(
 			const sessionStore = useSessionStore()
 
 			// reset
-			this.isActive = false
 
 			// convert svg to png!!
 			const fullCanvas = await svgToCanvas('inputSVG')
-
 			// crop canvas
 			const croppedCanvas = document.createElement('canvas')
 			cropCanvas(croppedCanvas, fullCanvas, this.x, this.y, this.width, this.height)
 
 			// erase strokes and switch to pen
 			erasePathsInRect(this.x, this.y, this.width, this.height)
-			sessionStore.activeTool = 'pen'
 
 			// recognize expression
 			const latex = recognizeCanvas(croppedCanvas)
@@ -148,7 +154,9 @@ export const selector: SelectorTool = reactive(
 			if (!(widget instanceof ExpressionData)) return
 			widget.latex = await latex // update latex when its done
 
-			// reset
+			// clean up
+			this.isActive = false
+			sessionStore.activeTool = 'pen'
 
 			// debug stuff
 			if (DEBUG.downloadPNG) downloadCanvasPNG(croppedCanvas)
