@@ -49,19 +49,24 @@ button:hover {
 	background: var(--color-bg-1);
 }
 
+
+/* styles for disabled buttons */
 button:disabled {
 	cursor: default;
 	pointer-events: none;
 	transform: none;
 	background: none;
 }
-button:disabled {
-	cursor: default;
-	pointer-events: none;
+button:disabled :slotted(svg) {
+	fill: var(--color-icon-unavailable);
+}
+button:disabled:hover {
 	transform: none;
 	background: none;
 }
 
+
+/* active button styles */
 button.active {
 	transform: scale(var(--scale-1));
 	background-color: var(--color-bg-3);

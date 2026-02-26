@@ -5,7 +5,6 @@ import { createPinia } from 'pinia'
 //import custom directives
 import { vTouchPrevent } from './directives/vTouchPrevent'
 import { vDrawingOpacity } from './directives/vDrawingOpacity'
-import { vToggleClass } from './directives/vToggleClass'
 
 
 // import styles
@@ -20,7 +19,6 @@ app.use(pinia)
 // register custom directives
 app.directive('touch-prevent', vTouchPrevent)
 app.directive('drawing-opacity', vDrawingOpacity)
-app.directive('toggle-class', vToggleClass)
 
 
 

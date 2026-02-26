@@ -19,10 +19,10 @@ const historyStore = useHistoryStore()
 			<!-- UNDO/REDO -->
 			<ToolbarSection class="undo-redo-container">
 				<ToolbarButton @click="historyStore.undo()" :disabled="!historyStore.undoAvailable">
-					<UndoIcon v-toggle-class:icon-unavailable="() => !historyStore.undoAvailable"></UndoIcon>
+					<UndoIcon></UndoIcon>
 				</ToolbarButton>
 				<ToolbarButton @click="historyStore.redo()" :disabled="!historyStore.redoAvailable">
-					<RedoIcon v-toggle-class:icon-unavailable="() => !historyStore.redoAvailable"></RedoIcon>
+					<RedoIcon></RedoIcon>
 				</ToolbarButton>
 			</ToolbarSection>
 			<!-- TOOLS -->
@@ -63,9 +63,5 @@ const historyStore = useHistoryStore()
 
 .undo-redo-container {
 	gap: 5px;
-}
-
-.icon-unavailable {
-	fill: var(--color-icon-unavailable);
 }
 </style>
