@@ -1,13 +1,16 @@
 import { ExpressionData, GraphData } from './widgetData.js'
 import { useWidgetStore } from '@/stores/useWidgetStore.js'
+const isDev = import.meta.env.DEV
+
+const considerDebug = (value: boolean) => isDev && value
 
 export const DEBUG = {
-	createTestExpression: false,
-	createTestGraph: false,
-	doLogMouseMovements: false,
-	downloadPNG: false,
-	logLatex: true,
-	addTestWidgets: addTestWidgets,
+	createTestExpression: considerDebug(false),
+	createTestGraph: considerDebug(false),
+	doLogMouseMovements: considerDebug(false),
+	downloadPNG: considerDebug(false),
+	logLatex: considerDebug(false),
+	addTestWidgets,
 	logMouseMovements: logMouseMovement,
 }
 
