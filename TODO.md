@@ -1,5 +1,9 @@
 ## THE PLAN!!!:
 
+WIDGETS
+- refactor widget movement/selection system
+
+
 MOBILE SUPPORT!!
 - 🖼️ make widgets display properly on mobile
 - 🖌️ fix toolbar styles on mobile

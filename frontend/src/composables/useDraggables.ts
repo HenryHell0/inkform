@@ -1,40 +1,46 @@
-import { ref } from 'vue'
+import { onUnmounted, ref } from 'vue'
 import type { Ref } from 'vue'
 import { useSessionStore } from '@/stores/useSessionStore.js'
 
-export function useMouseDelta() {
-	const sessionStore = useSessionStore()
-	// this also updates stopCanvasInput because thats all I'm usin it for
+// PS eventually thsi may need to track pointerID for multi touch in the future PS
+function usePointerDelta(hooks?: {
+	onDown?: (event: PointerEvent) => void
+	onMove?: (dx: number, dy: number, event: PointerEvent) => void
+	onUp?: (event: PointerEvent) => void
+}) {
 	let startX = 0
 	let startY = 0
-	const deltaX = ref(0)
-	const deltaY = ref(0)
-	const moving = ref(false)
-
+	const isActive = ref(false)
 	function start(event: PointerEvent) {
-		moving.value = true
-		sessionStore.inputMode = 'widget'
+		if (isActive.value) return
+		isActive.value = true
 
 		startX = event.clientX
 		startY = event.clientY
-		deltaX.value = 0
-		deltaY.value = 0
-	}
-	function move(event: PointerEvent) {
-		// returns true if succesful and false if not dragging/clicking :)
-		if (!moving.value || event.buttons !== 1) return false
 
-		deltaX.value = event.clientX - startX
-		deltaY.value = event.clientY - startY
-
-		return true
+		document.addEventListener('pointermove', onMove)
+		document.addEventListener('pointerup', onUp)
+		hooks?.onDown?.(event)
 	}
-	function end() {
-		moving.value = false
-		sessionStore.inputMode = 'idle'
+	function onMove(event: PointerEvent) {
+		if (!isActive.value) return
+		const dx = event.clientX - startX
+		const dy = event.clientY - startY
+		hooks?.onMove?.(dx, dy, event)
 	}
+	function onUp(event: PointerEvent) {
+		isActive.value = false
 
-	return { deltaX, deltaY, start, move, end, moving }
+		document.removeEventListener('pointermove', onMove)
+		document.removeEventListener('pointerup', onUp)
+		hooks?.onUp?.(event)
+	}
+	onUnmounted(() => {
+		document.removeEventListener('pointermove', onMove)
+		document.removeEventListener('pointerup', onUp)
+	})
+
+	return { start, isActive }
 }
 
 export function useDrag(elementX: Ref<number>, elementY: Ref<number>) {

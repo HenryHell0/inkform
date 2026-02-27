@@ -15,9 +15,6 @@ const props = defineProps<{
 }>()
 const widget = widgetStore.getWidgetById(props.id)
 
-// =======================================
-// ALL of this should be composables
-// ======================================
 var element = ref<HTMLElement | null>(null)
 
 const { dragStart, dragMove, dragEnd, isDragging } = useDrag(toRef(widget, 'x'), toRef(widget, 'y'))

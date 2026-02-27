@@ -17,7 +17,7 @@ const { isDragging, widget } = defineProps<{
 	>
 		<div class="title">{{ widget.type }}</div>
 
-		<div class="button-container" v-if="widget.toolbarButtons">
+		<div @pointerdown.stop class="button-container" v-if="widget.toolbarButtons">
 			<img
 				class="toolbar-button"
 				v-for="(button, i) in widget.toolbarButtons"
@@ -28,7 +28,7 @@ const { isDragging, widget } = defineProps<{
 			/>
 		</div>
 
-		<div class="x-button-container">
+		<div @pointerdown.stop class="x-button-container">
 			<img src="/assets/x.svg" @pointerup="widgetStore.deleteWidget(widget.id)" class="x-button" draggable="false" />
 		</div>
 	</div>
