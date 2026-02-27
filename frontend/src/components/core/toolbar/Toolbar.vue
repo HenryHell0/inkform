@@ -41,7 +41,15 @@ const historyStore = useHistoryStore()
 		<!-- FEEDBACK -->
 		<ToolbarSection>
 			<ToolbarButton @click="sessionStore.inputMode = 'feedback'">
-				<img :src="'./assets/feedback.svg'" />
+				<img src="/assets/feedback.svg" />
+			</ToolbarButton>
+		</ToolbarSection>
+		<!-- GITHUB -->
+		<ToolbarSection>
+			<ToolbarButton>
+				<a href="https://github.com/henryhell0/hmer-whiteboard" target="_blank">
+					<img src="/assets/github.svg" style="transform: scale(1.5)"/>
+				</a>
 			</ToolbarButton>
 		</ToolbarSection>
 	</div>
@@ -53,6 +61,7 @@ const historyStore = useHistoryStore()
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+	gap: 6px;
 }
 
 .center-toolbar {
@@ -63,5 +72,11 @@ const historyStore = useHistoryStore()
 
 .undo-redo-container {
 	gap: 5px;
+}
+
+a {
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 </style>

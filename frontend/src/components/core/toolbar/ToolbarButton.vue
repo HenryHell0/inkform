@@ -19,6 +19,7 @@ defineProps<{
 
 	width: 1.5em;
 	height: 1.5em;
+	aspect-ratio: 1/1;
 	transform: scale(1.3);
 }
 
@@ -49,7 +50,6 @@ button:hover {
 	background: var(--color-bg-1);
 }
 
-
 /* styles for disabled buttons */
 button:disabled {
 	cursor: default;
@@ -64,7 +64,6 @@ button:disabled:hover {
 	transform: none;
 	background: none;
 }
-
 
 /* active button styles */
 button.active {
