@@ -6,13 +6,17 @@ import { clamp } from '@/utils/utils'
 import { executeAction, MoveWidgetAction, ResizeWidgetAction } from '@/utils/actions'
 
 // PS eventually thsi may need to track pointerID for multi touch in the future PS
+// Description: computes a dx and dy for a pointer gesture, giving lifecycle hooks for it's movement
 function usePointerDelta(hooks?: {
 	onDown?: (event: PointerEvent) => void
 	onMove?: (event: PointerEvent, dx: number, dy: number) => void
-	onUp?: (event: PointerEvent) => void
+	onUp?: (event: PointerEvent, finalDx: number, finalDy: number) => void
 }) {
-	let startX = 0
-	let startY = 0
+	let startX: number
+	let startY: number
+	let dx: number
+	let dy: number
+
 	const isActive = ref(false)
 	function start(event: PointerEvent) {
 		if (isActive.value) return
@@ -27,8 +31,8 @@ function usePointerDelta(hooks?: {
 	}
 	function onMove(event: PointerEvent) {
 		if (!isActive.value) return
-		const dx = event.clientX - startX
-		const dy = event.clientY - startY
+		dx = event.clientX - startX
+		dy = event.clientY - startY
 		hooks?.onMove?.(event, dx, dy)
 	}
 	function onUp(event: PointerEvent) {
@@ -36,7 +40,7 @@ function usePointerDelta(hooks?: {
 
 		document.removeEventListener('pointermove', onMove)
 		document.removeEventListener('pointerup', onUp)
-		hooks?.onUp?.(event)
+		hooks?.onUp?.(event, dx, dy)
 	}
 	onUnmounted(() => {
 		document.removeEventListener('pointermove', onMove)
@@ -46,8 +50,9 @@ function usePointerDelta(hooks?: {
 	return { start, isActive }
 }
 
-// useDrag and useResize are actually identical functions, except their returns and arguments are renamed
-export function useDrag(
+// todo rename
+// usepointermove, usepointergesture, usedrag, .... idk
+export function usePointerGestureCoordinateOffset(
 	x: Ref<number>,
 	y: Ref<number>,
 	hooks?: {
@@ -56,7 +61,7 @@ export function useDrag(
 		onUp?: (event: PointerEvent, from: Position, to: Position) => void
 	},
 ) {
-	const { start, isActive: isDragging } = usePointerDelta({ onDown, onMove, onUp })
+	const { start, isActive } = usePointerDelta({ onDown, onMove, onUp })
 	let startX: number
 	let startY: number
 
@@ -74,41 +79,7 @@ export function useDrag(
 		hooks?.onUp?.(event, { x: startX, y: startY }, { x: x.value, y: y.value })
 	}
 
-	return { start, isDragging }
-}
-
-export function useResize(
-	width: Ref<number>,
-	height: Ref<number>,
-	hooks?: {
-		onDown?: (event: PointerEvent) => void
-		onMove?: (event: PointerEvent, dx: number, dy: number) => void
-		onUp?: (event: PointerEvent, from: Size, to: Size) => void
-	},
-) {
-	const { start, isActive: isResizing } = usePointerDelta({ onDown, onMove, onUp })
-	let startWidth: number
-	let startHeight: number
-
-	function onDown(event: PointerEvent) {
-		startWidth = width.value
-		startHeight = height.value
-		hooks?.onDown?.(event)
-	}
-	function onMove(event: PointerEvent, dx: number, dy: number) {
-		width.value = startWidth + dx
-		height.value = startHeight + dy
-		hooks?.onMove?.(event, dx, dy)
-	}
-	function onUp(event: PointerEvent) {
-		hooks?.onUp?.(
-			event,
-			{ width: startWidth, height: startHeight },
-			{ width: width.value, height: height.value },
-		)
-	}
-
-	return { start, isResizing }
+	return { start, isActive }
 }
 
 export function useWidgetDrag(id: string) {
@@ -117,7 +88,7 @@ export function useWidgetDrag(id: string) {
 	const x = toRef(widget, 'x')
 	const y = toRef(widget, 'y')
 
-	const { start, isDragging } = useDrag(x, y, {
+	const { start, isActive: isDragging } = usePointerGestureCoordinateOffset(x, y, {
 		onMove: () => {
 			const maxX = window.innerWidth - widget.width // temporary window.innerWidth and stuff
 			const maxY = window.innerHeight - widget.height
@@ -142,19 +113,21 @@ export function useWidgetResize(id: string) {
 	const width = toRef(widget, 'width')
 	const height = toRef(widget, 'height')
 
-	const { start, isResizing } = useResize(width, height, {
+	const { start, isActive: isResizing } = usePointerGestureCoordinateOffset(width, height, {
 		onMove: () => {
-			const maxWidth = window.innerWidth // temporary window.innerWidth :)
+			const maxWidth = window.innerWidth // "temporary" window.innerWidth (actually temporary - it doesent work) :)
 			const maxHeight = window.innerHeight
 
-			width.value = clamp(width.value, 0, maxWidth)
-			height.value = clamp(height.value, 0, maxHeight)
+			width.value = clamp(width.value, 100, maxWidth) // todo fix minimum width and height
+			height.value = clamp(height.value, 100, maxHeight)
 		},
 
 		onUp: (_, from, to) => {
-			if (from.width === to.width && from.height === to.height) return
+			if (from.x === to.x && from.y === to.y) return
 
-			executeAction(new ResizeWidgetAction(id, from, to))
+			executeAction(
+				new ResizeWidgetAction(id, { width: from.x, height: from.y }, { width: to.x, height: to.y }), // can I make this less ugly
+			)
 		},
 	})
 
