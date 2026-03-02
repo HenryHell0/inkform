@@ -1,5 +1,12 @@
 import { useCanvasStore } from '@/stores/useCanvasStore'
-import type { Path } from '@/types/types'
+import { useHistoryStore } from '@/stores/useHistoryStore'
+import { useWidgetStore } from '@/stores/useWidgetStore'
+import type { Path, Position } from '@/types/types'
+
+
+export function executeAction (action: Action) {
+	useHistoryStore().execute(action)
+}
 
 export interface Action {
 	do(): void
@@ -30,5 +37,25 @@ export class RemovePathAction implements Action {
 	undo() {
 		const canvasStore = useCanvasStore()
 		canvasStore.paths.push(this.path)
+	}
+}
+export class MoveWidgetAction implements Action {
+	constructor(
+		private id: string,
+		private from: Position,
+		private to: Position,
+	) {}
+
+	do() {
+		const widgetstore = useWidgetStore()
+		const widget = widgetstore.getWidgetById(this.id)
+		widget.x = this.to.x
+		widget.y = this.to.y
+	}
+	undo() {
+		const widgetstore = useWidgetStore()
+		const widget = widgetstore.getWidgetById(this.id)
+		widget.x = this.from.x
+		widget.y = this.from.y
 	}
 }

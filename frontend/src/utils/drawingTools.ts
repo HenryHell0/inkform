@@ -5,7 +5,7 @@ import { erasePathsInRect } from './svgCanvasUtils'
 import { useWidgetStore } from '@/stores/useWidgetStore'
 import { useCanvasStore } from '@/stores/useCanvasStore'
 import { useSessionStore } from '@/stores/useSessionStore'
-import { AddPathAction, RemovePathAction } from './actions'
+import { AddPathAction, executeAction, RemovePathAction } from './actions'
 import { DEBUG } from './debug'
 import { useHistoryStore } from '@/stores/useHistoryStore'
 
@@ -35,7 +35,7 @@ const pen = new (class implements Tool {
 
 		const path = { d: sessionStore.currentPath, id: crypto.randomUUID() }
 		const action = new AddPathAction(path)
-		historyStore.execute(action)
+		executeAction(action)
 
 		// clear path
 		sessionStore.currentStroke = []
@@ -71,7 +71,7 @@ const eraser = new (class implements Tool {
 				if (!path) continue
 
 				const action = new RemovePathAction(path)
-				history.execute(action)
+				executeAction(action)
 			}
 		}
 	}
