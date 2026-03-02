@@ -1,22 +1,21 @@
 <script setup lang="ts">
-import { ref, toRef, computed, onMounted, onUnmounted, watch } from 'vue'
-
-import { useDrag, useResize, useWidgetDrag } from '@/composables/useDraggables'
-
+import { computed } from 'vue'
+import { useWidgetDrag, useWidgetResize } from '@/composables/useDraggables'
 import { useWidgetStore } from '@/stores/useWidgetStore'
 import { useSessionStore } from '@/stores/useSessionStore'
 import WidgetToolbar from './WidgetToolbar.vue'
-
+import { useWidgetStyles } from '@/composables/useWidgetStyles'
 const widgetStore = useWidgetStore()
 const sessionStore = useSessionStore()
-
 const props = defineProps<{
 	id: string
 }>()
 const widget = widgetStore.getWidgetById(props.id)
 
 const { start: dragStart, isDragging } = useWidgetDrag(props.id)
+const { start: resizeStart, isResizing } = useWidgetResize(props.id)
 
+const styles = useWidgetStyles(widget)
 const classes = computed(() => {
 	return {
 		dragging: isDragging.value,
@@ -52,8 +51,7 @@ function bringToFront() {
 		<div @click="bringToFront" style="height: 100%">
 			<slot></slot>
 		</div>
-		<!-- @pointerdown="startResize" goes there btw -->
-		<img class="resizer" v-touch-prevent :src="'./assets/resize.svg'" draggable="false" />
+		<img class="resizer" v-touch-prevent  @pointerdown="resizeStart" :src="'./assets/resize.svg'" draggable="false" />
 	</div>
 </template>
 <style scoped>
