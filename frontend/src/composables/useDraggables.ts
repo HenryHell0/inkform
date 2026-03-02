@@ -46,6 +46,7 @@ function usePointerDelta(hooks?: {
 	return { start, isActive }
 }
 
+// useDrag and useResize are actually identical functions, except their returns and arguments are renamed
 export function useDrag(
 	x: Ref<number>,
 	y: Ref<number>,
@@ -76,32 +77,37 @@ export function useDrag(
 	return { start, isDragging }
 }
 
-export function useResize(elementWidth: Ref<number>, elementHeight: Ref<number>) {
-	const { start, move, end, deltaX, deltaY, moving: isResizing } = useMouseDelta()
-	let initialWidth: number
-	let initialHeight: number
+export function useResize(
+	width: Ref<number>,
+	height: Ref<number>,
+	hooks?: {
+		onDown?: (event: PointerEvent) => void
+		onMove?: (event: PointerEvent, dx: number, dy: number) => void
+		onUp?: (event: PointerEvent, from: Size, to: Size) => void
+	},
+) {
+	const { start, isActive: isResizing } = usePointerDelta({ onDown, onMove, onUp })
+	let startWidth: number
+	let startHeight: number
 
-	function resizeStart(event: PointerEvent) {
-		start(event)
-		initialWidth = elementWidth.value
-		initialHeight = elementHeight.value
+	function onDown(event: PointerEvent) {
+		startWidth = width.value
+		startHeight = height.value
+		hooks?.onDown?.(event)
+	}
+	function onMove(event: PointerEvent, dx: number, dy: number) {
+		width.value = startWidth + dx
+		height.value = startHeight + dy
+		hooks?.onMove?.(event, dx, dy)
+	}
+	function onUp(event: PointerEvent) {
+		hooks?.onUp?.(
+			event,
+			{ width: startWidth, height: startHeight },
+			{ width: width.value, height: height.value },
+		)
 	}
 
-	function resizeMove(event: PointerEvent) {
-		if (!move(event)) return
-
-		elementWidth.value = initialWidth + deltaX.value
-		elementHeight.value = initialHeight + deltaY.value
-	}
-
-	function resizeEnd() {
-		end()
-	}
-
-	return {
-		resizeStart,
-		resizeMove,
-		resizeEnd,
-		isResizing,
-	}
+	return { start, isResizing }
+}
 }
