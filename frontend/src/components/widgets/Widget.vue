@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, toRef, computed, onMounted, onUnmounted, watch } from 'vue'
 
-import { useDrag, useResize } from '@/composables/useDraggables'
+import { useDrag, useResize, useWidgetDrag } from '@/composables/useDraggables'
 
 import { useWidgetStore } from '@/stores/useWidgetStore'
 import { useSessionStore } from '@/stores/useSessionStore'
@@ -15,17 +15,16 @@ const props = defineProps<{
 }>()
 const widget = widgetStore.getWidgetById(props.id)
 
-var element = ref<HTMLElement | null>(null)
-
-const { dragStart, dragMove, dragEnd, isDragging } = useDrag(toRef(widget, 'x'), toRef(widget, 'y'))
-const { resizeStart, resizeMove, resizeEnd, isResizing } = useResize(toRef(widget, 'width'), toRef(widget, 'height'))
+const { start: dragStart, isDragging } = useWidgetDrag(props.id)
 
 const classes = computed(() => {
 	return {
 		dragging: isDragging.value,
-		resizing: isResizing.value,
+		// resizing: isResizing.value,
 	}
 })
+
+// TODO refactor to a widget method
 const styles = computed(() => {
 	return {
 		left: widget.x.toString() + 'px',
@@ -36,83 +35,25 @@ const styles = computed(() => {
 	}
 })
 
-// clamp widget movement
-function clampToViewport() {
-	const windowWidth = window.innerWidth
-	const windowHeight = window.innerHeight
-
-	// X bounds
-	if (widget.x < 0) widget.x = 0
-	if (widget.x + widget.width > windowWidth) widget.x = windowWidth - widget.width
-
-	// Y bounds
-	if (widget.y < 0) widget.y = 0
-	if (widget.y + widget.height > windowHeight) widget.y = windowHeight - widget.height
-}
-// Watch movement and clamp
-watch(
-	() => [widget.x, widget.y],
-	() => clampToViewport(),
-	{ deep: false },
-)
-watch(
-	() => [widget.width, widget.height],
-	() => clampToViewport(),
-)
-
 function toolbarClicked(event: PointerEvent) {
 	dragStart(event)
 	sessionStore.heldWidgetId = widget.id
 	bringToFront()
 }
-function toolBarMove(event: PointerEvent) {
-	if (!dragMove(event)) return
-
-	if (!element.value) throw new Error('no element aaah!')
-	element.value.style.pointerEvents = 'none'
-}
-function toolbarReleased() {
-	dragEnd()
-
-	// check if user is over the toolbar
-	if (!element.value) return
-	element.value.style.pointerEvents = 'fill'
-
-	// reset widget ID and reset mode
-	sessionStore.heldWidgetId = ''
-}
 
 function bringToFront() {
 	widgetStore.bringWidgetToFront(widget)
 }
-
-// can't I extract these to their respective composables?
-onMounted(() => {
-	clampToViewport()
-
-	document.addEventListener('pointermove', toolBarMove)
-	document.addEventListener('pointerup', toolbarReleased)
-
-	document.addEventListener('pointermove', resizeMove)
-	document.addEventListener('pointerup', resizeEnd)
-})
-onUnmounted(() => {
-	document.removeEventListener('pointermove', dragMove)
-	document.removeEventListener('pointerup', dragEnd)
-
-	document.removeEventListener('pointermove', resizeMove)
-	document.removeEventListener('pointerup', resizeEnd)
-})
 </script>
 <template>
 	<div v-drawing-opacity ref="element" class="template" :class="classes" :style="styles">
-		<WidgetToolbar @toolbarClicked="toolbarClicked" :widget :isDragging></WidgetToolbar>
+		<WidgetToolbar @pointerdown="toolbarClicked" :widget :isDragging></WidgetToolbar>
 
 		<div @click="bringToFront" style="height: 100%">
 			<slot></slot>
 		</div>
-
-		<img class="resizer" @pointerdown="resizeStart" v-touch-prevent :src="'./assets/resize.svg'" draggable="false" />
+		<!-- @pointerdown="startResize" goes there btw -->
+		<img class="resizer" v-touch-prevent :src="'./assets/resize.svg'" draggable="false" />
 	</div>
 </template>
 <style scoped>
