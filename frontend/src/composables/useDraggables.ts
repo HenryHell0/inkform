@@ -1,11 +1,14 @@
-import { onUnmounted, ref } from 'vue'
+import {  onUnmounted, ref, toRef } from 'vue'
 import type { Ref } from 'vue'
-import { useSessionStore } from '@/stores/useSessionStore.js'
+import type { Position, Size } from '@/types/types'
+import { useWidgetStore } from '@/stores/useWidgetStore'
+import { clamp } from '@/utils/utils'
+import { executeAction, MoveWidgetAction } from '@/utils/actions'
 
 // PS eventually thsi may need to track pointerID for multi touch in the future PS
 function usePointerDelta(hooks?: {
 	onDown?: (event: PointerEvent) => void
-	onMove?: (dx: number, dy: number, event: PointerEvent) => void
+	onMove?: (event: PointerEvent, dx: number, dy: number) => void
 	onUp?: (event: PointerEvent) => void
 }) {
 	let startX = 0
@@ -26,7 +29,7 @@ function usePointerDelta(hooks?: {
 		if (!isActive.value) return
 		const dx = event.clientX - startX
 		const dy = event.clientY - startY
-		hooks?.onMove?.(dx, dy, event)
+		hooks?.onMove?.(event, dx, dy)
 	}
 	function onUp(event: PointerEvent) {
 		isActive.value = false
@@ -43,33 +46,34 @@ function usePointerDelta(hooks?: {
 	return { start, isActive }
 }
 
-export function useDrag(elementX: Ref<number>, elementY: Ref<number>) {
-	const { start, move, end, deltaX, deltaY, moving: isDragging } = useMouseDelta()
+export function useDrag(
+	x: Ref<number>,
+	y: Ref<number>,
+	hooks?: {
+		onDown?: (event: PointerEvent) => void
+		onMove?: (event: PointerEvent, dx: number, dy: number) => void
+		onUp?: (event: PointerEvent, from: Position, to: Position) => void
+	},
+) {
+	const { start, isActive: isDragging } = usePointerDelta({ onDown, onMove, onUp })
+	let startX: number
+	let startY: number
 
-	let initialElementX: number
-	let initialElementY: number
-
-	function dragStart(event: PointerEvent) {
-		start(event)
-
-		initialElementX = elementX.value
-		initialElementY = elementY.value
+	function onDown(event: PointerEvent) {
+		startX = x.value
+		startY = y.value
+		hooks?.onDown?.(event)
+	}
+	function onMove(event: PointerEvent, dx: number, dy: number) {
+		x.value = startX + dx
+		y.value = startY + dy
+		hooks?.onMove?.(event, dx, dy)
+	}
+	function onUp(event: PointerEvent) {
+		hooks?.onUp?.(event, { x: startX, y: startY }, { x: x.value, y: y.value })
 	}
 
-	function dragMove(event: PointerEvent) {
-		if (!move(event)) return false
-
-		elementX.value = initialElementX + deltaX.value
-		elementY.value = initialElementY + deltaY.value
-
-		return true
-	}
-
-	function dragEnd() {
-		end()
-	}
-
-	return { dragStart, dragMove, dragEnd, isDragging }
+	return { start, isDragging }
 }
 
 export function useResize(elementWidth: Ref<number>, elementHeight: Ref<number>) {
