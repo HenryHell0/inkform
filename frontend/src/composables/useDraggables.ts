@@ -110,4 +110,28 @@ export function useResize(
 
 	return { start, isResizing }
 }
+
+export function useWidgetDrag(id: string) {
+	const widgetStore = useWidgetStore()
+	const widget = widgetStore.getWidgetById(id)
+	const x = toRef(widget, 'x')
+	const y = toRef(widget, 'y')
+
+	const { start, isDragging } = useDrag(x, y, {
+		onMove: () => {
+			const maxX = window.innerWidth - widget.width // temporary window.innerWidth and stuff
+			const maxY = window.innerHeight - widget.height
+
+			x.value = clamp(x.value, 0, maxX)
+			y.value = clamp(y.value, 0, maxY)
+		},
+
+		onUp: (_, from, to) => {
+			if (from.x === to.x && from.y === to.y) return
+
+			executeAction(new MoveWidgetAction(id, from, to))
+		},
+	})
+
+	return { start, isDragging }
 }
