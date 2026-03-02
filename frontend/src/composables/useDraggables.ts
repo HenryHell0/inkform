@@ -1,9 +1,9 @@
-import {  onUnmounted, ref, toRef } from 'vue'
+import { onUnmounted, ref, toRef } from 'vue'
 import type { Ref } from 'vue'
 import type { Position, Size } from '@/types/types'
 import { useWidgetStore } from '@/stores/useWidgetStore'
 import { clamp } from '@/utils/utils'
-import { executeAction, MoveWidgetAction } from '@/utils/actions'
+import { executeAction, MoveWidgetAction, ResizeWidgetAction } from '@/utils/actions'
 
 // PS eventually thsi may need to track pointerID for multi touch in the future PS
 function usePointerDelta(hooks?: {
@@ -134,4 +134,29 @@ export function useWidgetDrag(id: string) {
 	})
 
 	return { start, isDragging }
+}
+
+export function useWidgetResize(id: string) {
+	const widgetStore = useWidgetStore()
+	const widget = widgetStore.getWidgetById(id)
+	const width = toRef(widget, 'width')
+	const height = toRef(widget, 'height')
+
+	const { start, isResizing } = useResize(width, height, {
+		onMove: () => {
+			const maxWidth = window.innerWidth // temporary window.innerWidth :)
+			const maxHeight = window.innerHeight
+
+			width.value = clamp(width.value, 0, maxWidth)
+			height.value = clamp(height.value, 0, maxHeight)
+		},
+
+		onUp: (_, from, to) => {
+			if (from.width === to.width && from.height === to.height) return
+
+			executeAction(new ResizeWidgetAction(id, from, to))
+		},
+	})
+
+	return { start, isResizing }
 }
