@@ -19,18 +19,7 @@ const styles = useWidgetStyles(widget)
 const classes = computed(() => {
 	return {
 		dragging: isDragging.value,
-		// resizing: isResizing.value,
-	}
-})
-
-// TODO refactor to a widget method
-const styles = computed(() => {
-	return {
-		left: widget.x.toString() + 'px',
-		top: widget.y.toString() + 'px',
-		width: widget.width.toString() + 'px',
-		height: widget.height.toString() + 'px',
-		zIndex: widget.zIndex.toString(),
+		resizing: isResizing.value,
 	}
 })
 
@@ -40,9 +29,11 @@ function toolbarClicked(event: PointerEvent) {
 	bringToFront()
 }
 
+// todo this should NOT be in-component. it should be a history action
 function bringToFront() {
 	widgetStore.bringWidgetToFront(widget)
 }
+
 </script>
 <template>
 	<div v-drawing-opacity ref="element" class="template" :class="classes" :style="styles">
