@@ -1,5 +1,3 @@
-import { useCanvasStore } from '@/stores/useCanvasStore'
-
 export interface Position {
 	x: number
 	y: number
