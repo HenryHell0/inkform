@@ -5,6 +5,11 @@ export interface Position {
 	y: number
 }
 
+export interface Size {
+	width: number
+	height: number
+}
+
 export interface Path {
 	d: string
 	id: string
