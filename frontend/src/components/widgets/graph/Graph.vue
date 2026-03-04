@@ -11,23 +11,21 @@ const sessionStore = useSessionStore()
 const props = defineProps<{
 	id: string
 }>()
-const widget = widgetStore.getWidgetById(props.id)
+const widget = widgetStore.getWidgetById(props.id) as GraphData
 
 async function importExpression() {
 	if (!sessionStore.heldWidgetId) return
 	if (!(widget instanceof GraphData)) throw new Error('this widget is not a graph!!! aah!')
 	const heldWidget = widgetStore.getWidgetById(sessionStore.heldWidgetId)
 	if (!(heldWidget instanceof ExpressionData)) return
-	// add it
+	// ad it
 
 	widget.addExpression(heldWidget)
-
-	// delete expression
 	widgetStore.deleteWidget(heldWidget.id)
 }
 </script>
 <template>
-	<div class="content" @mouseup="importExpression">
+	<div class="content" data-drop-type="graph" @widget-drop="importExpression">
 		<GraphContent :id="props.id"></GraphContent>
 		<GraphBottomBar :id="props.id"></GraphBottomBar>
 	</div>

@@ -4,6 +4,7 @@ import type { Position, Size } from '@/types/types'
 import { useWidgetStore } from '@/stores/useWidgetStore'
 import { clamp } from '@/utils/utils'
 import { executeAction, MoveWidgetAction, ResizeWidgetAction } from '@/utils/actions'
+import { useSessionStore } from '@/stores/useSessionStore'
 
 // PS eventually thsi may need to track pointerID for multi touch in the future PS
 // Description: computes a dx and dy for a pointer gesture, giving lifecycle hooks for it's movement
@@ -84,11 +85,15 @@ export function usePointerGestureCoordinateOffset(
 
 export function useWidgetDrag(id: string) {
 	const widgetStore = useWidgetStore()
+	const sessionStore = useSessionStore()
 	const widget = widgetStore.getWidgetById(id)
 	const x = toRef(widget, 'x')
 	const y = toRef(widget, 'y')
 
 	const { start, isActive: isDragging } = usePointerGestureCoordinateOffset(x, y, {
+		onDown: () => {
+			sessionStore.heldWidgetId = id
+		},
 		onMove: () => {
 			const maxX = window.innerWidth - widget.width // temporary window.innerWidth and stuff
 			const maxY = window.innerHeight - widget.height
@@ -97,10 +102,23 @@ export function useWidgetDrag(id: string) {
 			y.value = clamp(y.value, 0, maxY)
 		},
 
-		onUp: (_, from, to) => {
-			if (from.x === to.x && from.y === to.y) return
+		// TODO eventually this will also trigger drop events like dropping a widget onto a graph.. in the future
+		onUp: (event, from, to) => {
+			if (from.x !== to.x || from.y !== to.y) {
+				executeAction(new MoveWidgetAction(id, from, to))
+			}
 
-			executeAction(new MoveWidgetAction(id, from, to))
+			// !!! TEMPORARY EVIL HACKY DRAG AND DROP FIX
+			const elements = document.elementsFromPoint(event.clientX, event.clientY)
+			const dropTarget = elements.find(
+				(el) => el instanceof HTMLElement && el.hasAttribute('data-drop-type'),
+			) as HTMLElement
+			if (dropTarget?.dataset.dropType === 'graph') {
+				dropTarget.dispatchEvent(new CustomEvent('widget-drop'))
+			}
+
+			// not temporary this is important state cleanup
+			queueMicrotask(() => (sessionStore.heldWidgetId = ''))
 		},
 	})
 
