@@ -5,6 +5,8 @@ Inkform lets you write math naturally and have it transformed into interactive e
 
 🌐 **Live Demo:** https://inkform.io
 
+https://github.com/user-attachments/assets/52c0791f-bf13-40a5-97ea-58d7a076732e
+
 <br>
 
 ## Inkform lets you...
@@ -23,13 +25,6 @@ Instead of typing, you write naturally - Inkform handles recognition and visuali
 - 🧱 Draggable and resizable math widgets
 - 🔄 Undo / Redo history system
 - 🖊 Touch input support
-
-<br>
-
-## 🎥 Demo
-[Try it live!](https://inkform.io)
-
-https://github.com/user-attachments/assets/10f42054-18e7-4dbe-8120-f94bb7aa1970
 
 <br>
 
