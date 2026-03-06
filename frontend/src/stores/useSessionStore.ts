@@ -5,7 +5,7 @@ import type { Position } from '@/types/types'
 import { strokeToPath } from '@/utils/svgCanvasUtils'
 
 
-type InputModeName = 'idle' | 'drawing' | 'widget' | 'feedback' // eventually this will be "dialog" not feedback ...
+type InputModeName = 'idle' | 'drawing' | 'widget'
 
 export const useSessionStore = defineStore('session', () => {
 	const currentStroke = ref<Position[]>([])
