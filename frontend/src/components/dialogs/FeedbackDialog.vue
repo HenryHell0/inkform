@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { useSessionStore } from '@/stores/useSessionStore'
+import { useDialogStore } from '@/stores/useDialogStore'
 import { reactive } from 'vue'
-const sessionStore = useSessionStore()
+const dialogStore = useDialogStore()
 const API_BASE = import.meta.env.VITE_API_BASE
 
 const data = reactive({
-	userInfo: "",
-	message: ""
+	userInfo: '',
+	message: '',
 })
 
 function handleSubmit() {
@@ -22,19 +22,23 @@ function handleSubmit() {
 		body,
 	})
 
-	alert("Yay! Thanks so much!")
-	sessionStore.inputMode = "idle"
+	alert('Yay! Thanks so much!')
+	dialogStore.closeDialog('feedback')
 }
 </script>
 <template>
-	<div v-show="sessionStore.inputMode == 'feedback'" class="backdrop">
-		<div class="container" @mouseup.stop >
+	<div class="backdrop" @click="dialogStore.closeDialog('feedback')">
+		<div class="container" @click.stop>
 			<h1>Give Feedback!</h1>
-
 
 			<div class="form">
 				<input v-model="data.userInfo" type="text" placeholder="Name or Email" />
-				<textarea v-model="data.message" class="message" type="text" placeholder="Your feedback"></textarea>
+				<textarea
+					v-model="data.message"
+					class="message"
+					type="text"
+					placeholder="Your feedback"
+				></textarea>
 				<button @click="handleSubmit"><b>Send</b></button>
 			</div>
 		</div>

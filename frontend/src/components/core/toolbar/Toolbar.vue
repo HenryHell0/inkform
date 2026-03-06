@@ -6,9 +6,11 @@ import ToolbarSection from './ToolbarSection.vue'
 import ToolbarButton from './ToolbarButton.vue'
 import RedoIcon from '@/components/images/RedoIcon.vue'
 import UndoIcon from '@/components/images/UndoIcon.vue'
+import { useDialogStore } from '@/stores/useDialogStore'
 
 const sessionStore = useSessionStore()
 const historyStore = useHistoryStore()
+const dialogStore = useDialogStore()
 </script>
 <template>
 	<div ref="element" class="toolbar-container">
@@ -40,7 +42,7 @@ const historyStore = useHistoryStore()
 
 		<!-- FEEDBACK -->
 		<ToolbarSection>
-			<ToolbarButton @click="sessionStore.inputMode = 'feedback'">
+			<ToolbarButton @click="dialogStore.openDialog('feedback')">
 				<img src="/assets/feedback.svg" />
 			</ToolbarButton>
 		</ToolbarSection>
