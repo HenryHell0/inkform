@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, type Component } from 'vue'
+import { ref, markRaw, type Component } from 'vue'
 
 type ActiveDialog = {
 	name: string
@@ -11,7 +11,7 @@ export const useDialogStore = defineStore('dialog', () => {
 	const openDialogs = ref<ActiveDialog[]>([])
 
 	function registerDialog(name: string, component: Component) {
-		dialogRegistry.value[name] = component
+		dialogRegistry.value[name] = markRaw(component)
 
 		return {
 			open: (props?: Record<string, unknown>) => openDialog(name, props),
