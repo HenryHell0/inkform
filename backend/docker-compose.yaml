@@ -2,12 +2,14 @@ services:
     texteller:
         build: ./texteller
         image: texteller
+        container_name: texteller
         shm_size: 3.24g
         ports:
             - "8000:8000"
     feedback:
         build: ./feedback
         image: hmer-feedback
+        container_name: feedback
         ports:
             - "3100:3100"
         volumes:
