@@ -10,49 +10,21 @@ https://github.com/user-attachments/assets/52c0791f-bf13-40a5-97ea-58d7a076732e
 <br>
 
 ## Inkform lets you...
-- ✍️ Write in your own handwriting
-- 📊 Visualize on the fly
-- 🖊 Use a tablet and stylus just like on paper
+- Write in your own handwriting
+- Visualize on the fly
+- Use a tablet and stylus just like on paper
 
 Instead of typing, you write naturally - Inkform handles recognition and visualization :)
 
 <br>
 
-## 😎 Features
+## Features
 
-- 📐 Handwritten Math Recognition (HMER) powered by [**TexTeller**](https://github.com/OleehyO/TexTeller)
-- 📈 Live graphing powered by [**Desmos**](https://www.desmos.com/)
-- 🧱 Draggable and resizable math widgets
-- 🔄 Undo / Redo history system
-- 🖊 Touch input support
-
-<br>
-
-## 🗺️ Roadmap
-
-**PHASE ONE 😲**
-- 💃 Refactor widget movement + selection system
-- 🧹 Major widget architecture cleanup
-- 🌩️ Hover feedback when dragging expressions onto graphs
-- 👀 Fix widget display on mobile
-- 🗨️ Improve dialog system architecture
-- ↩️ Ensure undo/redo works across all widget actions
-
-**PHASE TWO 😎**
-- 🔨 Fix toolbar styling on variable width displays
-- 📷 Infinite pannable canvas / grab tool
-- 🔍 Improve SEO
-- 📊 Add Google Analytics
-- 🩹 Introduction Dialog
-- 📘 Information Dialog
-
-**PHASE THREE 🙊**
-- 🎨 Tool settings menu (stroke width, color, etc.)
-- ⌨️ keyboard shortcuts
-- 🖋️ Editable expression component
-- 🔃 Convert expressions back into editable strokes
-- 🧰 Select graph bounds interactively
-- 🛡️ Save/Load functionality
+- Handwritten Math Recognition (HMER) powered by [**TexTeller**](https://github.com/OleehyO/TexTeller)
+- Live graphing powered by [**Desmos**](https://www.desmos.com/)
+- Draggable and resizable math widgets
+- Undo / Redo history system
+- Touch input support
 
 <br>
 
