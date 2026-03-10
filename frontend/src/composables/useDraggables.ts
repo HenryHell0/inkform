@@ -133,8 +133,8 @@ export function useWidgetResize(id: string) {
 
 	const { start, isActive: isResizing } = usePointerGestureCoordinateOffset(width, height, {
 		onMove: () => {
-			const maxWidth = window.innerWidth // "temporary" window.innerWidth (actually temporary - it doesent work) :)
-			const maxHeight = window.innerHeight
+			const maxWidth = window.innerWidth - widget.x// "temporary" window.innerWidth (actually temporary - it doesent work) :)
+			const maxHeight = window.innerHeight - widget.y
 
 			width.value = clamp(width.value, 100, maxWidth) // todo fix minimum width and height
 			height.value = clamp(height.value, 100, maxHeight)
