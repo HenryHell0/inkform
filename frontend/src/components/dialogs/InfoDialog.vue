@@ -66,7 +66,7 @@ const dialogStore = useDialogStore()
 				</ul>
 			</section>
 
-			<footer class="footer">
+			<section>
 				<p>
 					I’m aiming to make something easy to use, fun, and helpful for both students and teachers.
 				</p>
@@ -78,16 +78,22 @@ const dialogStore = useDialogStore()
 				</p>
 
 				<p class="enjoy">Enjoy! 🎉</p>
+			</section>
+
+			<footer class="legal">
+				<p>
+					&copy; 2026 Henry Holton - Inkform&trade;<br />
+					Licensed under AGPL-3.0
+				</p>
 			</footer>
 		</div>
 	</FullscreenDialog>
 </template>
 
 <style scoped>
-
+/* make internal dialog bigger */
 .dialog > * {
 	width: 40em;
-
 }
 
 .about {
@@ -117,8 +123,6 @@ section {
 	display: flex;
 	flex-direction: column;
 	gap: 0.75rem;
-
-
 }
 
 .features h3 {
@@ -151,7 +155,7 @@ li {
 }
 
 .enjoy {
-	font-weight: 500;
+	font-weight: bold;
 }
 
 a {
@@ -162,5 +166,10 @@ a {
 
 a:hover {
 	text-decoration: underline;
+}
+
+.legal {
+	font-size: 75%;
+	color: var(--color-zinc-600)
 }
 </style>

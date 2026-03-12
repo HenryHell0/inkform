@@ -1,7 +1,7 @@
 # Inkform
 > A handwriting-based mathematical whiteboard for exploring, solving, and visualizing math
 
-Inkform lets you write math naturally and have it transformed into interactive expressions and graphs
+Inkform™ lets you write math naturally and have it transformed into interactive expressions and graphs
 
 🌐 **Live Demo:** https://inkform.io
 
@@ -51,5 +51,10 @@ npm run dev
 ```
 >⚠️ First boot may take a while while TexTeller installs dependencies.
 
+
+## 📝 Legal
+
+Inkform is licensed under the GNU Affero General Public License v3.0 (AGPL-3.0).
+© 2026 Henry Holton. Inkform™ is a trademark of Henry Holton.
 
 Built with Vue! Yay! 💚
