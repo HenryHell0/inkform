@@ -13,6 +13,7 @@ const widget = widgetStore.getWidgetById(props.id)
 if (!(widget instanceof ExpressionData)) throw new Error('this aint no expression!')
 
 // initial check if LaTeX is loaded
+// TODO eventually this will all be extracted to a scalable (callback-based?) async composable thing, where you just pass around stuff and when it's done then everything works. no need for this manual stuff.
 const loadingBar: Ref<InstanceType<typeof LoadingBar> | null> = ref(null)
 onMounted(() => {
 	if (!loadingBar.value) throw new Error('loadingbar is not defined :(')
@@ -23,6 +24,7 @@ onMounted(() => {
 	}
 })
 
+// could I stop the watcher when it loads? saves performance later ... ?
 watch(
 	() => widget.latex,
 	(latex) => {

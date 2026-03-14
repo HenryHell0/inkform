@@ -28,7 +28,7 @@ export function usePopMenu(closeMenuOnClick = false) {
 			close()
 		}
 	}
-
+	// PS I could just use uhh anchor positioning
 	function positionMenu() {
 		nextTick(() => {
 			if (!activatorElement.value || !menuElement.value) return

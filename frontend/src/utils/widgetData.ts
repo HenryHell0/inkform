@@ -11,7 +11,7 @@ export const graphColors = new Map<string, string>([
 	['BLACK', '#000000'],
 ])
 
-interface ItoolbarButton {
+interface ToolbarButton {
 	name: string
 	icon: string
 	onClick: (event: PointerEvent) => void
@@ -25,7 +25,7 @@ abstract class WidgetData {
 	id: string
 	zIndex: number
 
-	toolbarButtons?: ItoolbarButton[]
+	toolbarButtons?: ToolbarButton[]
 
 	constructor(x: number, y: number, width: number, height: number) {
 		this.x = x
