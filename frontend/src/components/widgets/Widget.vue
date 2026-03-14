@@ -3,7 +3,6 @@ import { computed } from 'vue'
 import { useWidgetDrag, useWidgetResize } from '@/composables/useDraggables'
 import { useWidgetStore } from '@/stores/useWidgetStore'
 import { useSessionStore } from '@/stores/useSessionStore'
-import WidgetToolbar from './WidgetToolbar.vue'
 import { useWidgetStyles } from '@/composables/useWidgetStyles'
 const widgetStore = useWidgetStore()
 const sessionStore = useSessionStore()
@@ -29,20 +28,28 @@ function toolbarClicked(event: PointerEvent) {
 	bringToFront()
 }
 
-// todo this should NOT be in-component. it should be a history action
+// todo this should NOT be in-component. it should be a history action but i'll do that later
 function bringToFront() {
 	widgetStore.bringWidgetToFront(widget)
 }
-
 </script>
 <template>
 	<div v-drawing-opacity ref="element" class="template" :class="classes" :style="styles">
-		<WidgetToolbar @pointerdown="toolbarClicked" :widget :isDragging></WidgetToolbar>
+		<!-- <WidgetToolbar @pointerdown="toolbarClicked" :widget :isDragging></WidgetToolbar> -->
+		<!-- can you v-bind to a slot??? -->
+		<slot name="toolbar" :widget="widget" :isDragging="isDragging" :onPointerdown="toolbarClicked" />
 
 		<div @click="bringToFront" style="height: 100%">
 			<slot></slot>
 		</div>
-		<img class="resizer" v-touch-prevent  @pointerdown="resizeStart" :src="'./assets/resize.svg'" draggable="false" />
+
+		<img
+			class="resizer"
+			v-touch-prevent
+			@pointerdown="resizeStart"
+			:src="'./assets/resize.svg'"
+			draggable="false"
+		/>
 	</div>
 </template>
 <style scoped>

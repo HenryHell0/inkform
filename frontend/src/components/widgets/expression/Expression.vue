@@ -4,6 +4,8 @@ import LoadingBar from '@/components/ui/LoadingBar.vue'
 import { useWidgetStore } from '@/stores/useWidgetStore'
 import { ExpressionData } from '@/utils/widgetData'
 import { onMounted, ref, watch, type Ref } from 'vue'
+import ExpressionToolbar from './ExpressionToolbar.vue'
+import Widget from '../Widget.vue'
 
 const props = defineProps<{
 	id: string
@@ -37,8 +39,14 @@ watch(
 )
 </script>
 <template>
-	<ExpressionContent :id="props.id"></ExpressionContent>
-	<LoadingBar ref="loadingBar" class="loading-bar"></LoadingBar>
+	<Widget :id="props.id">
+		<template #toolbar="{ widget, isDragging, onPointerdown }">
+			<ExpressionToolbar :widget="widget" :isDragging="isDragging" @pointerdown="onPointerdown"/>
+		</template>
+
+		<ExpressionContent :id="props.id"></ExpressionContent>
+		<LoadingBar ref="loadingBar" class="loading-bar"></LoadingBar>
+	</Widget>
 </template>
 <style scoped>
 .loading-bar {

@@ -8,12 +8,12 @@ function setIdleInputMode() {
 }
 </script>
 <template>
-	<div v-drawing-opacity class="toolbar-section" @mouseenter="setIdleInputMode">
+	<div v-drawing-opacity class="section" @mouseenter="setIdleInputMode">
 		<slot></slot>
 	</div>
 </template>
 <style scoped lang="css">
-.toolbar-section {
+.section {
 	padding: 10px 10px;
 
 	display: flex;
