@@ -2,7 +2,6 @@ import { onUnmounted, ref, toRef } from 'vue'
 import type { Ref } from 'vue'
 import type { Position, Size } from '@/types/types'
 import { useWidgetStore } from '@/stores/useWidgetStore'
-import { clamp } from '@/utils/utils'
 import { executeAction, MoveWidgetAction, ResizeWidgetAction } from '@/utils/actions'
 import { useSessionStore } from '@/stores/useSessionStore'
 
@@ -94,14 +93,6 @@ export function useWidgetDrag(id: string) {
 		onDown: () => {
 			sessionStore.heldWidgetId = id
 		},
-		onMove: () => {
-			const maxX = window.innerWidth - widget.width // temporary window.innerWidth and stuff
-			const maxY = window.innerHeight - widget.height
-
-			x.value = clamp(x.value, 0, maxX)
-			y.value = clamp(y.value, 0, maxY)
-		},
-
 		// TODO eventually this will also trigger drop events like dropping a widget onto a graph.. in the future
 		onUp: (event, from, to) => {
 			if (from.x !== to.x || from.y !== to.y) {
@@ -132,13 +123,6 @@ export function useWidgetResize(id: string) {
 	const height = toRef(widget, 'height')
 
 	const { start, isActive: isResizing } = usePointerGestureCoordinateOffset(width, height, {
-		onMove: () => {
-			const maxWidth = window.innerWidth - widget.x// "temporary" window.innerWidth (actually temporary - it doesent work) :)
-			const maxHeight = window.innerHeight - widget.y
-
-			width.value = clamp(width.value, 100, maxWidth) // todo fix minimum width and height
-			height.value = clamp(height.value, 100, maxHeight)
-		},
 
 		onUp: (_, from, to) => {
 			if (from.x === to.x && from.y === to.y) return
