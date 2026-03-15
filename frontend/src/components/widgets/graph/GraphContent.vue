@@ -1,14 +1,9 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import { useWidgetStore } from '@/stores/useWidgetStore'
-import { GraphData } from '@/utils/widgetData'
+import { inject, onMounted, ref } from 'vue'
+import { GraphData, type Widget } from '@/utils/widgetData'
 
-const props = defineProps<{
-	id: string
-}>()
+const widget = inject<Widget>('widget')
 const graphElement = ref<HTMLElement | null>(null)
-const widgetStore = useWidgetStore()
-const widget = widgetStore.getWidgetById(props.id)
 
 onMounted(async () => {
 	// check da ting

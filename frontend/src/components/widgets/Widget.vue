@@ -8,6 +8,8 @@ import type { Widget } from '@/utils/widgetData'
 const widgetStore = useWidgetStore()
 const sessionStore = useSessionStore()
 
+// ! NOTE: this REQUIRES widget to be provided... so we might want to do a require prop, and then wiget.vue provides it.
+// also, we might want to do some sort of useWidgetInject or something... or make another wrapper around widgets that provides.. or provide here... idk.
 const widget = inject<Widget>("widget")!
 
 const { start: dragStart, isDragging } = useWidgetDrag(widget.id)
