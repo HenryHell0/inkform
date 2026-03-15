@@ -6,22 +6,15 @@
 </template>
 <style scoped lang="css">
 .section {
-	--margin-top-bottom: 1px;
-	position: absolute;
-	left: 50%;
-	transform: translateX(-50%);
-
 	background-color: var(--color-gray-50);
 	border-radius: 5px;
-	margin-top: var(--margin-top-bottom);
-	margin-bottom: var(--margin-top-bottom);
-
-	box-sizing: border-box;
-	height: calc(100% - 2 * var(--margin-top-bottom));
-	padding-top: 1px;
-	padding-bottom: 1px;
 
 	display: flex;
-	padding: 1px;
+	align-items: center;
+
+	padding: 3px; /*space between buttons and edge of section */
+	margin-top: 2px; /*space between section and edges of toolbar */
+	margin-bottom: 2px;
+	gap: 6px; /* space between elements*/
 }
 </style>

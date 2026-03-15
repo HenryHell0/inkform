@@ -17,7 +17,6 @@ const isDragging = inject<Ref<boolean>>("isDragging")
 
 		<!-- BUTTONS/CONTENT -->
 		<div class="content">
-			<!-- might wnat to add pointerdown.stop or v-touch-prevent -->
 			<slot name="content"></slot>
 		</div>
 
@@ -37,21 +36,19 @@ const isDragging = inject<Ref<boolean>>("isDragging")
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	flex-direction: row;
 
 	cursor: grab;
 }
 
 .title {
 	color: var(--color-text-dark);
-	font-size: 100%;
+	font-size: 1em;
 	padding: 0.5em;
 }
 
 .content {
-	white-space: nowrap;
-
 	display: flex;
+	gap: 5px;
 	align-items: center;
 }
 
