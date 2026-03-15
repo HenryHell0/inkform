@@ -4,17 +4,18 @@ import { useWidgetDrag, useWidgetResize } from '@/composables/useDraggables'
 import { useWidgetStore } from '@/stores/useWidgetStore'
 import { useSessionStore } from '@/stores/useSessionStore'
 import { useWidgetStyles } from '@/composables/useWidgetStyles'
+import type { Widget } from '@/utils/widgetData'
 const widgetStore = useWidgetStore()
 const sessionStore = useSessionStore()
+
 const props = defineProps<{
-	id: string
+	widget: Widget
 }>()
-const widget = widgetStore.getWidgetById(props.id)
 
-const { start: dragStart, isDragging } = useWidgetDrag(props.id)
-const { start: resizeStart, isResizing } = useWidgetResize(props.id)
+const { start: dragStart, isDragging } = useWidgetDrag(props.widget.id)
+const { start: resizeStart, isResizing } = useWidgetResize(props.widget.id)
 
-const styles = useWidgetStyles(widget)
+const styles = useWidgetStyles(props.widget)
 const classes = computed(() => {
 	return {
 		dragging: isDragging.value,
@@ -24,25 +25,28 @@ const classes = computed(() => {
 
 function toolbarClicked(event: PointerEvent) {
 	dragStart(event)
-	sessionStore.heldWidgetId = widget.id
+	sessionStore.heldWidgetId = props.widget.id
 	bringToFront()
 }
 
 // todo this should NOT be in-component. it should be a history action but i'll do that later
 function bringToFront() {
-	widgetStore.bringWidgetToFront(widget)
+	widgetStore.bringWidgetToFront(props.widget)
 }
 </script>
 <template>
-	<div v-drawing-opacity ref="element" class="template" :class="classes" :style="styles">
-		<!-- <WidgetToolbar @pointerdown="toolbarClicked" :widget :isDragging></WidgetToolbar> -->
-		<!-- can you v-bind to a slot??? -->
-		<slot name="toolbar" :widget="widget" :isDragging="isDragging" :onPointerdown="toolbarClicked" />
-
-		<div @click="bringToFront" style="height: 100%">
-			<slot></slot>
+	<div v-drawing-opacity ref="element" class="wrapper" :class="classes" :style="styles">
+		<!-- TOOLBAR -->
+		<div @pointerdown="toolbarClicked">
+			<slot name="toolbar" :isDragging />
 		</div>
 
+		<!-- MAIN CONTENT -->
+		<div @click="bringToFront" style="height: 100%">
+			<slot name="content"></slot>
+		</div>
+
+		<!-- RESIZER -->
 		<img
 			class="resizer"
 			v-touch-prevent
@@ -53,21 +57,20 @@ function bringToFront() {
 	</div>
 </template>
 <style scoped>
-.template {
-	/*? change this to work with future graphs. this should be in expression prolly */
+.wrapper {
 	user-select: none;
 	z-index: 2;
 	position: absolute;
 
 	display: flex;
 	flex-direction: column;
-	overflow: hidden;
 
 	border-radius: 0.5em;
 	background: var(--color-bg-0);
 	box-shadow: 2px 2px 10px var(--color-box-shadow);
 
 	pointer-events: fill;
+	overflow: hidden;
 }
 
 .dragging {

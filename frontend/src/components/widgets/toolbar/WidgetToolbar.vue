@@ -1,64 +1,69 @@
 <script setup lang="ts">
 import { useWidgetStore } from '@/stores/useWidgetStore'
-import { type Widget } from '@/utils/widgetData'
-const widgetStore = useWidgetStore()
 
 const { isDragging } = defineProps<{
 	isDragging: boolean
-	close: () => void
+	close: () => void // should this really be blind? I mean it's the same for each widget, and widgetToolbar is already so specific to just this
 }>()
 </script>
 <template>
 	<div class="toolbar" v-touch-prevent :style="{ cursor: isDragging ? 'grabbing' : 'grab' }">
-
-		<slot name="title" class="title" />
-		<slot></slot>
-
-		<div @pointerdown.stop class="x-button-container">
-			<img src="/assets/x.svg" @pointerup="close" class="x-button" draggable="false" />
+		<!-- TITLE -->
+		<div class="title">
+			<slot name="title" class="title" />
 		</div>
+
+		<!-- BUTTONS/CONTENT -->
+		<div class="content">
+			<!-- might wnat to add pointerdown.stop -->
+			<slot name="content"></slot>
+		</div>
+
+		<!-- X BUTTON -->
+		<img @pointerdown.stop src="/assets/x.svg" @pointerup="close" class="x-button" draggable="false" />
 	</div>
 </template>
 <style scoped>
 .toolbar {
-	border-top-left-radius: inherit;
-	border-top-right-radius: inherit;
-	background-color: var(--color-bg-1);
 	width: 100%;
 	position: relative;
 
+	border-top-left-radius: inherit;
+	border-top-right-radius: inherit;
+	background-color: var(--color-bg-1);
+
 	display: flex;
-	flex-direction: row;
 	justify-content: space-between;
+	align-items: center;
+	flex-direction: row;
 
 	cursor: grab;
 }
 
-/* ? will this apply to slotted title text? */
-::slotted(.title) {
-	/* color: var(--color-text-dark); */
-	color: red;
+.title {
+	color: var(--color-text-dark);
 	font-size: 100%;
 	padding: 0.5em;
-	align-self: flex-start;
 }
 
-.x-button-container {
+.content {
+	white-space: nowrap;
+
 	display: flex;
 	align-items: center;
-	justify-content: center;
 }
 
 .x-button {
-	height: 100%;
+	height: 2.3em;
 	box-sizing: border-box;
 	padding: 0.1em;
 	border-radius: 100px;
-	transition: background 0.3s ease;
+	transition: background 0.3s ease, transform 0.1s ease-in-out;
 	cursor: pointer;
 }
 
 .x-button:hover {
-	background-color: var(--color-bg-3);
+	background-color: var(--color-bg-0);
+	transform: scale(1.1);
 }
 </style>

@@ -39,13 +39,17 @@ watch(
 )
 </script>
 <template>
-	<Widget :id="props.id">
-		<template #toolbar="{ widget, isDragging, onPointerdown }">
-			<ExpressionToolbar :widget="widget" :isDragging="isDragging" @pointerdown="onPointerdown"/>
+	<Widget :widget>
+		<!-- TOOLBAR -->
+		<template #toolbar="{ isDragging }">
+			<ExpressionToolbar :widget :isDragging />
 		</template>
 
-		<ExpressionContent :id="props.id"></ExpressionContent>
-		<LoadingBar ref="loadingBar" class="loading-bar"></LoadingBar>
+		<!-- CONTENT -->
+		<template #content>
+			<ExpressionContent :id="props.id"></ExpressionContent>
+			<LoadingBar ref="loadingBar" class="loading-bar"></LoadingBar>
+		</template>
 	</Widget>
 </template>
 <style scoped>
