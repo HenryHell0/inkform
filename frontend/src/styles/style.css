@@ -1,5 +1,4 @@
 :root {
-
 	/* =========================================================
 	   SEMANTIC TOKENS (PRIMARY GLOBAL DESIGN SYSTEM)
 	   Components should use THESE, not palette values.
@@ -25,6 +24,9 @@
 
 	/* --- Shadows --- */
 	--color-box-shadow: rgba(0, 0, 0, 0.2);
+
+	/* --- Animation --- */
+	--bounce-curve: cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 * {
@@ -44,5 +46,16 @@ textarea {
 }
 
 button {
-	all: unset
+	all: unset;
+}
+
+img {
+	/* who knows if this works or no */
+	-webkit-user-select: none; /* Safari */
+	user-select: none; /* Standard */
+	/* pointer-events: none; Disables click/long-press on mobile */
+	-webkit-touch-callout: none; /* Disables callout menu on iOS */
+	-webkit-user-drag: none; /* Safari, Chrome */
+	-moz-user-drag: none; /* Firefox (older versions) */
+	-ms-user-drag: none; /* Internet Explorer/Edge */
 }

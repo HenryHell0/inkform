@@ -75,4 +75,9 @@ button.active:hover {
 	transform: scale(var(--scale-2));
 	background-color: var(--color-bg-2);
 }
+
+/* cute button click animation */
+button:active {
+	transform: scale(1);
+}
 </style>

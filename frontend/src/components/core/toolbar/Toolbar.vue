@@ -15,7 +15,7 @@ const dialogStore = useDialogStore()
 	<div ref="element" class="toolbar-container">
 		<ToolbarSection>
 			<ToolbarButton @click="dialogStore.openDialog('info')">
-				<img src="/assets/info.svg" style="transform:scale(1.45)">
+				<img src="/assets/info.svg" style="transform:scale(1.45)" draggable="false">
 			</ToolbarButton>
 		</ToolbarSection>
 
@@ -37,7 +37,7 @@ const dialogStore = useDialogStore()
 					:active="sessionStore.activeTool === tool"
 					@click="sessionStore.activeTool = tool"
 				>
-					<img :src="`./assets/${tool}.svg`" />
+					<img :src="`./assets/${tool}.svg`" draggable="false"/>
 				</ToolbarButton>
 			</ToolbarSection>
 		</div>
@@ -46,14 +46,14 @@ const dialogStore = useDialogStore()
 		<div class="toolbar-group">
 			<ToolbarSection>
 				<ToolbarButton @click="dialogStore.openDialog('feedback')">
-					<img src="/assets/feedback.svg" />
+					<img src="/assets/feedback.svg" draggable="false"/>
 				</ToolbarButton>
 			</ToolbarSection>
 			<!-- GITHUB -->
 			<ToolbarSection>
 				<ToolbarButton>
 					<a href="https://github.com/henryhell0/inkform" target="_blank">
-						<img src="/assets/github.svg" style="transform: scale(1.5)" />
+						<img src="/assets/github.svg" style="transform: scale(1.5)" draggable="false"/>
 					</a>
 				</ToolbarButton>
 			</ToolbarSection>

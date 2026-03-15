@@ -65,6 +65,15 @@ button {
 	height: 2em;
 
 	color: white;
+
+	transition: transform 0.2s ease;
+}
+
+button:hover {
+	transform: scale(1.05);
+}
+
+button:active {
+	transform: scale(0.9);
 }
 </style>
-``
