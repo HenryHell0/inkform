@@ -38,7 +38,7 @@ function bringToFront() {
 }
 </script>
 <template>
-	<div v-drawing-opacity ref="element" class="wrapper" :class="classes" :style="styles" >
+	<div v-drawing-opacity class="wrapper" :class="classes" :style="styles" >
 		<!-- TOOLBAR -->
 		<div @pointerdown="toolbarClicked">
 			<slot name="toolbar" />
