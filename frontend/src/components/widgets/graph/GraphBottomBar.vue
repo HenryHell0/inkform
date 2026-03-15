@@ -63,7 +63,7 @@ function changeColor(expression: ExpressionData, color: string) {
 			<PopMenu :closeOnClick="true">
 				<template #activator>
 					<div class="popmenu-activator">
-						<img class="three-dot-image" src="/assets/vertical-dots.svg" />
+						<img class="three-dot-image" src="/assets/vertical-dots.svg" draggable="false"/>
 					</div>
 				</template>
 				<template #menu>

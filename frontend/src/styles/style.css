@@ -44,5 +44,16 @@ textarea {
 }
 
 button {
-	all: unset
+	all: unset;
+}
+
+img {
+	/* who knows if this works or no */
+	-webkit-user-select: none; /* Safari */
+	user-select: none; /* Standard */
+	/* pointer-events: none; Disables click/long-press on mobile */
+	-webkit-touch-callout: none; /* Disables callout menu on iOS */
+	-webkit-user-drag: none; /* Safari, Chrome */
+	-moz-user-drag: none; /* Firefox (older versions) */
+	-ms-user-drag: none; /* Internet Explorer/Edge */
 }
