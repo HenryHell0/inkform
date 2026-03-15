@@ -19,6 +19,7 @@ PSPSPS IMPORTANT! get **google SEO** going!
 - ⭐ switch HMER select button to having a little AI star
 - make it so that hovering a graph with an expression blurs/makes it clear you can drop it in. noone will know you can do that.
 - make a logo
+- add :active to all buttons to make them pop out when clicking!
 
 ### Later:
 
