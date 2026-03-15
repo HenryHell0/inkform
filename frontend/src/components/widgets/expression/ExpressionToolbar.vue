@@ -4,17 +4,14 @@ import WidgetToolbar from '../toolbar/WidgetToolbar.vue'
 import WidgetToolbarButton from '../toolbar/WidgetToolbarButton.vue'
 import WidgetToolbarSection from '../toolbar/WidgetToolbarSection.vue'
 import { useWidgetStore } from '@/stores/useWidgetStore'
+import { inject } from 'vue'
 
+const widget = inject<Widget>('widget')!
 const widgetStore = useWidgetStore()
-
-defineProps<{
-	isDragging: boolean
-	widget: Widget
-}>()
 </script>
 
 <template>
-	<WidgetToolbar :close="() => widgetStore.deleteWidget(widget.id)" :isDragging>
+	<WidgetToolbar :close="() => widgetStore.deleteWidget(widget.id)">
 		<template #title> Expression </template>
 		<template #content> buttons go here... </template>
 	</WidgetToolbar>

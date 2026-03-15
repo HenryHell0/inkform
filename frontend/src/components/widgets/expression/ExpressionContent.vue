@@ -1,13 +1,8 @@
 <script setup lang="ts">
-import { toRef } from 'vue'
-import { useWidgetStore } from '@/stores/useWidgetStore'
-import { storeToRefs } from 'pinia'
-import { ExpressionData } from '@/utils/widgetData'
+import { inject, toRef } from 'vue'
+import { ExpressionData, type Widget } from '@/utils/widgetData'
 
-// wouldn't it be easier to just pass in the LaTeX?
-const props = defineProps<{ id: string }>()
-const widgetStore = useWidgetStore()
-const widget = widgetStore.getWidgetById(props.id) as ExpressionData
+const widget = inject<Widget>("widget")! as ExpressionData
 
 const latex = toRef(widget, 'latex')
 </script>

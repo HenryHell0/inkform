@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, inject, provide, type Ref } from 'vue'
 import { useWidgetDrag, useWidgetResize } from '@/composables/useDraggables'
 import { useWidgetStore } from '@/stores/useWidgetStore'
 import { useSessionStore } from '@/stores/useSessionStore'
@@ -8,14 +8,12 @@ import type { Widget } from '@/utils/widgetData'
 const widgetStore = useWidgetStore()
 const sessionStore = useSessionStore()
 
-const props = defineProps<{
-	widget: Widget
-}>()
+const widget = inject<Widget>("widget")!
 
-const { start: dragStart, isDragging } = useWidgetDrag(props.widget.id)
-const { start: resizeStart, isResizing } = useWidgetResize(props.widget.id)
+const { start: dragStart, isDragging } = useWidgetDrag(widget.id)
+const { start: resizeStart, isResizing } = useWidgetResize(widget.id)
 
-const styles = useWidgetStyles(props.widget)
+const styles = useWidgetStyles(widget)
 const classes = computed(() => {
 	return {
 		dragging: isDragging.value,
@@ -23,22 +21,25 @@ const classes = computed(() => {
 	}
 })
 
+// give children the widget id, dragging value, etc.
+provide("isDragging", isDragging)
+
 function toolbarClicked(event: PointerEvent) {
 	dragStart(event)
-	sessionStore.heldWidgetId = props.widget.id
+	sessionStore.heldWidgetId = widget.id
 	bringToFront()
 }
 
-// todo this should NOT be in-component. it should be a history action but i'll do that later
+// todo this should NOT be in-component. it should be a history action in bringWidgetToFront but i'll do that later
 function bringToFront() {
-	widgetStore.bringWidgetToFront(props.widget)
+	widgetStore.bringWidgetToFront(widget)
 }
 </script>
 <template>
-	<div v-drawing-opacity ref="element" class="wrapper" :class="classes" :style="styles">
+	<div v-drawing-opacity ref="element" class="wrapper" :class="classes" :style="styles" >
 		<!-- TOOLBAR -->
 		<div @pointerdown="toolbarClicked">
-			<slot name="toolbar" :isDragging />
+			<slot name="toolbar" />
 		</div>
 
 		<!-- MAIN CONTENT -->
@@ -75,11 +76,12 @@ function bringToFront() {
 
 .dragging {
 	box-shadow: 10px 10px 15px var(--color-box-shadow);
-	opacity: 80%;
+	/* TODO FIX the v-drawing-opacity composable (I think) */
+	opacity: 0.8;
 }
 
 .resizing {
-	opacity: 80%;
+	opacity: 0.8;
 }
 
 .resizer {

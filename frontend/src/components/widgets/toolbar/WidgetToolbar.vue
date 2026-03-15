@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { useWidgetStore } from '@/stores/useWidgetStore'
+import { inject, type Ref } from 'vue';
 
-const { isDragging } = defineProps<{
-	isDragging: boolean
-	close: () => void // should this really be blind? I mean it's the same for each widget, and widgetToolbar is already so specific to just this
+defineProps<{
+	close: () => void
 }>()
+
+const isDragging = inject<Ref<boolean>>("isDragging")
+
 </script>
 <template>
 	<div class="toolbar" v-touch-prevent :style="{ cursor: isDragging ? 'grabbing' : 'grab' }">
@@ -15,7 +17,7 @@ const { isDragging } = defineProps<{
 
 		<!-- BUTTONS/CONTENT -->
 		<div class="content">
-			<!-- might wnat to add pointerdown.stop -->
+			<!-- might wnat to add pointerdown.stop or v-touch-prevent -->
 			<slot name="content"></slot>
 		</div>
 
