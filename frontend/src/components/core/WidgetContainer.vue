@@ -18,9 +18,12 @@ addTestWidgets()
 </script>
 <template>
 	<div class="widget-container">
-		<Widget v-for="widget in widgetStore.widgets" :key="widget.id" :id="widget.id">
-			<component :is="widgetComponents[widget.type]" :id="widget.id"></component>
-		</Widget>
+		<component
+			v-for="widget in widgetStore.widgets"
+			:key="widget.id"
+			:is="widgetComponents[widget.type]"
+			:id="widget.id"
+		></component>
 	</div>
 </template>
 <style scoped>

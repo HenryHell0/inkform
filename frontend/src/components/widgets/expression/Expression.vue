@@ -3,7 +3,9 @@ import ExpressionContent from './ExpressionContent.vue'
 import LoadingBar from '@/components/ui/LoadingBar.vue'
 import { useWidgetStore } from '@/stores/useWidgetStore'
 import { ExpressionData } from '@/utils/widgetData'
-import { onMounted, ref, watch, type Ref } from 'vue'
+import { onMounted, provide, ref, watch, type Ref } from 'vue'
+import ExpressionToolbar from './ExpressionToolbar.vue'
+import Widget from '../Widget.vue'
 
 const props = defineProps<{
 	id: string
@@ -11,6 +13,9 @@ const props = defineProps<{
 const widgetStore = useWidgetStore()
 const widget = widgetStore.getWidgetById(props.id)
 if (!(widget instanceof ExpressionData)) throw new Error('this aint no expression!')
+
+// provide widget for childen
+provide('widget', widget)
 
 // initial check if LaTeX is loaded
 // TODO eventually this will all be extracted to a scalable (callback-based?) async composable thing, where you just pass around stuff and when it's done then everything works. no need for this manual stuff.
@@ -37,8 +42,18 @@ watch(
 )
 </script>
 <template>
-	<ExpressionContent :id="props.id"></ExpressionContent>
-	<LoadingBar ref="loadingBar" class="loading-bar"></LoadingBar>
+	<Widget>
+		<!-- TOOLBAR -->
+		<template #toolbar>
+			<ExpressionToolbar />
+		</template>
+
+		<!-- CONTENT -->
+		<template #content>
+			<ExpressionContent />
+			<LoadingBar ref="loadingBar" class="loading-bar" />
+		</template>
+	</Widget>
 </template>
 <style scoped>
 .loading-bar {

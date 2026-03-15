@@ -11,11 +11,6 @@ export const graphColors = new Map<string, string>([
 	['BLACK', '#000000'],
 ])
 
-interface ToolbarButton {
-	name: string
-	icon: string
-	onClick: (event: PointerEvent) => void
-}
 
 abstract class WidgetData {
 	x: number
@@ -24,8 +19,6 @@ abstract class WidgetData {
 	height: number
 	id: string
 	zIndex: number
-
-	toolbarButtons?: ToolbarButton[]
 
 	constructor(x: number, y: number, width: number, height: number) {
 		this.x = x
@@ -52,18 +45,13 @@ export class ExpressionData extends WidgetData {
 		if (!color) throw new Error('bad math')
 		this.graphColor = color
 
-		const self = this
-		this.toolbarButtons = [
-			{
-				name: 'graph',
-				icon: 'graph',
-				onClick: function () {
-					const widgetStore = useWidgetStore()
-					widgetStore.addWidget(new GraphData(self.x, self.y, self.width, self.width, [self])) // self.width twice is intentional
-					widgetStore.deleteWidget(self.id)
-				},
-			},
-		]
+
+	}
+	convertToGraph (){
+		// this should use history actions in the future btw!
+		const widgetStore = useWidgetStore()
+		widgetStore.addWidget(new GraphData(this.x, this.y, this.width, this.width, [this])) // self.width twice is intentional
+		widgetStore.deleteWidget(this.id)
 	}
 }
 

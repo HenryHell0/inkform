@@ -1,15 +1,10 @@
 <script setup lang="ts">
-import { toRef } from 'vue'
-import { useWidgetStore } from '@/stores/useWidgetStore'
-import { storeToRefs } from 'pinia'
-import { ExpressionData } from '@/utils/widgetData'
+import { inject, toRef } from 'vue'
+import { ExpressionData, type Widget } from '@/utils/widgetData'
 
-const props = defineProps({ id: String })
-const widgetStore = useWidgetStore()
-const widget = storeToRefs(widgetStore).widgets.value.find((e) => e.id === props.id)
-if (!(widget instanceof ExpressionData)) throw new Error('this is not an expression widget!')
+const widget = inject<Widget>("widget")! as ExpressionData
 
-const latex = toRef(() => widget.latex)
+const latex = toRef(widget, 'latex')
 </script>
 <template>
 	<div class="content">
@@ -39,7 +34,7 @@ const latex = toRef(() => widget.latex)
 	justify-content: center;
 	align-items: center;
 	/* width: 100%;
-	height: 100%; */
+		height: 100%; */
 	font-size: clamp(1em, 400vh, 400%);
 	transform: translateY(-10px);
 }

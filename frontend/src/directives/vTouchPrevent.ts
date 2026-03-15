@@ -1,5 +1,6 @@
 import type { Directive } from 'vue'
 
+// this bassically just prevents mobile scrolling on elements
 export const vTouchPrevent: Directive = {
   mounted(element) {
     const prevent = (e: TouchEvent) => e.preventDefault()

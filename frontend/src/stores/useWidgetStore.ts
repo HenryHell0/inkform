@@ -17,6 +17,7 @@ export const useWidgetStore = defineStore('widgets', () => {
 	}
 
 	function deleteWidget(id: string) {
+		// this should use history actions in the future
 		widgets.value = widgets.value.filter((e) => e.id != id)
 	}
 
