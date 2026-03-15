@@ -14,7 +14,7 @@ const latex = toRef(widget, 'latex')
 <template>
 	<div class="content">
 		<vue-mathjax
-			v-if="latex"
+			v-if="typeof latex == 'string'"
 			:formula="`$$${latex}$$`"
 			class="expression"
 			:options="{ messageStyle: 'none' }"
