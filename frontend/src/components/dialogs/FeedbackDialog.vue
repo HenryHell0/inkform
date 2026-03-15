@@ -38,7 +38,7 @@ function handleSubmit() {
 		</div>
 	</FullscreenDialog>
 </template>
-<style>
+<style scoped>
 .form {
 	display: flex;
 	flex-direction: column;
