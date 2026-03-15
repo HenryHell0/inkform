@@ -97,6 +97,8 @@ function changeColor(expression: ExpressionData, color: string) {
 	width: 26px;
 	height: 26px;
 	/* position: relative; */
+
+	transition: transform 0.2s var(--bounce-curve)
 }
 
 .color-svg::after {
@@ -104,20 +106,14 @@ function changeColor(expression: ExpressionData, color: string) {
 	background-color: red;
 	position: absolute;
 	top: 10px;
-	/*
-	width: 26px;
-	height: 26px;
-	top: -1px;
-	outline: 2px solid red;
-	background: red;
-	border-radius: 100px;
-	outline-offset: 1px; */
 }
 
 .color-svg:hover {
-	outline: 3px solid var(--color-border-medium);
-	border-radius: 100px;
-	outline-offset: -3px;
+	transform: scale(0.9);
+}
+
+.color-svg:active {
+	transform: scale(0.8);
 }
 
 .color-circle {
@@ -163,11 +159,16 @@ function changeColor(expression: ExpressionData, color: string) {
 	background-color: rgb(221, 221, 221);
 	border-radius: 3px;
 
-	transition: background ease-in-out 0.1s;
+	transition: background ease-in-out 0.1s, transform ease 0.2s;
 }
 
 .popmenu-activator:hover {
-	background-color: rgb(184, 184, 184);
+	background-color: rgb(195, 195, 195);
+	transform: scale(1.15);
+}
+
+.popmenu-activator:active {
+	transform: scale(0.95);
 }
 
 .three-dot-image {

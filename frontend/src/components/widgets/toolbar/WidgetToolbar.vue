@@ -65,4 +65,8 @@ const isDragging = inject<Ref<boolean>>("isDragging")
 	background-color: var(--color-bg-0);
 	transform: scale(1.1);
 }
+
+.x-button:active {
+	transform: scale(0.95);
+}
 </style>

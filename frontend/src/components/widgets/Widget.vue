@@ -96,5 +96,11 @@ function bringToFront() {
 	cursor: se-resize;
 	fill: var(--color-icon);
 	z-index: 2;
+
+	transition: transform 0.1s var(--bounce-curve);
+}
+
+.resizer:active {
+	transform: scale(0.8) translate(1px, 1px);
 }
 </style>
