@@ -6,5 +6,9 @@ import { ref } from 'vue'
 export const useCanvasStore = defineStore('canvas', () => {
 	const paths = ref<Path[]>([])
 
-	return { paths }
+	function removePathById(id: string) {
+		paths.value = paths.value.filter((p) => p.id != id)
+	}
+
+	return { paths, removePathById }
 })
