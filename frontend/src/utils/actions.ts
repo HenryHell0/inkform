@@ -7,6 +7,10 @@ export function executeAction(action: Action) {
 	useHistoryStore().execute(action)
 }
 
+export function pushAction(action: Action) {
+	useHistoryStore().push(action)
+}
+
 export interface Action {
 	do(): void
 	undo(): void
@@ -24,6 +28,10 @@ export class ActionGroup implements Action {
 
 	undo() {
 		for (const a of [...this.actions].reverse()) a.undo()
+	}
+
+	push(action: Action) {
+		this.actions.push(action)
 	}
 }
 
