@@ -5,9 +5,10 @@ import { erasePathsInRect } from './svgCanvasUtils'
 import { useWidgetStore } from '@/stores/useWidgetStore'
 import { useCanvasStore } from '@/stores/useCanvasStore'
 import { useSessionStore } from '@/stores/useSessionStore'
-import { AddPathAction, executeAction, RemovePathAction } from './actions'
+import { ActionGroup, AddPathAction, executeAction, pushAction, RemovePathAction } from './actions'
 import { DEBUG } from './debug'
 import { useHistoryStore } from '@/stores/useHistoryStore'
+import type { Path } from '@/types/types'
 
 export interface Tool {
 	onDown?: (event: PointerEvent) => void
@@ -42,10 +43,14 @@ const pen = new (class implements Tool {
 	}
 })()
 const eraser = new (class implements Tool {
+	capturedPaths: Set<Path> = new Set() // method to make one history action
+	onDown() {
+		this.capturedPaths.clear()
+	}
 	onMove(event: PointerEvent) {
+		const canvasStore = useCanvasStore()
 		const sessionStore = useSessionStore()
 		if (sessionStore.inputMode !== 'drawing') return
-		const canvasStore = useCanvasStore()
 
 		const startPos = sessionStore.previousMousePos
 		const endPos = { x: event.clientX, y: event.clientY }
@@ -61,19 +66,43 @@ const eraser = new (class implements Tool {
 
 			const elements = document.elementsFromPoint(x, y)
 
-			const history = useHistoryStore()
-
 			for (let pathElement of elements) {
 				if (!(pathElement instanceof SVGPathElement)) continue
 
+				// ======================================================
+				// Method 1) THIS METHOD ERASES EVERYTHING ONE BY ONE (INDUVIDUAL ACTIONS)
+				// ======================================================
+				/*
 				const id = pathElement.dataset.id
 				const path = canvasStore.paths.find((p) => p.id === id)
 				if (!path) continue
-
 				const action = new RemovePathAction(path)
 				executeAction(action)
+				*/
+
+				// ======================================================
+				// METHOD 2) adds path to an array and makes one action
+				// ======================================================
+				const id = pathElement.dataset.id
+
+				if (!id) continue
+				const path = canvasStore.paths.find((p) => p.id === id)
+				if (!path) continue
+				if (this.capturedPaths.has(path)) continue
+
+				this.capturedPaths.add(path) // capture for groupAction later
+				canvasStore.removePathById(path.id)
 			}
 		}
+	}
+	onUp() {
+		if (this.capturedPaths.size === 0) return
+
+		const actionGroup = new ActionGroup([])
+		for (const path of this.capturedPaths) {
+			actionGroup.push(new RemovePathAction(path))
+		}
+		pushAction(actionGroup)
 	}
 })()
 
