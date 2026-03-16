@@ -6,7 +6,7 @@ const dialogStore = useDialogStore()
 </script>
 
 <template>
-	<FullscreenDialog class="dialog" :close="() => dialogStore.closeDialog('info')">
+	<FullscreenDialog class="dialog" @close="dialogStore.closeDialog('info')">
 		<div class="about">
 			<header class="header">
 				<h1>About Inkform</h1>

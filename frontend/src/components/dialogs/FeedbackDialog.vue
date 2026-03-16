@@ -28,7 +28,7 @@ function handleSubmit() {
 }
 </script>
 <template>
-	<FullscreenDialog :close="() => dialogStore.closeDialog('feedback')">
+	<FullscreenDialog @close="dialogStore.closeDialog('feedback')">
 		<h1>Give Feedback!</h1>
 
 		<div class="form">

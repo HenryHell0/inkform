@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { inject, type Ref } from 'vue';
+import { inject, type Ref } from 'vue'
 
-defineProps<{
-	close: () => void
+defineEmits<{
+	close: []
 }>()
 
-const isDragging = inject<Ref<boolean>>("isDragging")
-
+const isDragging = inject<Ref<boolean>>('isDragging')
 </script>
 <template>
 	<div class="toolbar" v-touch-prevent :style="{ cursor: isDragging ? 'grabbing' : 'grab' }">
@@ -21,7 +20,7 @@ const isDragging = inject<Ref<boolean>>("isDragging")
 		</div>
 
 		<!-- X BUTTON -->
-		<img @pointerdown.stop src="/assets/x.svg" @pointerup="close" class="x-button" draggable="false" />
+		<img @pointerdown.stop src="/assets/x.svg" @pointerup="$emit('close')" class="x-button" draggable="false" />
 	</div>
 </template>
 <style scoped>
@@ -57,7 +56,9 @@ const isDragging = inject<Ref<boolean>>("isDragging")
 	box-sizing: border-box;
 	padding: 0.1em;
 	border-radius: 100px;
-	transition: background 0.3s ease, transform 0.1s ease-in-out;
+	transition:
+		background 0.3s ease,
+		transform 0.1s ease-in-out;
 	cursor: pointer;
 }
 

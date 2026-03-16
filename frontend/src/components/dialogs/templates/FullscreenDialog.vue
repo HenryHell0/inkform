@@ -1,11 +1,11 @@
 <script setup lang="ts">
-const props = defineProps<{
-	close: () => void
+defineEmits<{
+	close: []
 }>()
 </script>
 
 <template>
-	<div class="backdrop" @click="close">
+	<div class="backdrop" @click="$emit('close')">
 		<div class="container" @click.stop>
 			<slot></slot>
 		</div>

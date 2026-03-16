@@ -32,7 +32,7 @@ async function importExpression() {
 <template>
 	<Widget data-drop-type="graph" @widget-drop="importExpression">
 		<template #toolbar>
-			<WidgetToolbar :close="() => widgetStore.deleteWidget(id)">
+			<WidgetToolbar @close="widgetStore.deleteWidget(id)">
 				<template #title> Graph </template>
 			</WidgetToolbar>
 		</template>
