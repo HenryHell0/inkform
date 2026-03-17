@@ -65,6 +65,16 @@ export class RemovePathAction implements Action {
 		canvasStore.paths.push(this.path)
 	}
 }
+
+// one BIG issue with this system is that LaTeX isn't cached, so it re-recognizes each time. we need to fix that! and centralize storage of widgets. right now they are all over the place
+// NOTE could this be used in reverse to convert an expression back to writing (do => undo, undo => do)
+export class RecognizeCanvasAction extends ActionGroup {
+	constructor(widget: ExpressionData, paths: Path[]) {
+		const createWidgetAction = new AddWidgetAction(widget)
+		const addPathsAction = new ActionGroup(paths.map((path) => new RemovePathAction(path)))
+		super([createWidgetAction, addPathsAction])
+	}
+}
 // ================================
 //     WIDGETS
 // ================================
