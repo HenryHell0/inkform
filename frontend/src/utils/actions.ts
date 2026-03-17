@@ -2,6 +2,7 @@ import { useCanvasStore } from '@/stores/useCanvasStore'
 import { useHistoryStore } from '@/stores/useHistoryStore'
 import { useWidgetStore } from '@/stores/useWidgetStore'
 import type { Path, Position, Size } from '@/types/types'
+import type { ExpressionData, Widget } from './widgetData'
 
 export function executeAction(action: Action) {
 	useHistoryStore().execute(action)
@@ -35,9 +36,9 @@ export class ActionGroup implements Action {
 	}
 }
 
-// ================
+// ================================
 //      PATHS
-// ================
+// ================================
 export class AddPathAction implements Action {
 	constructor(private path: Path) {}
 
@@ -64,9 +65,9 @@ export class RemovePathAction implements Action {
 		canvasStore.paths.push(this.path)
 	}
 }
-// ================
+// ================================
 //     WIDGETS
-// ================
+// ================================
 export class MoveWidgetAction implements Action {
 	constructor(
 		private id: string,
@@ -75,14 +76,14 @@ export class MoveWidgetAction implements Action {
 	) {}
 
 	do() {
-		const widgetstore = useWidgetStore()
-		const widget = widgetstore.getWidgetById(this.id)
+		const widgetStore = useWidgetStore()
+		const widget = widgetStore.getWidgetById(this.id)
 		widget.x = this.to.x
 		widget.y = this.to.y
 	}
 	undo() {
-		const widgetstore = useWidgetStore()
-		const widget = widgetstore.getWidgetById(this.id)
+		const widgetStore = useWidgetStore()
+		const widget = widgetStore.getWidgetById(this.id)
 		widget.x = this.from.x
 		widget.y = this.from.y
 	}
@@ -95,15 +96,46 @@ export class ResizeWidgetAction implements Action {
 	) {}
 
 	do() {
-		const widgetstore = useWidgetStore()
-		const widget = widgetstore.getWidgetById(this.id)
+		const widgetStore = useWidgetStore()
+		const widget = widgetStore.getWidgetById(this.id)
 		widget.width = this.to.width
 		widget.height = this.to.height
 	}
 	undo() {
-		const widgetstore = useWidgetStore()
-		const widget = widgetstore.getWidgetById(this.id)
+		const widgetStore = useWidgetStore()
+		const widget = widgetStore.getWidgetById(this.id)
 		widget.width = this.from.width
 		widget.height = this.from.height
 	}
 }
+
+export class CreateWidgetAction implements Action {
+	constructor(private widget: Widget) {} // NOTE this is storing widgets twice in memory now, but we should really just have a list of them and then like enable/disable them or something
+	do() {
+		const widgetStore = useWidgetStore()
+		widgetStore.addWidget(this.widget)
+	}
+
+	undo() {
+		const widgetstore = useWidgetStore()
+		widgetstore.deleteWidget(this.widget.id)
+	}
+}
+
+export class RemoveWidgetAction implements Action {
+	constructor(private widget: Widget) {}
+	do() {
+		const widgetStore = useWidgetStore()
+		widgetStore.deleteWidget(this.widget.id)
+	}
+
+	undo() {
+		const widgetstore = useWidgetStore()
+		widgetstore.addWidget(this.widget)
+	}
+}
+
+// ================================
+//     EXPRESSIONS
+// ================================
+export class ConvertExpressionToGraph
