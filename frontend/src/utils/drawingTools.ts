@@ -9,7 +9,6 @@ import { ActionGroup, AddPathAction, executeAction, pushAction, RecognizeCanvasA
 import { DEBUG } from './debug'
 import { useHistoryStore } from '@/stores/useHistoryStore'
 import type { Path } from '@/types/types'
-import WidgetToolbarSection from '@/components/widgets/toolbar/WidgetToolbarSection.vue'
 
 export interface Tool {
 	onDown?: (event: PointerEvent) => void

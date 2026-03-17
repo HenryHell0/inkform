@@ -5,9 +5,14 @@ import WidgetToolbarButton from '../toolbar/WidgetToolbarButton.vue'
 import WidgetToolbarSection from '../toolbar/WidgetToolbarSection.vue'
 import { useWidgetStore } from '@/stores/useWidgetStore'
 import { inject } from 'vue'
+import { ConvertExpressionToGraphAction, executeAction } from '@/utils/actions'
 
 const widget = inject<Widget>('widget')! as ExpressionData
 const widgetStore = useWidgetStore()
+
+function convertToGraph(){
+	executeAction(new ConvertExpressionToGraphAction(widget))
+}
 
 </script>
 <template>
@@ -15,7 +20,7 @@ const widgetStore = useWidgetStore()
 		<template #title> Expression </template>
 		<template #content>
 			<WidgetToolbarSection>
-				<WidgetToolbarButton @pointerup="widget.convertToGraph()">
+				<WidgetToolbarButton @pointerup="convertToGraph()">
 					<img src="/public/assets/graph.svg" draggable="false"/>
 				</WidgetToolbarButton>
 			</WidgetToolbarSection>

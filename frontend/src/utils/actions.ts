@@ -2,7 +2,7 @@ import { useCanvasStore } from '@/stores/useCanvasStore'
 import { useHistoryStore } from '@/stores/useHistoryStore'
 import { useWidgetStore } from '@/stores/useWidgetStore'
 import type { Path, Position, Size } from '@/types/types'
-import type { ExpressionData, Widget } from './widgetData'
+import { GraphData, type ExpressionData, type Widget } from './widgetData'
 
 export function executeAction(action: Action) {
 	useHistoryStore().execute(action)
@@ -119,7 +119,7 @@ export class ResizeWidgetAction implements Action {
 	}
 }
 
-export class CreateWidgetAction implements Action {
+export class AddWidgetAction implements Action {
 	constructor(private widget: Widget) {} // NOTE this is storing widgets twice in memory now, but we should really just have a list of them and then like enable/disable them or something
 	do() {
 		const widgetStore = useWidgetStore()
@@ -148,4 +148,20 @@ export class RemoveWidgetAction implements Action {
 // ================================
 //     EXPRESSIONS
 // ================================
-export class ConvertExpressionToGraph
+export class ConvertExpressionToGraphAction extends ActionGroup {
+	constructor(expressionWidget: ExpressionData) {
+		const addGraphwidget = new AddWidgetAction(
+			new GraphData(
+				expressionWidget.x,
+				expressionWidget.y,
+				expressionWidget.width,
+				expressionWidget.width, // NOTE: expressionWidget.width twice is intentional
+				[expressionWidget],
+			),
+		)
+
+		const deleteExpressionWidget = new RemoveWidgetAction(expressionWidget)
+
+		super([addGraphwidget, deleteExpressionWidget])
+	}
+}

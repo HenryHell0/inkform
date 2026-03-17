@@ -79,12 +79,6 @@ export class ExpressionData extends WidgetData {
 		if (!color) throw new Error('bad math')
 		this.graphColor = color
 	}
-	convertToGraph() {
-		// this should use history actions in the future btw!
-		const widgetStore = useWidgetStore()
-		widgetStore.addWidget(new GraphData(this.x, this.y, this.width, this.width, [this])) // self.width twice is intentional
-		widgetStore.deleteWidget(this.id)
-	}
 }
 
 export class GraphData extends WidgetData {
