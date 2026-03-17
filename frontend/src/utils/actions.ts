@@ -3,15 +3,38 @@ import { useHistoryStore } from '@/stores/useHistoryStore'
 import { useWidgetStore } from '@/stores/useWidgetStore'
 import type { Path, Position, Size } from '@/types/types'
 
-
-export function executeAction (action: Action) {
+export function executeAction(action: Action) {
 	useHistoryStore().execute(action)
+}
+
+export function pushAction(action: Action) {
+	useHistoryStore().push(action)
 }
 
 export interface Action {
 	do(): void
 	undo(): void
 }
+
+// =========================
+//      ACTION GROUP
+// =========================
+export class ActionGroup implements Action {
+	constructor(private actions: Action[]) {}
+
+	do() {
+		for (const a of this.actions) a.do()
+	}
+
+	undo() {
+		for (const a of [...this.actions].reverse()) a.undo()
+	}
+
+	push(action: Action) {
+		this.actions.push(action)
+	}
+}
+
 // ================
 //      PATHS
 // ================

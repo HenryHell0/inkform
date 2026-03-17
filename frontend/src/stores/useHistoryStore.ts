@@ -15,6 +15,11 @@ export const useHistoryStore = defineStore('history', () => {
 		undone.value = [] // clear future timeline
 	}
 
+	function push(action: Action) {
+		done.value.push(action)
+		undone.value = [] // clear future timeline
+	}
+
 	function undo() {
 		const action = done.value.pop()
 		if (!action) return
@@ -29,5 +34,5 @@ export const useHistoryStore = defineStore('history', () => {
 		done.value.push(action)
 	}
 
-	return { execute, undo, redo, undoAvailable, redoAvailable }
+	return { execute, push, undo, redo, undoAvailable, redoAvailable }
 })
