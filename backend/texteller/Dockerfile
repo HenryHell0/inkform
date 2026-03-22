@@ -13,4 +13,4 @@ RUN uv pip install texteller --system
 
 EXPOSE 8000
 
-CMD [ "texteller", "launch", "--ngpu-per-replica", "0" ]
+CMD [ "texteller", "launch", "--ngpu-per-replica", "0", "--use-onnx", "--ncpu-per-replica", "3" ]
