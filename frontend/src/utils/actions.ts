@@ -84,6 +84,7 @@ export class RecognizeCanvasAction extends ActionGroup {
 // ================================
 //     WIDGETS
 // ================================
+// we actually need to make it so that if you like drag and drop an expression onto a graph this action groups with the import to graph group one
 export class MoveWidgetAction implements Action {
 	constructor(
 		private id: string,
@@ -169,18 +170,19 @@ export class EditWidgetAction<T extends Widget> implements Action {
 	do() {
 		const widgetStore = useWidgetStore()
 		const widget = widgetStore.getWidgetById(this.id) as T
-		Object.assign(widget, this.edits) // object.assign preserved reactivity
+		Object.assign(widget, this.edits) // object.assign preserves reactivity
 		this.afterUpdate?.(widget)
 	}
 
 	undo() {
 		const widgetStore = useWidgetStore()
 		const widget = widgetStore.getWidgetById(this.id) as T
-		Object.assign(widget, this.before) // object.assign preserved reactivity
+		Object.assign(widget, this.before) // object.assign preserves reactivity
 		this.afterUpdate?.(widget)
 	}
 }
 
+// we could also just extract this to GraphData instead of it's own action
 export class ChangeGraphColorAction extends EditWidgetAction<GraphData> {
 	constructor(graph: GraphData, expressionId: string, newColor: string) {
 		const newExpressions = graph.expressions.map((expression) => {
@@ -190,8 +192,22 @@ export class ChangeGraphColorAction extends EditWidgetAction<GraphData> {
 				graphColor: newColor,
 			}
 		}) as ExpressionData[]
+
 		super(graph.id, { expressions: newExpressions }, (graph) => {
-			graph.syncGraphColor(expressionId)
+			graph.syncExpression(expressionId)
+		})
+	}
+}
+
+// this does NOT delete the expression, just adds it.
+export class AddExpressionToGraphAction extends EditWidgetAction<GraphData> {
+	constructor(graph: GraphData, expressionId: string) {
+		// mutate graphData with new expression..
+		const expression = useWidgetStore().getWidgetById(expressionId) as ExpressionData
+		const newExpressions = [expression, ...graph.expressions]
+
+		super(graph.id, { expressions: newExpressions }, (graph) => {
+			graph.syncExpression(expressionId)
 		})
 	}
 }
