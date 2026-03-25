@@ -1,5 +1,6 @@
 import { useWidgetStore } from '@/stores/useWidgetStore.js'
 import { clamp } from '@/utils/utils'
+import { ChangeGraphColorAction, executeAction } from './actions'
 
 export type WidgetName = 'Expression' | 'Graph'
 
@@ -104,6 +105,10 @@ export class GraphData extends WidgetData {
 		if (this.expressions.length == 0) {
 			widgetStore.deleteWidget(this.id)
 		}
+	}
+	changeGraphColor(expressionId: string, color: string) {
+		const action = new ChangeGraphColorAction(this, expressionId, color)
+		executeAction(action)
 	}
 	syncGraphColor(expressionId: string) {
 		const expression = this.expressions.find((expression) => expression.id == expressionId)

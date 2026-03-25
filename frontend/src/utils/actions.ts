@@ -181,6 +181,21 @@ export class EditWidgetAction<T extends Widget> implements Action {
 	}
 }
 
+export class ChangeGraphColorAction extends EditWidgetAction<GraphData> {
+	constructor(graph: GraphData, expressionId: string, newColor: string) {
+		const newExpressions = graph.expressions.map((expression) => {
+			if (expression.id != expressionId) return expression
+			return {
+				...expression,
+				graphColor: newColor,
+			}
+		}) as ExpressionData[]
+		super(graph.id, { expressions: newExpressions }, (graph) => {
+			graph.syncGraphColor(expressionId)
+		})
+	}
+}
+
 // ================================
 //     EXPRESSIONS
 // ================================
