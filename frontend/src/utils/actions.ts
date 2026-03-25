@@ -12,6 +12,7 @@ export function pushAction(action: Action) {
 	useHistoryStore().push(action)
 }
 
+// one issue with these is that they aren't serializeable - so we might want to extract behavior in the future :)
 export interface Action {
 	do(): void
 	undo(): void
@@ -20,6 +21,11 @@ export interface Action {
 // =========================
 //      ACTION GROUP
 // =========================
+/* FYI on how cool this is:
+keep in mind it's SUPER cool how these actions are scalable. for example I can stack remove path actions to create the removal of multiple, and then I can group that with a create expression action to represent recognizing text, having it removed, and adding an expression widget.
+It's also cool that the classes like stack on each other. I was originally trying to do it more procedurally but this funcational/OOP method is better (function in that groupaction.do => each action.do => ..., OOP because I'm stacking the classes). Originally the ignorant procedural approach was to do like historyStore.done: Action | ActionGroup. One problem with this is I have to change the action execution system completely. Another is that I can't have a tree of groups, whereas with like stacking the classes I can. With the class-based approach I create a class that implements the class and basically "runs" two other classes, and then each of those classes can also be group actions. Pretty cool!!
+It's very vue-idiomatic in my opinion, because it's a lot like composable stacking! sorta. except here its kinda like bottom up (or maybe this way is top down not bottom up?) Anyways I think whereas my current approach to composable is to directly use the composable in another one, I think it would be cool if I implemented a composable where you can pass the results of a composable in and stack like that. idk something to think about!
+*/
 export class ActionGroup implements Action {
 	constructor(private actions: Action[]) {}
 
@@ -142,6 +148,36 @@ export class RemoveWidgetAction implements Action {
 	undo() {
 		const widgetstore = useWidgetStore()
 		widgetstore.addWidget(this.widget)
+	}
+}
+
+export class EditWidgetAction<T extends Widget> implements Action {
+	private before: Partial<T> = {}
+
+	constructor(
+		private id: string,
+		private edits: Partial<T>,
+		private afterUpdate?: (widget: T) => void,
+	) {
+		const widget = useWidgetStore().getWidgetById(this.id) as T
+
+		for (const key in edits) {
+			const k = key as keyof T
+			this.before[k] = widget[k] // could cause errors if widget[k] changes
+		}
+	}
+	do() {
+		const widgetStore = useWidgetStore()
+		const widget = widgetStore.getWidgetById(this.id) as T
+		Object.assign(widget, this.edits) // object.assign preserved reactivity
+		this.afterUpdate?.(widget)
+	}
+
+	undo() {
+		const widgetStore = useWidgetStore()
+		const widget = widgetStore.getWidgetById(this.id) as T
+		Object.assign(widget, this.before) // object.assign preserved reactivity
+		this.afterUpdate?.(widget)
 	}
 }
 
