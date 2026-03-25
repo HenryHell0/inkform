@@ -1,6 +1,7 @@
 import { useWidgetStore } from '@/stores/useWidgetStore.js'
 import { clamp } from '@/utils/utils'
-import { ChangeGraphColorAction, executeAction } from './actions'
+import { ActionGroup, AddExpressionToGraphAction, ChangeGraphColorAction, executeAction, RemoveWidgetAction } from './actions'
+import { useSessionStore } from '@/stores/useSessionStore'
 
 export type WidgetName = 'Expression' | 'Graph'
 
@@ -91,10 +92,14 @@ export class GraphData extends WidgetData {
 		this.type = 'Graph'
 		this.expressions = [...expressions]
 	}
-	async addExpression(expression: ExpressionData) {
-		this.expressions.push(expression)
-		const graph = { latex: expression.latex, color: expression.graphColor, id: expression.id }
-		this.calculator.setExpression({ latex: await graph.latex, color: graph.color, id: graph.id })
+	// could extract this to addExpression, importExpression, and importHeldExpression
+	importHeldExpression() {
+		const widget = useWidgetStore().getHeldWidget()
+		if (!(widget instanceof ExpressionData)) return
+
+		const addExpressionAction = new AddExpressionToGraphAction(this, widget.id)
+		const deleteWidgetAction = new RemoveWidgetAction(widget)
+		executeAction(new ActionGroup([addExpressionAction, deleteWidgetAction]))
 	}
 	deleteExpression(expression: ExpressionData) {
 		const widgetStore = useWidgetStore()
