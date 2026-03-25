@@ -11,7 +11,7 @@ const widgetStore = useWidgetStore()
 
 </script>
 <template>
-	<WidgetToolbar :close="() => widgetStore.deleteWidget(widget.id)">
+	<WidgetToolbar @close="widgetStore.deleteWidget(widget.id)">
 		<template #title> Expression </template>
 		<template #content>
 			<WidgetToolbarSection>
