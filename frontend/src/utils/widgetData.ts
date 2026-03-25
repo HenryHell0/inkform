@@ -110,10 +110,19 @@ export class GraphData extends WidgetData {
 		const action = new ChangeGraphColorAction(this, expressionId, color)
 		executeAction(action)
 	}
-	syncGraphColor(expressionId: string) {
+	async syncExpression(expressionId: string) {
 		const expression = this.expressions.find((expression) => expression.id == expressionId)
 		if (!expression) throw new Error("This expression doesen't exist")
-		this.calculator.setExpression({ id: expressionId, color: expression.graphColor })
+		this.calculator.setExpression({
+			id: expressionId,
+			latex: await expression.latex,
+			color: expression.graphColor,
+		})
+	}
+	syncAllExpressions() {
+		for (let expression of this.expressions) {
+			this.syncExpression(expression.id)
+		}
 	}
 }
 
