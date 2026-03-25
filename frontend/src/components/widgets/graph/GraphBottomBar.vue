@@ -1,18 +1,16 @@
 <script setup lang="ts">
 import PopMenu from '@/components/ui/PopMenu.vue'
 import { useWidgetStore } from '@/stores/useWidgetStore'
+import { ChangeGraphColorAction, EditWidgetAction, executeAction } from '@/utils/actions';
 import { GraphData, ExpressionData, graphColors } from '@/utils/widgetData'
 
 const props = defineProps<{
 	id: string
 }>()
 const widgetStore = useWidgetStore()
-const widget = widgetStore.getWidgetById(props.id)
-if (!(widget instanceof GraphData)) throw new Error('this aint no graph')
+const widget = widgetStore.getWidgetById(props.id) as GraphData
 
 function convertToExpressionWidget(expression: ExpressionData) {
-	// remove expression from graph
-	if (!(widget instanceof GraphData)) throw new Error('this aint no graph')
 	widget.deleteExpression(expression)
 
 	// set expression to be at the bottom.
@@ -38,10 +36,13 @@ function convertToExpressionWidget(expression: ExpressionData) {
 // 	if (!(widget instanceof GraphData)) throw new Error('not a graph')
 // 	// widget.calculator.
 // }
+// changeGraphColor(expression: ExpressionData, color: string) {
+// 		expression.graphColor = color
+// 		this.calculator.setExpression({ id: expression.id, color: color })
+// 	}
 
-function changeColor(expression: ExpressionData, color: string) {
-	if (!(widget instanceof GraphData)) throw new Error("expression isn't expressioning")
-	widget.changeGraphColor(expression, color)
+function changeColor(expressionId: string, color: string) {
+	widget.changeGraphColor(expressionId, color)
 }
 </script>
 <template>
@@ -63,16 +64,22 @@ function changeColor(expression: ExpressionData, color: string) {
 			<PopMenu :closeOnClick="true">
 				<template #activator>
 					<div class="popmenu-activator">
-						<img class="three-dot-image" src="/assets/vertical-dots.svg" draggable="false"/>
+						<img class="three-dot-image" src="/assets/vertical-dots.svg" draggable="false" />
 					</div>
 				</template>
 				<template #menu>
 					<div class="colorMenu">
 						<svg class="color-svg" v-for="color in graphColors.values()">
-							<circle class="color-circle" :fill="color" @click="changeColor(expression, color)"></circle>
+							<circle
+								class="color-circle"
+								:fill="color"
+								@click="changeColor(expression.id, color)"
+							></circle>
 						</svg>
 					</div>
-					<div class="popmenu-button" @click="convertToExpressionWidget(expression)">Convert to Expression</div>
+					<div class="popmenu-button" @click="convertToExpressionWidget(expression)">
+						Convert to Expression
+					</div>
 					<div class="popmenu-button delete-button" @click="widget.deleteExpression(expression)">
 						Delete
 					</div>
@@ -98,7 +105,7 @@ function changeColor(expression: ExpressionData, color: string) {
 	height: 26px;
 	/* position: relative; */
 
-	transition: transform 0.2s var(--bounce-curve)
+	transition: transform 0.2s var(--bounce-curve);
 }
 
 .color-svg::after {
@@ -159,7 +166,9 @@ function changeColor(expression: ExpressionData, color: string) {
 	background-color: rgb(221, 221, 221);
 	border-radius: 3px;
 
-	transition: background ease-in-out 0.1s, transform ease 0.2s;
+	transition:
+		background ease-in-out 0.1s,
+		transform ease 0.2s;
 }
 
 .popmenu-activator:hover {
