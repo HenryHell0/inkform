@@ -85,6 +85,8 @@ export class RecognizeCanvasAction extends ActionGroup {
 //     WIDGETS
 // ================================
 // we actually need to make it so that if you like drag and drop an expression onto a graph this action groups with the import to graph group one
+// TODO these should really be editWidgetAction extensions...
+// this shouldn't require the "from" position, it should just get it from the widget
 export class MoveWidgetAction implements Action {
 	constructor(
 		private id: string,
@@ -209,6 +211,16 @@ export class AddExpressionToGraphAction extends EditWidgetAction<GraphData> {
 		super(graph.id, { expressions: newExpressions }, (graph) => {
 			graph.syncExpression(expressionId)
 		})
+	}
+}
+
+export class ImportExpressionToGraphAction extends ActionGroup {
+	constructor(graph: GraphData, expressionId: string) {
+		const addExpressionAction = new AddExpressionToGraphAction(graph, expressionId)
+		const expression = useWidgetStore().getWidgetById(expressionId)
+		const deleteWidgetAction = new RemoveWidgetAction(expression)
+
+		super([addExpressionAction, deleteWidgetAction])
 	}
 }
 
