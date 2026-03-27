@@ -107,6 +107,7 @@ export class MoveWidgetAction implements Action {
 		widget.y = this.from.y
 	}
 }
+// this also shouldn't require a "from" parameter
 export class ResizeWidgetAction implements Action {
 	constructor(
 		private id: string,
@@ -223,6 +224,31 @@ export class ImportExpressionToGraphAction extends ActionGroup {
 		super([addExpressionAction, deleteWidgetAction])
 	}
 }
+
+// this does NOT add the expression back to the widgets array, just removes it from the graph.
+// TODO this needs to also remove the graph if there are no expressions left or something
+export class RemoveExpressionFromGraphAction extends ActionGroup{
+	constructor(graph: GraphData, expressionId: string) {
+		const actions: Action[] = []
+
+		// get the new expressions list
+		const newExpressions = graph.expressions.filter((expression) => expression.id != expressionId)
+
+		// update the graph's expressions
+		actions.push(new EditWidgetAction<GraphData>(graph.id, { expressions: newExpressions }, (graph) => {
+			graph.syncExpression(expressionId)
+		}))
+
+		// if the graph is out of expressions, delete it
+		if (newExpressions.length <= 0) {
+			actions.push(new RemoveWidgetAction(graph))
+		}
+
+
+		super(actions)
+	}
+}
+
 export class ExportExpressionFromGraphAction extends ActionGroup {
 	constructor(graph: GraphData, expressionId: string, newExpressionPosition?: Position) {
 		const expression = graph.expressions.find((expression) => expression.id == expressionId)

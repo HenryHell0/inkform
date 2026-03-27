@@ -111,7 +111,7 @@ export class GraphData extends WidgetData {
 		position.x = this.x
 		position.y = this.y + this.height + 12
 		// if we removed all the expressions, put it at the top of the graph
-		if (this.expressions.length == 0) {
+		if (this.expressions.length == 1 /* because it hasn't been removed yet */) {
 			position.x = this.x
 			position.y = this.y
 		}
@@ -125,6 +125,9 @@ export class GraphData extends WidgetData {
 			useWidgetStore().bringWidgetToFront(useWidgetStore().getWidgetById(expressionId))
 		}, 1)
 	}
+	deleteExpression(expressionId: string) {
+		const action = new RemoveExpressionFromGraphAction(this, expressionId)
+		executeAction(action)
 	}
 	changeGraphColor(expressionId: string, color: string) {
 		const action = new ChangeGraphColorAction(this, expressionId, color)
