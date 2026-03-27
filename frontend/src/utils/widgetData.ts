@@ -97,24 +97,34 @@ export class GraphData extends WidgetData {
 		this.type = 'Graph'
 		this.expressions = [...expressions]
 	}
-	// could extract this to addExpression, importExpression, and importHeldExpression
+	// could extract this to importExpression, and importHeldExpression
 	importHeldExpression() {
-		const widget = useWidgetStore().getHeldWidget()
-		if (!(widget instanceof ExpressionData)) return
+		const expression = useWidgetStore().getHeldWidget()
+		if (!(expression instanceof ExpressionData)) return
 
-		const addExpressionAction = new AddExpressionToGraphAction(this, widget.id)
-		const deleteWidgetAction = new RemoveWidgetAction(widget)
-		executeAction(new ActionGroup([addExpressionAction, deleteWidgetAction]))
+		const action = new ImportExpressionToGraphAction(this, expression.id)
+		executeAction(action)
 	}
-	deleteExpression(expression: ExpressionData) {
-		const widgetStore = useWidgetStore()
-
-		this.expressions = this.expressions.filter((e) => e.id != expression.id)
-		this.calculator.removeExpression({ id: expression.id })
-
+	exportExpression(expressionId: string) {
+		// calculate expression position
+		let position = { x: 0, y: 0 }
+		position.x = this.x
+		position.y = this.y + this.height + 12
+		// if we removed all the expressions, put it at the top of the graph
 		if (this.expressions.length == 0) {
-			widgetStore.deleteWidget(this.id)
+			position.x = this.x
+			position.y = this.y
 		}
+
+		const action = new ExportExpressionFromGraphAction(this, expressionId, position)
+		executeAction(action)
+
+		// put it above (wait hack since this has an update afterwards)
+		// TODO this needs to be part of the action...
+		setTimeout(() => {
+			useWidgetStore().bringWidgetToFront(useWidgetStore().getWidgetById(expressionId))
+		}, 1)
+	}
 	}
 	changeGraphColor(expressionId: string, color: string) {
 		const action = new ChangeGraphColorAction(this, expressionId, color)
