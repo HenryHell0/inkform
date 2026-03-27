@@ -1,7 +1,12 @@
 import { useWidgetStore } from '@/stores/useWidgetStore.js'
 import { clamp } from '@/utils/utils'
-import { ActionGroup, AddExpressionToGraphAction, ChangeGraphColorAction, executeAction, RemoveWidgetAction } from './actions'
-import { useSessionStore } from '@/stores/useSessionStore'
+import {
+	ChangeGraphColorAction,
+	executeAction,
+	ExportExpressionFromGraphAction,
+	ImportExpressionToGraphAction,
+	RemoveExpressionFromGraphAction,
+} from './actions'
 
 export type WidgetName = 'Expression' | 'Graph'
 
@@ -116,6 +121,19 @@ export class GraphData extends WidgetData {
 		executeAction(action)
 	}
 	async syncExpression(expressionId: string) {
+		// if the expression is in the calculator but not the list, remove it from calculator
+		if (
+			this.calculator
+				.getExpressions()
+				.map((expression) => expression.id)
+				.includes(expressionId) &&
+			!this.expressions.map((expression) => expression.id).includes(expressionId)
+		) {
+			this.calculator.removeExpression({ id: expressionId })
+			return
+		}
+
+		// otherwise, add/exit the expression
 		const expression = this.expressions.find((expression) => expression.id == expressionId)
 		if (!expression) throw new Error("This expression doesen't exist")
 		this.calculator.setExpression({
