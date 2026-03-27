@@ -223,6 +223,23 @@ export class ImportExpressionToGraphAction extends ActionGroup {
 		super([addExpressionAction, deleteWidgetAction])
 	}
 }
+export class ExportExpressionFromGraphAction extends ActionGroup {
+	constructor(graph: GraphData, expressionId: string, newExpressionPosition?: Position) {
+		const expression = graph.expressions.find((expression) => expression.id == expressionId)
+		if (!expression) throw new Error('expression not found when removing from graph')
+		const removeExpressionFromGraphAction = new RemoveExpressionFromGraphAction(graph, expressionId)
+
+		// put expression at the right spot - this does NOT need to be an action because its a new expression
+		if (newExpressionPosition) {
+			expression.x = newExpressionPosition.x
+			expression.y = newExpressionPosition.y
+		}
+
+		const addExpressionAction = new AddWidgetAction(expression)
+
+		super([removeExpressionFromGraphAction, addExpressionAction])
+	}
+}
 
 // ================================
 //     EXPRESSIONS
