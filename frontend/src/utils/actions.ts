@@ -133,12 +133,12 @@ export class AddWidgetAction implements Action {
 	constructor(private widget: Widget) {} // NOTE this is storing widgets twice in memory now, but we should really just have a list of them and then like enable/disable them or something
 	do() {
 		const widgetStore = useWidgetStore()
-		widgetStore.addWidget(this.widget)
+		widgetStore.widgets.push(this.widget)
 	}
 
 	undo() {
-		const widgetstore = useWidgetStore()
-		widgetstore.deleteWidget(this.widget.id)
+		const widgetStore = useWidgetStore()
+		widgetStore.widgets = widgetStore.widgets.filter((e) => e.id != this.widget.id) // ! does reassigning break reactivity?
 	}
 }
 
@@ -146,12 +146,12 @@ export class RemoveWidgetAction implements Action {
 	constructor(private widget: Widget) {}
 	do() {
 		const widgetStore = useWidgetStore()
-		widgetStore.deleteWidget(this.widget.id)
+		widgetStore.widgets = widgetStore.widgets.filter((e) => e.id != this.widget.id)
 	}
 
 	undo() {
-		const widgetstore = useWidgetStore()
-		widgetstore.addWidget(this.widget)
+		const widgetStore = useWidgetStore()
+		widgetStore.widgets.push(this.widget)
 	}
 }
 

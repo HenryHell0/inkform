@@ -2,13 +2,14 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import type { Widget } from '@/utils/widgetData.js'
 import { useSessionStore } from './useSessionStore'
+import { AddWidgetAction, executeAction, RemoveWidgetAction } from '@/utils/actions'
 
 export const useWidgetStore = defineStore('widgets', () => {
 	const widgets = ref<Widget[]>([])
 	const zIndexCount = ref<number>(2)
 
 	function addWidget(widgetData: Widget) {
-		widgets.value.push(widgetData)
+		executeAction(new AddWidgetAction(widgetData))
 	}
 	function getWidgetById(id: string): Widget {
 		const widget = widgets.value.find((e) => e.id === id)
@@ -24,7 +25,7 @@ export const useWidgetStore = defineStore('widgets', () => {
 
 	function deleteWidget(id: string) {
 		// this should use history actions in the future
-		widgets.value = widgets.value.filter((e) => e.id != id)
+		executeAction(new RemoveWidgetAction(getWidgetById(id)))
 	}
 
 	function bringWidgetToFront(widget: Widget) {
