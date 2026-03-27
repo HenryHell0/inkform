@@ -10,28 +10,6 @@ const props = defineProps<{
 const widgetStore = useWidgetStore()
 const widget = widgetStore.getWidgetById(props.id) as GraphData
 
-function convertToExpressionWidget(expression: ExpressionData) {
-	widget.deleteExpression(expression)
-
-	// set expression to be at the bottom.
-	expression.x = widget.x
-	expression.y = widget.y + widget.height + 12
-	// if we removed all the expressions, put it at the top of the graph
-	if (widget.expressions.length == 0) {
-		expression.x = widget.x
-		expression.y = widget.y
-	}
-
-	// add the widget to store
-	widgetStore.addWidget(expression)
-
-	// put it above (wait since this has an update afterwards)
-	setTimeout(() => {
-		widgetStore.bringWidgetToFront(expression)
-	}, 1)
-
-}
-
 // function changecolor(expression: ExpressionData, color: string) {
 // 	if (!(widget instanceof GraphData)) throw new Error('not a graph')
 // 	// widget.calculator.
@@ -77,10 +55,10 @@ function changeColor(expressionId: string, color: string) {
 							></circle>
 						</svg>
 					</div>
-					<div class="popmenu-button" @click="convertToExpressionWidget(expression)">
+					<div class="popmenu-button" @click="widget.exportExpression(expression.id)">
 						Convert to Expression
 					</div>
-					<div class="popmenu-button delete-button" @click="widget.deleteExpression(expression)">
+					<div class="popmenu-button delete-button" @click="widget.deleteExpression(expression.id)">
 						Delete
 					</div>
 				</template>
