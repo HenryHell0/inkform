@@ -36,6 +36,8 @@
 	font-style: normal;
 	/* font-variation-settings:
     "wdth" 100; */
+
+	-webkit-tap-highlight-color: transparent !important;
 }
 
 textarea {
@@ -47,13 +49,18 @@ textarea {
 
 button {
 	all: unset;
+	-webkit-tap-highlight-color: transparent;
+}
+
+a {
+	-webkit-tap-highlight-color: transparent;
 }
 
 img {
-	/* who knows if this works or no */
+	/* who knows if this works or not but whatever */
 	-webkit-user-select: none; /* Safari */
 	user-select: none; /* Standard */
-	/* pointer-events: none; Disables click/long-press on mobile */
+	pointer-events: none;
 	-webkit-touch-callout: none; /* Disables callout menu on iOS */
 	-webkit-user-drag: none; /* Safari, Chrome */
 	-moz-user-drag: none; /* Firefox (older versions) */
