@@ -83,4 +83,8 @@ a {
 	align-items: center;
 	justify-content: center;
 }
+
+img {
+	pointer-events: none;
+}
 </style>

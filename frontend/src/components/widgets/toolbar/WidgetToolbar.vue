@@ -20,6 +20,7 @@ const isDragging = inject<Ref<boolean>>('isDragging')
 		</div>
 
 		<!-- X BUTTON -->
+		<!-- TODO this should probably be wrapped in a <button> -->
 		<img @pointerdown.stop src="/assets/x.svg" @pointerup="$emit('close')" class="x-button" draggable="false" />
 	</div>
 </template>

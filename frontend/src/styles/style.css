@@ -60,7 +60,6 @@ img {
 	/* who knows if this works or not but whatever */
 	-webkit-user-select: none; /* Safari */
 	user-select: none; /* Standard */
-	pointer-events: none;
 	-webkit-touch-callout: none; /* Disables callout menu on iOS */
 	-webkit-user-drag: none; /* Safari, Chrome */
 	-moz-user-drag: none; /* Firefox (older versions) */
