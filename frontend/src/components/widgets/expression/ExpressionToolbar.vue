@@ -18,6 +18,9 @@ const widgetStore = useWidgetStore()
 				<WidgetToolbarButton @pointerup="widget.convertToGraph()">
 					<img src="/public/assets/graph.svg" draggable="false"/>
 				</WidgetToolbarButton>
+				<WidgetToolbarButton @pointerup="widget.copy()">
+					<img src="/public/assets/copy.svg" draggable="false"/>
+				</WidgetToolbarButton>
 			</WidgetToolbarSection>
 		</template>
 	</WidgetToolbar>
