@@ -185,7 +185,31 @@ export class EditWidgetAction<T extends Widget> implements Action {
 	}
 }
 
-// we could also just extract this to GraphData instead of it's own action
+// ================================
+//     EXPRESSIONS
+// ================================
+export class ConvertExpressionToGraphAction extends ActionGroup {
+	constructor(expressionWidget: ExpressionData) {
+		const addGraphwidget = new AddWidgetAction(
+			new GraphData(
+				expressionWidget.x,
+				expressionWidget.y,
+				expressionWidget.width,
+				expressionWidget.width, // NOTE: expressionWidget.width twice is intentional
+				[expressionWidget],
+			),
+		)
+
+		const deleteExpressionWidget = new RemoveWidgetAction(expressionWidget)
+
+		super([addGraphwidget, deleteExpressionWidget])
+	}
+}
+
+// ================================
+//     GRAPHS
+// ================================
+// we could also just move this logic to GraphData instead of it's own action class
 export class ChangeGraphColorAction extends EditWidgetAction<GraphData> {
 	constructor(graph: GraphData, expressionId: string, newColor: string) {
 		const newExpressions = graph.expressions.map((expression) => {
@@ -227,7 +251,7 @@ export class ImportExpressionToGraphAction extends ActionGroup {
 
 // this does NOT add the expression back to the widgets array, just removes it from the graph.
 // TODO this needs to also remove the graph if there are no expressions left or something
-export class RemoveExpressionFromGraphAction extends ActionGroup{
+export class RemoveExpressionFromGraphAction extends ActionGroup {
 	constructor(graph: GraphData, expressionId: string) {
 		const actions: Action[] = []
 
@@ -235,15 +259,16 @@ export class RemoveExpressionFromGraphAction extends ActionGroup{
 		const newExpressions = graph.expressions.filter((expression) => expression.id != expressionId)
 
 		// update the graph's expressions
-		actions.push(new EditWidgetAction<GraphData>(graph.id, { expressions: newExpressions }, (graph) => {
-			graph.syncExpression(expressionId)
-		}))
+		actions.push(
+			new EditWidgetAction<GraphData>(graph.id, { expressions: newExpressions }, (graph) => {
+				graph.syncExpression(expressionId)
+			}),
+		)
 
 		// if the graph is out of expressions, delete it
 		if (newExpressions.length <= 0) {
 			actions.push(new RemoveWidgetAction(graph))
 		}
-
 
 		super(actions)
 	}
@@ -262,28 +287,8 @@ export class ExportExpressionFromGraphAction extends ActionGroup {
 		}
 
 		const addExpressionAction = new AddWidgetAction(expression)
+		const updateZIndexAction = new BringWidgetToFrontAction(expression)
 
-		super([removeExpressionFromGraphAction, addExpressionAction])
-	}
-}
-
-// ================================
-//     EXPRESSIONS
-// ================================
-export class ConvertExpressionToGraphAction extends ActionGroup {
-	constructor(expressionWidget: ExpressionData) {
-		const addGraphwidget = new AddWidgetAction(
-			new GraphData(
-				expressionWidget.x,
-				expressionWidget.y,
-				expressionWidget.width,
-				expressionWidget.width, // NOTE: expressionWidget.width twice is intentional
-				[expressionWidget],
-			),
-		)
-
-		const deleteExpressionWidget = new RemoveWidgetAction(expressionWidget)
-
-		super([addGraphwidget, deleteExpressionWidget])
+		super([removeExpressionFromGraphAction, addExpressionAction, updateZIndexAction])
 	}
 }
