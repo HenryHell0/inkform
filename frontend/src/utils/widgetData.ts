@@ -118,6 +118,9 @@ export class GraphData extends WidgetData {
 		expression.graphColor = color
 		this.calculator.setExpression({ id: expression.id, color: color })
 	}
+	copyExpression(expression: ExpressionData) {
+		expression.copyLatex()
+	}
 }
 
 export type Widget = ExpressionData | GraphData

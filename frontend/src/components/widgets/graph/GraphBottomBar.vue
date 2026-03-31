@@ -31,7 +31,6 @@ function convertToExpressionWidget(expression: ExpressionData) {
 	setTimeout(() => {
 		widgetStore.bringWidgetToFront(expression)
 	}, 1)
-
 }
 
 // function changecolor(expression: ExpressionData, color: string) {
@@ -63,16 +62,23 @@ function changeColor(expression: ExpressionData, color: string) {
 			<PopMenu :closeOnClick="true">
 				<template #activator>
 					<div class="popmenu-activator">
-						<img class="three-dot-image" src="/assets/vertical-dots.svg" draggable="false"/>
+						<img class="three-dot-image" src="/assets/vertical-dots.svg" draggable="false" />
 					</div>
 				</template>
 				<template #menu>
 					<div class="colorMenu">
 						<svg class="color-svg" v-for="color in graphColors.values()">
-							<circle class="color-circle" :fill="color" @click="changeColor(expression, color)"></circle>
+							<circle
+								class="color-circle"
+								:fill="color"
+								@click="changeColor(expression, color)"
+							></circle>
 						</svg>
 					</div>
-					<div class="popmenu-button" @click="convertToExpressionWidget(expression)">Convert to Expression</div>
+					<div class="popmenu-button" @click="convertToExpressionWidget(expression)">
+						Convert to Expression
+					</div>
+					<div class="popmenu-button" @click="widget.copyExpression(expression)">Copy</div>
 					<div class="popmenu-button delete-button" @click="widget.deleteExpression(expression)">
 						Delete
 					</div>
@@ -98,7 +104,7 @@ function changeColor(expression: ExpressionData, color: string) {
 	height: 26px;
 	/* position: relative; */
 
-	transition: transform 0.2s var(--bounce-curve)
+	transition: transform 0.2s var(--bounce-curve);
 }
 
 .color-svg::after {
@@ -159,7 +165,9 @@ function changeColor(expression: ExpressionData, color: string) {
 	background-color: rgb(221, 221, 221);
 	border-radius: 3px;
 
-	transition: background ease-in-out 0.1s, transform ease 0.2s;
+	transition:
+		background ease-in-out 0.1s,
+		transform ease 0.2s;
 }
 
 .popmenu-activator:hover {
