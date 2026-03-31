@@ -2,7 +2,7 @@ export function clamp(value: number, min: number, max: number): number {
 	return Math.max(min, Math.min(max, value))
 }
 
-export async function copy(text: string): Promise<boolean> {
+async function copyText(text: string): Promise<boolean> {
 	try {
 		if (navigator.clipboard?.writeText) {
 			await navigator.clipboard.writeText(text)
@@ -18,5 +18,15 @@ export async function copy(text: string): Promise<boolean> {
 	} catch (err) {
 		console.error('Copy failed:', err)
 		return false
+	}
+}
+
+export async function copyTextWithPopup(text: string) {
+	const success = copyText(text)
+
+	if (await success) {
+		// TODO show a success popup
+	} else {
+		// TODO show a failure popup
 	}
 }
