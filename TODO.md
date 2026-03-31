@@ -1,11 +1,17 @@
+for this undo-redo fix thing:
+- make z-index only trigger an action when the view actually changes
+      - also zindex should update on drag
+      - and zindex should update when pointerdown, not pointerup
+- make moveWidetAction and ResizeWidgetAction NOT need a "before" property (potentially just extend editWidgetAction)
+- group moveWidgetAction with ImportExpressionToGraphAction so that it doesen't sit on the graph when you drop it. I may be able to like hack it and just delete the moveWidgetAction or something... or undo it? we'll see
+
 ## THE PLAN!!!:
 
-PS learn about issue templates and keyboard shortcuts and maybe use GH cli?
-
-PSPSPS IMPORTANT! get **google SEO** going!
+TODO TODO WEE WOO WEE WOO fix POPMENU Z INDEX
 
 
 ### General
+
 
 - 🔗 add save/load
 - Improve SEO (alt text and stuff)
@@ -17,9 +23,7 @@ PSPSPS IMPORTANT! get **google SEO** going!
 - 😄 make intro dialog with GIFs!!!!!!!
 - ⚙️  add different settings for the tools that pop down in a different menu (stoke width, color, etc. ) - make it cute
 - ⭐ switch HMER select button to having a little AI star
-- make it so that hovering a graph with an expression blurs/makes it clear you can drop it in. noone will know you can do that.
 - make a logo
-- add :active to all buttons to make them pop out when clicking!
 
 ### Later:
 
@@ -47,3 +51,9 @@ Now you can say:
 - 🧰 refactor widgets big time!!!! (aah!!)
      - 😜 refactor widgets to organize and follow best pracitces of like vue architecture organization... --- NOTE: tf does this mean
 
+for this undo-redo fix thing:
+- change graph colors
+- add(import?) expression to graph
+- future "change" expression (like solving it or editing it. Action.before & Action.after) (also this will be used with Partials in TS and be useful for graph colors)
+- turn graph back into expression
+- remove expression from graph
