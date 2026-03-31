@@ -185,6 +185,19 @@ export class EditWidgetAction<T extends Widget> implements Action {
 	}
 }
 
+
+// !! this is WRONG for a number of reasons. no 1) the widgetStore.zIndexCount isn't un-updating.. 2) much of this logic should be in do() not in the constructor
+	// 3) causes errors
+export class BringWidgetToFrontAction extends EditWidgetAction<Widget> {
+	constructor(widget: Widget) {
+		const widgetStore = useWidgetStore()
+		// !!!!!! TODO this needs to only update the zindexcount if the view actually changes, otherwise return
+		if (widgetStore.zIndexCount == widget.zIndex) return // prevents actions that do nothing visually
+		widgetStore.zIndexCount++
+		super(widget.id, { zIndex: widgetStore.zIndexCount })
+	}
+}
+
 // ================================
 //     EXPRESSIONS
 // ================================
