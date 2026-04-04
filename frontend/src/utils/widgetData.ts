@@ -1,5 +1,5 @@
 import { useWidgetStore } from '@/stores/useWidgetStore.js'
-import { clamp } from '@/utils/utils'
+import { clamp, copyText } from '@/utils/utils'
 
 export type WidgetName = 'Expression' | 'Graph'
 
@@ -79,6 +79,9 @@ export class ExpressionData extends WidgetData {
 		if (!color) throw new Error('bad math')
 		this.graphColor = color
 	}
+	async copyLatex() {
+		copyText(await this.latex) // ! icky! all this await stuff should be cleaned up with the new system
+	}
 	convertToGraph() {
 		// this should use history actions in the future btw!
 		const widgetStore = useWidgetStore()
@@ -114,6 +117,9 @@ export class GraphData extends WidgetData {
 	changeGraphColor(expression: ExpressionData, color: string) {
 		expression.graphColor = color
 		this.calculator.setExpression({ id: expression.id, color: color })
+	}
+	copyExpression(expression: ExpressionData) {
+		expression.copyLatex()
 	}
 }
 

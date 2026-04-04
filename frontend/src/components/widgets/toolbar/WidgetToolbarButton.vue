@@ -1,3 +1,4 @@
+<!-- we deprecated WidgetToolbarSection for just isolated buttons, they copy the UI of the section instead -->
 <script setup lang="ts">
 defineProps<{
 	active?: boolean
@@ -12,14 +13,16 @@ defineProps<{
 </template>
 <style scoped lang="css">
 .toolbar-button {
+	background-color: var(--color-gray-50);
+
 	box-sizing: border-box;
 	padding: 0px; /* controls spacing between button and image (border-box=this controls size of image)*/
 	margin: 0px; /* DON'T use this in flexbox layouts. instead use gap and padding on the parent! */
 
-	width: 2em;
-	height: 2em;
+	width: 40px;
+	height: 40px;
 
-	border-radius: inherit;
+	border-radius: 5px;
 	cursor: pointer;
 
 	transition:
@@ -27,8 +30,8 @@ defineProps<{
 		transform ease-in-out 0.1s;
 }
 
-.toolbar-button:hover {
-	background-color: var(--color-bg-1);
+.toolbar-button:hover{
+	/* background-color: var(--color-bg-1); */
 	transform: scale(1.1);
 }
 
@@ -45,6 +48,5 @@ defineProps<{
 	width: 100%;
 	height: 100%;
 	aspect-ratio: 1/1;
-
 }
 </style>

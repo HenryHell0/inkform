@@ -26,7 +26,7 @@ const isDragging = inject<Ref<boolean>>('isDragging')
 </template>
 <style scoped>
 .toolbar {
-	width: 100%;
+      width: 100%;
 	position: relative;
 
 	border-top-left-radius: inherit;
@@ -36,6 +36,9 @@ const isDragging = inject<Ref<boolean>>('isDragging')
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+
+	padding-top: 4px;
+	padding-bottom: 4px;
 
 	cursor: grab;
 }
@@ -50,6 +53,9 @@ const isDragging = inject<Ref<boolean>>('isDragging')
 	display: flex;
 	gap: 5px;
 	align-items: center;
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
 }
 
 .x-button {

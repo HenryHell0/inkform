@@ -5,8 +5,8 @@ const isDev = import.meta.env.DEV
 const considerDebug = (value: boolean) => isDev && value
 
 export const DEBUG = {
-	createTestExpression: considerDebug(false),
-	createTestGraph: considerDebug(false),
+	createTestExpression: considerDebug(true),
+	createTestGraph: considerDebug(true),
 	doLogMouseMovements: considerDebug(false),
 	downloadPNG: considerDebug(false),
 	logLatex: considerDebug(false),

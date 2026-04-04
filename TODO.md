@@ -1,9 +1,5 @@
 ## THE PLAN!!!:
-
-PS learn about issue templates and keyboard shortcuts and maybe use GH cli?
-
-PSPSPS IMPORTANT! get **google SEO** going!
-
+PSPSPS IMPORTANT! get **google SEO** going! Also analytics. also Reka UI my new goat
 
 ### General
 
@@ -15,7 +11,7 @@ PSPSPS IMPORTANT! get **google SEO** going!
      - spacebar on laptop
 - 🗼 make a robust way to represent expressions with promises so the user can graph/solve them before they load
 - 😄 make intro dialog with GIFs!!!!!!!
-- ⚙️  add different settings for the tools that pop down in a different menu (stoke width, color, etc. ) - make it cute
+- ⚙️ add different settings for the tools that pop down in a different menu (stoke width, color, etc. ) - make it cute
 - ⭐ switch HMER select button to having a little AI star
 - make it so that hovering a graph with an expression blurs/makes it clear you can drop it in. noone will know you can do that.
 - make a logo

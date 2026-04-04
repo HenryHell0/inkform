@@ -2,23 +2,28 @@
 import type { ExpressionData, Widget } from '@/utils/widgetData'
 import WidgetToolbar from '../toolbar/WidgetToolbar.vue'
 import WidgetToolbarButton from '../toolbar/WidgetToolbarButton.vue'
-import WidgetToolbarSection from '../toolbar/WidgetToolbarSection.vue'
 import { useWidgetStore } from '@/stores/useWidgetStore'
-import { inject } from 'vue'
-
-const widget = inject<Widget>('widget')! as ExpressionData
+import { inject, ref } from 'vue'
+import { useCopyTextWithUI } from '@/composables/useCopyTextWithUI'
+import SwapImages from '@/components/ui/SwapImages.vue'
+const expression = inject<Widget>('widget')! as ExpressionData
 const widgetStore = useWidgetStore()
 
+const { copy, copyUIOpen } = useCopyTextWithUI(expression.latex)
 </script>
 <template>
-	<WidgetToolbar @close="widgetStore.deleteWidget(widget.id)">
+	<WidgetToolbar @close="widgetStore.deleteWidget(expression.id)">
 		<template #title> Expression </template>
 		<template #content>
-			<WidgetToolbarSection>
-				<WidgetToolbarButton @pointerup="widget.convertToGraph()">
-					<img src="/public/assets/graph.svg" draggable="false"/>
-				</WidgetToolbarButton>
-			</WidgetToolbarSection>
+			<WidgetToolbarButton @pointerup="expression.convertToGraph()">
+				<img src="/public/assets/graph.svg" draggable="false" />
+			</WidgetToolbarButton>
+			<WidgetToolbarButton @pointerup="copy()">
+				<SwapImages :state="copyUIOpen ? 'success' : 'idle'">
+					<img src="/public/assets/copy.svg" draggable="false" />
+					<template #success><img src="/public/assets/check.svg" draggable="false" /></template>
+				</SwapImages>
+			</WidgetToolbarButton>
 		</template>
 	</WidgetToolbar>
 </template>
