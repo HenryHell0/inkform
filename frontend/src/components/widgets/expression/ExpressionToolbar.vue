@@ -4,38 +4,27 @@ import WidgetToolbar from '../toolbar/WidgetToolbar.vue'
 import WidgetToolbarButton from '../toolbar/WidgetToolbarButton.vue'
 import { useWidgetStore } from '@/stores/useWidgetStore'
 import { inject, ref } from 'vue'
+import { useCopyTextWithUI } from '@/composables/useCopyTextWithUI'
 const expression = inject<Widget>('widget')! as ExpressionData
 const widgetStore = useWidgetStore()
 
-const copyUIOpen = ref<boolean>(false)
-const copyTimeout = ref<number | null>(null)
-const timeoutMs = 1300
-
-function handleCopy() {
-	copyUIOpen.value = true
-	copyTimeout.value = null
-	expression.copyLatex()
-
-	copyTimeout.value = setTimeout(() => {
-		copyUIOpen.value = false
-	}, timeoutMs)
-}
+const { copy, copyUIOpen } = useCopyTextWithUI(expression.latex)
 </script>
 <template>
 	<WidgetToolbar @close="widgetStore.deleteWidget(expression.id)">
 		<template #title> Expression </template>
 		<template #content>
-				<WidgetToolbarButton @pointerup="expression.convertToGraph()">
-					<img src="/public/assets/graph.svg" draggable="false" />
-				</WidgetToolbarButton>
-				<WidgetToolbarButton
-					class="copy-button"
-					:data-state="copyUIOpen ? 'success' : 'idle'"
-					@pointerup="handleCopy()"
-				>
-					<img class="copy" src="/public/assets/copy.svg" draggable="false" />
-					<img class="check" src="/public/assets/check.svg" draggable="false" />
-				</WidgetToolbarButton>
+			<WidgetToolbarButton @pointerup="expression.convertToGraph()">
+				<img src="/public/assets/graph.svg" draggable="false" />
+			</WidgetToolbarButton>
+			<WidgetToolbarButton
+				class="copy-button"
+				:data-state="copyUIOpen ? 'success' : 'idle'"
+				@pointerup="copy()"
+			>
+				<img class="copy" src="/public/assets/copy.svg" draggable="false" />
+				<img class="check" src="/public/assets/check.svg" draggable="false" />
+			</WidgetToolbarButton>
 		</template>
 	</WidgetToolbar>
 </template>
