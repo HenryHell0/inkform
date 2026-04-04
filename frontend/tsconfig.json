@@ -1,12 +1,13 @@
 {
 	// Visit https://aka.ms/tsconfig to read more about this file
 	"compilerOptions": {
+		"ignoreDeprecations": "6.0",
 		// File Layout
 		// "rootDir": "./src",
 		// "outDir": "./dist",
 		"baseUrl": ".", // Or the base directory for your paths
 		"paths": {
-			"@/*": ["src/*"] // This maps @/ to src/s
+			"@/*": ["./src/*"] // This maps @/ to src/s
 		},
 
 		// Environment Settings
