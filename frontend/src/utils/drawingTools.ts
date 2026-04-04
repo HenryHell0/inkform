@@ -118,6 +118,7 @@ export interface SelectorTool extends Tool {
 	endX: number
 	endY: number
 }
+// ! TODO these will be "useSelector" in the future and will manage pointer events, selection box, state, etc. so we can isolate canvussies
 export const selector: SelectorTool = reactive(
 	new (class implements SelectorTool {
 		startX: number

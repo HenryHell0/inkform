@@ -1,3 +1,11 @@
+for copy expressions:
+- add a toast that appears on success/failure. probably use Vuetify or something
+      - OKAY sooo the issue isss the v-drawing-opacity doesen't work for some reason and it like glitches out when you draw over there.
+            - but that isn't important right now
+      - the more improtant issue is eomthign else cause we need make a v-drawing-opacity mutate a ref instead of the opacity directly. way more scalable (make sure its optional)
+-0- 
+- make expression toolbar styles look decent
+
 ## THE PLAN!!!:
 
 PS learn about issue templates and keyboard shortcuts and maybe use GH cli?
