@@ -34,18 +34,16 @@ function handleCopy() {
 				<WidgetToolbarButton @pointerup="expression.convertToGraph()">
 					<img src="/public/assets/graph.svg" draggable="false" />
 				</WidgetToolbarButton>
-				<BaseTooltip content="Copied!" :open="copyUIOpen">
-					<WidgetToolbarButton
-						class="copy-button"
-						:data-state="copyUIOpen ? 'success' : 'idle'"
-						@pointerup="handleCopy()"
-					>
-						<img class="copy" src="/public/assets/copy.svg" draggable="false" />
-						<!-- !!! TODO POSITIONING AND BORDERS ARE TWEAKING!  maybe..??-->
-						<img class="check" src="/public/assets/check.svg" draggable="false" />
-						<CopyToClipboardToast v-model:open="copyUIOpen"></CopyToClipboardToast>
-					</WidgetToolbarButton>
-				</BaseTooltip>
+			</WidgetToolbarSection>
+			<WidgetToolbarSection>
+				<WidgetToolbarButton
+					class="copy-button"
+					:data-state="copyUIOpen ? 'success' : 'idle'"
+					@pointerup="handleCopy()"
+				>
+					<img class="copy" src="/public/assets/copy.svg" draggable="false" />
+					<img class="check" src="/public/assets/check.svg" draggable="false" />
+				</WidgetToolbarButton>
 			</WidgetToolbarSection>
 		</template>
 	</WidgetToolbar>

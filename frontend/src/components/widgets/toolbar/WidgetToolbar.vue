@@ -37,6 +37,9 @@ const isDragging = inject<Ref<boolean>>('isDragging')
 	justify-content: space-between;
 	align-items: center;
 
+	padding-top: 2px;
+	padding-bottom: 2px;
+
 	cursor: grab;
 }
 
@@ -50,6 +53,9 @@ const isDragging = inject<Ref<boolean>>('isDragging')
 	display: flex;
 	gap: 5px;
 	align-items: center;
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
 }
 
 .x-button {
