@@ -5,6 +5,7 @@ import WidgetToolbarButton from '../toolbar/WidgetToolbarButton.vue'
 import { useWidgetStore } from '@/stores/useWidgetStore'
 import { inject, ref } from 'vue'
 import { useCopyTextWithUI } from '@/composables/useCopyTextWithUI'
+import SwapImages from '@/components/ui/SwapImages.vue'
 const expression = inject<Widget>('widget')! as ExpressionData
 const widgetStore = useWidgetStore()
 
@@ -17,45 +18,13 @@ const { copy, copyUIOpen } = useCopyTextWithUI(expression.latex)
 			<WidgetToolbarButton @pointerup="expression.convertToGraph()">
 				<img src="/public/assets/graph.svg" draggable="false" />
 			</WidgetToolbarButton>
-			<WidgetToolbarButton
-				class="copy-button"
-				:data-state="copyUIOpen ? 'success' : 'idle'"
-				@pointerup="copy()"
-			>
-				<img class="copy" src="/public/assets/copy.svg" draggable="false" />
-				<img class="check" src="/public/assets/check.svg" draggable="false" />
+			<WidgetToolbarButton @pointerup="copy()">
+				<SwapImages :state="copyUIOpen ? 'success' : 'idle'">
+					<img src="/public/assets/copy.svg" draggable="false" />
+					<template #success><img src="/public/assets/check.svg" draggable="false" /></template>
+				</SwapImages>
 			</WidgetToolbarButton>
 		</template>
 	</WidgetToolbar>
 </template>
-<style scoped lang="css">
-.copy-button {
-	position: relative;
-	--rotation: 120deg;
-}
-
-.copy-button > img {
-	position: absolute;
-	inset: 0;
-	transition: all 0.3s cubic-bezier(0.2, -0.4, 0.8, 1.4);
-}
-
-.copy {
-	opacity: 1;
-}
-
-.check {
-	opacity: 0;
-	transform: scale(0) rotate(calc(-1 * var(--rotation)));
-}
-
-.copy-button[data-state='success'] .copy {
-	opacity: 0;
-	transform: scale(0) rotate(var(--rotation));
-}
-
-.copy-button[data-state='success'] .check {
-	opacity: 1;
-	transform: scale(1) rotate(0deg);
-}
-</style>
+<style scoped lang="css"></style>
