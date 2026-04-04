@@ -18,6 +18,7 @@ coverage
 # my stuff
 */notes.txt
 frontend/TODO.md
+frontend/keys/
 
 /cypress/videos/
 /cypress/screenshots/
