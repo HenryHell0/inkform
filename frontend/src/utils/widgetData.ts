@@ -1,5 +1,5 @@
 import { useWidgetStore } from '@/stores/useWidgetStore.js'
-import { clamp, copyTextWithPopup } from '@/utils/utils'
+import { clamp, copyText } from '@/utils/utils'
 
 export type WidgetName = 'Expression' | 'Graph'
 
@@ -80,7 +80,7 @@ export class ExpressionData extends WidgetData {
 		this.graphColor = color
 	}
 	async copyLatex() {
-		copyTextWithPopup(await this.latex) // ! icky! all this await stuff should be cleaned up with the new system
+		copyText(await this.latex) // ! icky! all this await stuff should be cleaned up with the new system
 	}
 	convertToGraph() {
 		// this should use history actions in the future btw!
