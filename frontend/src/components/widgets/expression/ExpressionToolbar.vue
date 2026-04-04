@@ -1,14 +1,9 @@
 <script setup lang="ts">
-import { TooltipRoot, TooltipTrigger, TooltipPortal, TooltipContent, TooltipArrow } from 'reka-ui'
 import type { ExpressionData, Widget } from '@/utils/widgetData'
 import WidgetToolbar from '../toolbar/WidgetToolbar.vue'
 import WidgetToolbarButton from '../toolbar/WidgetToolbarButton.vue'
-import WidgetToolbarSection from '../toolbar/WidgetToolbarSection.vue'
 import { useWidgetStore } from '@/stores/useWidgetStore'
 import { inject, ref } from 'vue'
-import CopyToClipboardToast from '@/components/ui/toasts/copyToClipboardToast.vue'
-import BaseTooltip from '@/components/ui/BaseTooltip.vue'
-
 const expression = inject<Widget>('widget')! as ExpressionData
 const widgetStore = useWidgetStore()
 
