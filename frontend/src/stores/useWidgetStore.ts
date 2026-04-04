@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import type { Widget } from '@/utils/widgetData.js'
+import type { Widget, WidgetData } from '@/utils/widgetData.js'
 import { useSessionStore } from './useSessionStore'
 import { AddWidgetAction, BringWidgetToFrontAction, executeAction, RemoveWidgetAction } from '@/utils/actions'
 
@@ -18,9 +18,23 @@ export const useWidgetStore = defineStore('widgets', () => {
 	}
 	function getHeldWidget(): Widget {
 		const sessionStore = useSessionStore()
-		if (!sessionStore.heldWidgetId) throw new Error("no held widget")
+		if (!sessionStore.heldWidgetId) throw new Error('no held widget')
 		const widget = getWidgetById(sessionStore.heldWidgetId)
 		return widget
+	}
+
+	function getCollidingWidgets(widgetId: string): Widget[] {
+		const target = getWidgetById(widgetId)
+		if (!target) return []
+
+		return widgets.value.filter((other): other is Widget => {
+			if (other.id === widgetId) return false
+
+			const overlapX = target.x < other.x + other.width && target.x + target.width > other.x
+			const overlapY = target.y < other.y + other.height && target.y + target.height > other.y
+
+			return overlapX && overlapY
+		})
 	}
 
 	function deleteWidget(id: string) {
@@ -35,5 +49,5 @@ export const useWidgetStore = defineStore('widgets', () => {
 		// widget.zIndex = zIndexCount.value
 	}
 
-	return { widgets, zIndexCount, getWidgetById, getHeldWidget, deleteWidget, addWidget, bringWidgetToFront }
+	return { widgets, zIndexCount, getWidgetById, getHeldWidget, getCollidingWidgets, deleteWidget, addWidget, bringWidgetToFront }
 })
