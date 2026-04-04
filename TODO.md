@@ -1,17 +1,5 @@
-for copy expressions:
-- add a toast that appears on success/failure. probably use Vuetify or something
-      - OKAY sooo the issue isss the v-drawing-opacity doesen't work for some reason and it like glitches out when you draw over there.
-            - but that isn't important right now
-      - the more improtant issue is eomthign else cause we need make a v-drawing-opacity mutate a ref instead of the opacity directly. way more scalable (make sure its optional)
--0- 
-- make expression toolbar styles look decent
-
 ## THE PLAN!!!:
-
-PS learn about issue templates and keyboard shortcuts and maybe use GH cli?
-
-PSPSPS IMPORTANT! get **google SEO** going!
-
+PSPSPS IMPORTANT! get **google SEO** going! Also analytics. also Reka UI my new goat
 
 ### General
 
@@ -23,7 +11,7 @@ PSPSPS IMPORTANT! get **google SEO** going!
      - spacebar on laptop
 - 🗼 make a robust way to represent expressions with promises so the user can graph/solve them before they load
 - 😄 make intro dialog with GIFs!!!!!!!
-- ⚙️  add different settings for the tools that pop down in a different menu (stoke width, color, etc. ) - make it cute
+- ⚙️ add different settings for the tools that pop down in a different menu (stoke width, color, etc. ) - make it cute
 - ⭐ switch HMER select button to having a little AI star
 - make it so that hovering a graph with an expression blurs/makes it clear you can drop it in. noone will know you can do that.
 - make a logo
