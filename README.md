@@ -40,13 +40,33 @@ Contributions are welcome! Feel free to open issues or submit pull requests.
 
 - Node.js 18+
 - Docker
+- Mkcert (if using LAN HTTPS)
 
-### Clone & Run
-
+### Clone & Install
 ```bash
 git clone https://github.com/HenryHell0/inkform.git
 cd inkform/frontend
 npm install
+```
+
+### ⚠️ HTTPS over LAN
+If you want to host the application to test on a LAN device (ie, your phone), follow these steps. Otherwise, remove the `https: {}` section from `frontend/vite.config.js`
+#### Make certificates
+```bash
+# Install mkcert (if not already installed)
+mkcert -install
+
+# Generate certificates for your local IP
+mkcert 192.168.x.x
+
+# Move them into the project
+mkdir -p keys
+mv 192.168.x.x.pem keys/dev-cert.pem
+mv 192.168.x.x-key.pem keys/dev-key.pem
+
+```
+### Run
+```bash
 npm run dev
 ```
 >⚠️ First boot may take a while while TexTeller installs dependencies.
