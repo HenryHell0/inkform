@@ -95,8 +95,8 @@ const { copy, copyUIOpen } = useCopyTextWithUI(props.expression.latex)
 	box-sizing: border-box;
 	padding: 2px;
 
-	background-color: rgb(221, 221, 221);
-	border-radius: 3px;
+	background-color: var(--color-gray-200);
+	border-radius: 4px;
 
 	transition:
 		background ease-in-out 0.1s,
