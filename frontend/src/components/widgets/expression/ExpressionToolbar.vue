@@ -30,12 +30,9 @@ function handleCopy() {
 	<WidgetToolbar @close="widgetStore.deleteWidget(expression.id)">
 		<template #title> Expression </template>
 		<template #content>
-			<WidgetToolbarSection>
 				<WidgetToolbarButton @pointerup="expression.convertToGraph()">
 					<img src="/public/assets/graph.svg" draggable="false" />
 				</WidgetToolbarButton>
-			</WidgetToolbarSection>
-			<WidgetToolbarSection>
 				<WidgetToolbarButton
 					class="copy-button"
 					:data-state="copyUIOpen ? 'success' : 'idle'"
@@ -44,7 +41,6 @@ function handleCopy() {
 					<img class="copy" src="/public/assets/copy.svg" draggable="false" />
 					<img class="check" src="/public/assets/check.svg" draggable="false" />
 				</WidgetToolbarButton>
-			</WidgetToolbarSection>
 		</template>
 	</WidgetToolbar>
 </template>
