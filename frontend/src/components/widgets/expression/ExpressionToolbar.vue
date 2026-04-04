@@ -11,14 +11,14 @@ import CopyToClipboardToast from '@/components/ui/toasts/copyToClipboardToast.vu
 const expression = inject<Widget>('widget')! as ExpressionData
 const widgetStore = useWidgetStore()
 
-const copyToastOpen = ref<boolean>(false)
+const copyUIOpen = ref<boolean>(false)
 
 function handleCopy() {
-	copyToastOpen.value = true
+	copyUIOpen.value = true
 	expression.copyLatex()
-	const timeoutMs = 800;
+	const timeoutMs = 1350
 	setTimeout(() => {
-		copyToastOpen.value = false
+		copyUIOpen.value = false
 	}, timeoutMs)
 }
 </script>
@@ -30,12 +30,57 @@ function handleCopy() {
 				<WidgetToolbarButton @pointerup="expression.convertToGraph()">
 					<img src="/public/assets/graph.svg" draggable="false" />
 				</WidgetToolbarButton>
-				<WidgetToolbarButton @pointerup="handleCopy()">
-					<img src="/public/assets/copy.svg" draggable="false" />
-					<CopyToClipboardToast v-model:open="copyToastOpen"></CopyToClipboardToast>
+				<WidgetToolbarButton
+					class="copy-button"
+					:data-state="copyUIOpen ? 'success' : 'idle'"
+					@pointerup="handleCopy()"
+				>
+					<img class="copy" src="/public/assets/copy.svg" draggable="false" />
+					<img class="check" src="/public/assets/check.svg" draggable="false" />
+					<CopyToClipboardToast v-model:open="copyUIOpen"></CopyToClipboardToast>
 				</WidgetToolbarButton>
 			</WidgetToolbarSection>
 		</template>
 	</WidgetToolbar>
 </template>
-<style scoped lang="css"></style>
+<style scoped lang="css">
+.copy-button {
+	position: relative;
+}
+
+.copy-button > img {
+	position: absolute;
+	inset: 0;
+	transition: all 0.3s ease;
+}
+
+.copy {
+	opacity: 1;
+}
+
+.check {
+	opacity: 0;
+	transform: scale(0) rotate(90deg);
+}
+
+/* opacity change */
+/* .copy-button[data-state='success'] .copy {
+	opacity: 0;
+	transform: scale(0.8);
+}
+
+.copy-button[data-state='success'] .check {
+	opacity: 1;
+	transform: scale(1);
+} */
+
+.copy-button[data-state='success'] .copy {
+	opacity: 0;
+	transform: scale(0) rotate(-90deg);
+}
+
+.copy-button[data-state='success'] .check {
+	opacity: 1;
+	transform: scale(1) rotate(0deg);
+}
+</style>
