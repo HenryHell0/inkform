@@ -30,7 +30,7 @@ defineProps<{
 		transform ease-in-out 0.1s;
 }
 
-.toolbar-button:hover{
+.toolbar-button:hover {
 	/* background-color: var(--color-bg-1); */
 	transform: scale(1.1);
 }
@@ -39,14 +39,14 @@ defineProps<{
 	transform: scale(0.92);
 }
 
-:slotted(img),
-:slotted(svg) {
+.toolbar-button :deep(img) {
 	fill: var(--color-icon);
-	-webkit-user-drag: none;
-	user-select: none;
-	pointer-events: none;
 	width: 100%;
 	height: 100%;
 	aspect-ratio: 1/1;
+
+	-webkit-user-drag: none;
+	user-select: none;
+	pointer-events: none;
 }
 </style>

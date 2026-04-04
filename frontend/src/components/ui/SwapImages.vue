@@ -42,9 +42,10 @@ const props = defineProps<{ state: State }>()
 }
 
 /* ensure images fill their container */
-.swap-item img {
+.swap-item :deep(img) {
 	width: 100%;
 	height: 100%;
+	display: block;
 	object-fit: contain;
 }
 

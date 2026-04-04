@@ -103,6 +103,13 @@ const { copy, copyUIOpen } = useCopyTextWithUI(props.expression.latex)
 		transform ease 0.2s;
 }
 
+.popmenu-activator img {
+	width: 100%;
+	height: 100%;
+	display: block;
+	object-fit: contain;
+}
+
 .popmenu-activator:hover {
 	background-color: rgb(195, 195, 195);
 	transform: scale(1.15);
@@ -127,7 +134,7 @@ const { copy, copyUIOpen } = useCopyTextWithUI(props.expression.latex)
 	height: 26px;
 	/* position: relative; */
 
-	transition: transform 0.2s var(--bounce-curve);
+	transition: transform 0.2s ease-in-out;
 }
 
 .color-svg::after {
