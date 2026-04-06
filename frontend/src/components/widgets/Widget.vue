@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import { computed, inject, provide, type Ref } from 'vue'
 import { useWidgetDrag, useWidgetResize } from '@/composables/useDraggables'
-import { useWidgetStore } from '@/stores/useWidgetStore'
-import { useSessionStore } from '@/stores/useSessionStore'
 import { useWidgetStyles } from '@/composables/useWidgetStyles'
+import { useWidgetStore } from '@/stores/useWidgetStore'
 import type { Widget } from '@/utils/widgetData'
-import { bringWidgetToFrontIfNeeded } from '@/utils/actions'
 
 // ! NOTE: this REQUIRES widget to be provided... so we might want to do a require prop, and then wiget.vue provides it.
 // also, we might want to do some sort of useWidgetInject or something... or make another wrapper around widgets that provides.. or provide here... idk.
@@ -40,7 +38,7 @@ function resizeDown(event: PointerEvent) {
 		</div>
 
 		<!-- MAIN CONTENT -->
-		<div @pointerdown="() => bringWidgetToFrontIfNeeded(widget)" style="height: 100%">
+		<div @pointerdown="() => useWidgetStore().bringWidgetToFrontIfNeeded(widget)" style="height: 100%">
 			<slot name="content"></slot>
 		</div>
 
