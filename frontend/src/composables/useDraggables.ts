@@ -57,8 +57,6 @@ function usePointerDelta(hooks?: {
 	return { start, isActive }
 }
 
-// todo rename
-// usepointermove, usepointergesture, usedrag, .... idk
 export function usePointerGestureCoordinateOffset(
 	x: Ref<number>,
 	y: Ref<number>,
@@ -114,13 +112,13 @@ export function useWidgetDrag(id: string) {
 				pushAction(
 					new ActionGroup([
 						new MoveWidgetAction(id, to, from),
-						new BringWidgetToFrontAction(widget), // TEST from changeZIndexAction
+						new BringWidgetToFrontAction(widget),
 					]),
 				)
 			} else if (moved) {
 				pushAction(new MoveWidgetAction(id, to, from))
 			} else if (zIndexChanged) {
-				pushAction(new BringWidgetToFrontAction(widget)) // TEST from changeZIndexAction
+				pushAction(new BringWidgetToFrontAction(widget))
 			}
 
 			// * TEMPORARY EVIL HACKY DRAG AND DROP FIX
@@ -166,13 +164,13 @@ export function useWidgetResize(id: string) {
 				pushAction(
 					new ActionGroup([
 						new ResizeWidgetAction(id, fromSize, toSize),
-						new BringWidgetToFrontAction(widget), // TEST from changeZIndexAction
+						new BringWidgetToFrontAction(widget),
 					]),
 				)
 			} else if (resized) {
 				pushAction(new ResizeWidgetAction(id, fromSize, toSize))
 			} else if (zIndexChanged) {
-				pushAction(new BringWidgetToFrontAction(widget)) // TEST from changeZIndexAction
+				pushAction(new BringWidgetToFrontAction(widget))
 			}
 		},
 	})

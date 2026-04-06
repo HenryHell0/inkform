@@ -2,7 +2,13 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import type { Widget, WidgetData } from '@/utils/widgetData.js'
 import { useSessionStore } from './useSessionStore'
-import { AddWidgetAction, BringWidgetToFrontAction, executeAction, RemoveWidgetAction } from '@/utils/actions'
+import {
+	AddWidgetAction,
+	BringWidgetToFrontAction,
+	executeAction,
+	isWidgetCovered,
+	RemoveWidgetAction,
+} from '@/utils/actions'
 
 export const useWidgetStore = defineStore('widgets', () => {
 	const widgets = ref<Widget[]>([])
@@ -13,7 +19,7 @@ export const useWidgetStore = defineStore('widgets', () => {
 	}
 	function getWidgetById(id: string): Widget {
 		const widget = widgets.value.find((e) => e.id === id)
-		if (!widget) throw new Error('Widget not found')
+		if (!widget) throw new Error("Widget not found, perhaps it doesen't exist yet?")
 		return widget as Widget
 	}
 	function getHeldWidget(): Widget {
@@ -38,16 +44,28 @@ export const useWidgetStore = defineStore('widgets', () => {
 	}
 
 	function deleteWidget(id: string) {
-		// this should use history actions in the future
 		executeAction(new RemoveWidgetAction(getWidgetById(id)))
 	}
 
-	function bringWidgetToFront(widget: Widget) {
-		executeAction(new BringWidgetToFrontAction(widget))
-		// logic:
-		// zIndexCount.value++
-		// widget.zIndex = zIndexCount.value
+	function bringWidgetToFrontSilently(widget: Widget) {
+		zIndexCount.value++
+		widget.zIndex = zIndexCount.value
+		return zIndexCount.value
 	}
 
-	return { widgets, zIndexCount, getWidgetById, getHeldWidget, getCollidingWidgets, deleteWidget, addWidget, bringWidgetToFront }
+	function bringWidgetToFrontIfNeeded(widget: Widget) {
+		if (isWidgetCovered(widget)) executeAction(new BringWidgetToFrontAction(widget))
+	}
+
+	return {
+		widgets,
+		zIndexCount,
+		getWidgetById,
+		getHeldWidget,
+		getCollidingWidgets,
+		deleteWidget,
+		addWidget,
+		bringWidgetToFrontSilently,
+		bringWidgetToFrontIfNeeded
+	}
 })
