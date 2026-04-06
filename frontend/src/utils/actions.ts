@@ -4,7 +4,8 @@ import { useWidgetStore } from '@/stores/useWidgetStore'
 import type { Path, Position, Size } from '@/types/types'
 import { GraphData, type ExpressionData, type Widget } from './widgetData'
 
-export function executeAction(action: Action) {
+export function executeAction(action: Action | null) {
+	if (!action) return // do we need this?
 	useHistoryStore().execute(action)
 }
 
@@ -84,14 +85,11 @@ export class RecognizeCanvasAction extends ActionGroup {
 // ================================
 //     WIDGETS
 // ================================
-// we actually need to make it so that if you like drag and drop an expression onto a graph this action groups with the import to graph group one
-// TODO these should really be editWidgetAction extensions...
-// this shouldn't require the "from" position, it should just get it from the widget
 export class MoveWidgetAction implements Action {
 	constructor(
 		private id: string,
-		private from: Position,
 		private to: Position,
+		private from: Position, // TODO we could make this optional if wanted
 	) {}
 
 	do() {
@@ -163,18 +161,19 @@ export class RemoveWidgetAction implements Action {
 }
 
 export class EditWidgetAction<T extends Widget> implements Action {
-	private before: Partial<T> = {}
-
 	constructor(
 		private id: string,
 		private edits: Partial<T>,
+		private before: Partial<T> = {},
 		private afterUpdate?: (widget: T) => void,
 	) {
 		const widget = useWidgetStore().getWidgetById(this.id) as T
 
-		for (const key in edits) {
-			const k = key as keyof T
-			this.before[k] = widget[k] // could cause errors if widget[k] changes
+		if (this.before) {
+			for (const key in edits) {
+				const k = key as keyof T
+				this.before[k] = widget[k] // could cause errors if widget[k] changes
+			}
 		}
 	}
 	do() {
@@ -247,7 +246,7 @@ export class ChangeGraphColorAction extends EditWidgetAction<GraphData> {
 			}
 		}) as ExpressionData[]
 
-		super(graph.id, { expressions: newExpressions }, (graph) => {
+		super(graph.id, { expressions: newExpressions }, {}, (graph) => {
 			graph.syncExpression(expressionId)
 		})
 	}
@@ -260,7 +259,7 @@ export class AddExpressionToGraphAction extends EditWidgetAction<GraphData> {
 		const expression = useWidgetStore().getWidgetById(expressionId) as ExpressionData
 		const newExpressions = [expression, ...graph.expressions]
 
-		super(graph.id, { expressions: newExpressions }, (graph) => {
+		super(graph.id, { expressions: newExpressions }, {}, (graph) => {
 			graph.syncExpression(expressionId)
 		})
 	}
@@ -276,8 +275,6 @@ export class ImportExpressionToGraphAction extends ActionGroup {
 	}
 }
 
-// this does NOT add the expression back to the widgets array, just removes it from the graph.
-// TODO this needs to also remove the graph if there are no expressions left or something
 export class RemoveExpressionFromGraphAction extends ActionGroup {
 	constructor(graph: GraphData, expressionId: string) {
 		const actions: Action[] = []
@@ -287,7 +284,7 @@ export class RemoveExpressionFromGraphAction extends ActionGroup {
 
 		// update the graph's expressions
 		actions.push(
-			new EditWidgetAction<GraphData>(graph.id, { expressions: newExpressions }, (graph) => {
+			new EditWidgetAction<GraphData>(graph.id, { expressions: newExpressions }, {}, (graph) => {
 				graph.syncExpression(expressionId)
 			}),
 		)
