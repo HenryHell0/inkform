@@ -43,7 +43,7 @@ export const useWidgetStore = defineStore('widgets', () => {
 		})
 	}
 
-	//
+	// we might want to change this to using bounding boxes and data directly for the pannable viewport
 	function getWidgetsFromPoint(clientX: number, clientY: number) {
 		const elements = document.elementsFromPoint(clientX, clientY)
 

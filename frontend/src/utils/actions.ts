@@ -165,19 +165,18 @@ export class RemoveWidgetAction implements Action {
 }
 
 export class EditWidgetAction<T extends Widget> implements Action {
+	private before: Partial<T> = {}
+
 	constructor(
 		private id: string,
 		private edits: Partial<T>,
-		private before: Partial<T> = {},
 		private afterUpdate?: (widget: T) => void,
 	) {
 		const widget = useWidgetStore().getWidgetById(this.id) as T
 
-		if (this.before) {
-			for (const key in edits) {
-				const k = key as keyof T
-				this.before[k] = widget[k] // could cause errors if widget[k] changes
-			}
+		for (const key in edits) {
+			const k = key as keyof T
+			this.before[k] = widget[k] // could cause errors if widget[k] changes
 		}
 	}
 	do() {
@@ -276,7 +275,7 @@ export class ChangeGraphColorAction extends EditWidgetAction<GraphData> {
 			}
 		}) as ExpressionData[]
 
-		super(graph.id, { expressions: newExpressions }, {}, (graph) => {
+		super(graph.id, { expressions: newExpressions }, (graph) => {
 			graph.syncExpression(expressionId)
 		})
 	}
@@ -289,7 +288,7 @@ export class AddExpressionToGraphAction extends EditWidgetAction<GraphData> {
 		const expression = useWidgetStore().getWidgetById(expressionId) as ExpressionData
 		const newExpressions = [expression, ...graph.expressions]
 
-		super(graph.id, { expressions: newExpressions }, {}, (graph) => {
+		super(graph.id, { expressions: newExpressions }, (graph) => {
 			graph.syncExpression(expressionId)
 		})
 	}
@@ -314,7 +313,7 @@ export class RemoveExpressionFromGraphAction extends ActionGroup {
 
 		// update the graph's expressions
 		actions.push(
-			new EditWidgetAction<GraphData>(graph.id, { expressions: newExpressions }, {}, (graph) => {
+			new EditWidgetAction<GraphData>(graph.id, { expressions: newExpressions }, (graph) => {
 				graph.syncExpression(expressionId)
 			}),
 		)
@@ -329,20 +328,18 @@ export class RemoveExpressionFromGraphAction extends ActionGroup {
 }
 
 export class ExportExpressionFromGraphAction extends ActionGroup {
-	constructor(graph: GraphData, expressionId: string, newExpressionPosition?: Position) {
+	constructor(graph: GraphData, expressionId: string, newExpressionPosition: Position) {
 		const expression = graph.expressions.find((expression) => expression.id == expressionId)
 		if (!expression) throw new Error('expression not found when removing from graph')
 		const removeExpressionFromGraphAction = new RemoveExpressionFromGraphAction(graph, expressionId)
 
-		// put expression at the right spot - this does NOT need to be an action because its a new expression
-		if (newExpressionPosition) {
-			expression.x = newExpressionPosition.x
-			expression.y = newExpressionPosition.y
-		}
-
 		const addExpressionAction = new AddWidgetAction(expression)
+		const moveExpressionAction = new MoveWidgetAction(expression.id, newExpressionPosition, {
+			x: expression.x,
+			y: expression.y,
+		})
 		const updateZIndexAction = new BringWidgetToFrontAction(expression)
 
-		super([removeExpressionFromGraphAction, addExpressionAction, updateZIndexAction])
+		super([removeExpressionFromGraphAction, addExpressionAction, moveExpressionAction, updateZIndexAction])
 	}
 }

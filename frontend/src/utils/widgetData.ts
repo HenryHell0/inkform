@@ -110,12 +110,6 @@ export class GraphData extends WidgetData {
 
 		const action = new ExportExpressionFromGraphAction(this, expressionId, position)
 		executeAction(action)
-
-		// put it above (wait hack since this has an update afterwards)
-		// TODO this needs to be part of the action...
-		// setTimeout(() => {
-		// 	useWidgetStore().bringWidgetToFront(useWidgetStore().getWidgetById(expressionId))
-		// }, 1)
 	}
 	deleteExpression(expressionId: string) {
 		const action = new RemoveExpressionFromGraphAction(this, expressionId)
