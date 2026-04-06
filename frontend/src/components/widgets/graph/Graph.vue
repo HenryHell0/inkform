@@ -17,7 +17,7 @@ provide('widget', widget) // hmm this is repeat code and doesen't cause an error
 
 </script>
 <template>
-	<Widget data-drop-type="graph" @widget-drop="widget.importHeldExpression()">
+	<Widget>
 		<template #toolbar>
 			<WidgetToolbar :close="() => widgetStore.deleteWidget(id)">
 				<template #title> Graph </template>

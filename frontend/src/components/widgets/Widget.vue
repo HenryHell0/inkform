@@ -29,16 +29,20 @@ function toolbarClicked(event: PointerEvent) {
 function resizeDown(event: PointerEvent) {
 	resizeStart(event)
 }
+
+function contentClicked() {
+	useWidgetStore().bringWidgetToFrontIfNeeded(widget)
+}
 </script>
 <template>
-	<div v-drawing-opacity class="wrapper" :class="classes" :style="styles">
+	<div :data-widget-id="widget.id" v-drawing-opacity class="wrapper" :class="classes" :style="styles">
 		<!-- TOOLBAR -->
 		<div @pointerdown="toolbarClicked">
 			<slot name="toolbar" />
 		</div>
 
 		<!-- MAIN CONTENT -->
-		<div @pointerdown="() => useWidgetStore().bringWidgetToFrontIfNeeded(widget)" style="height: 100%">
+		<div @pointerdown="contentClicked" style="height: 100%">
 			<slot name="content"></slot>
 		</div>
 

@@ -43,6 +43,29 @@ export const useWidgetStore = defineStore('widgets', () => {
 		})
 	}
 
+	//
+	function getWidgetsFromPoint(clientX: number, clientY: number) {
+		const elements = document.elementsFromPoint(clientX, clientY)
+
+		const widgets: Widget[] = []
+		const seenIds = new Set<string>()
+
+		for (const el of elements) {
+			if (!(el instanceof HTMLElement)) continue
+
+			const id = el.dataset.widgetId
+			if (!id) continue
+			if (seenIds.has(id)) continue
+
+			const widget = getWidgetById(id)
+
+			seenIds.add(id)
+			widgets.push(widget)
+		}
+
+		return widgets
+	}
+
 	function deleteWidget(id: string) {
 		executeAction(new RemoveWidgetAction(getWidgetById(id)))
 	}
@@ -63,9 +86,10 @@ export const useWidgetStore = defineStore('widgets', () => {
 		getWidgetById,
 		getHeldWidget,
 		getCollidingWidgets,
+		getWidgetsFromPoint,
 		deleteWidget,
 		addWidget,
 		bringWidgetToFrontSilently,
-		bringWidgetToFrontIfNeeded
+		bringWidgetToFrontIfNeeded,
 	}
 })
