@@ -221,6 +221,22 @@ export class BringWidgetToFrontAction implements Action {
 	}
 }
 
+export class ChangeZIndexAction implements Action {
+	constructor(
+		private widget: Widget,
+		private newZIndex: number,
+		private previousZIndez: number,
+	) {}
+
+	do() {
+		this.widget.zIndex = this.newZIndex
+	}
+
+	undo() {
+		this.widget.zIndex = this.previousZIndez
+	}
+}
+
 // ================================
 //     EXPRESSIONS
 // ================================
