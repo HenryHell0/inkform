@@ -4,7 +4,7 @@ import type { Position, Size } from '@/types/types'
 import { useWidgetStore } from '@/stores/useWidgetStore'
 import {
 	ActionGroup,
-	BringWidgetToFrontAction,
+	ChangeZIndexAction,
 	isWidgetCovered,
 	MoveWidgetAction,
 	pushAction,
@@ -112,13 +112,13 @@ export function useWidgetDrag(id: string) {
 				pushAction(
 					new ActionGroup([
 						new MoveWidgetAction(id, to, from),
-						new BringWidgetToFrontAction(widget),
+						new ChangeZIndexAction(widget, newZIndex, startZIndex),
 					]),
 				)
 			} else if (moved) {
 				pushAction(new MoveWidgetAction(id, to, from))
 			} else if (zIndexChanged) {
-				pushAction(new BringWidgetToFrontAction(widget))
+				pushAction(new ChangeZIndexAction(widget, newZIndex, startZIndex))
 			}
 
 			// * TEMPORARY EVIL HACKY DRAG AND DROP FIX
@@ -153,8 +153,8 @@ export function useWidgetResize(id: string) {
 			newZIndex = widgetStore.bringWidgetToFrontSilently(widget)
 		},
 		onUp: (_, from, to) => {
-			const fromSize: Size = { width: from.x, height: from.y }
-			const toSize: Size = { width: to.x, height: to.y }
+			const fromSize = {width: from.x, height: from.y}
+			const toSize = {width: to.x, height: to.y}
 
 			const resized = fromSize.width !== toSize.width || fromSize.height !== toSize.height
 			const zIndexChanged = isWidgetCovered(widget, startZIndex)
@@ -164,13 +164,13 @@ export function useWidgetResize(id: string) {
 				pushAction(
 					new ActionGroup([
 						new ResizeWidgetAction(id, fromSize, toSize),
-						new BringWidgetToFrontAction(widget),
+						new ChangeZIndexAction(widget, newZIndex, startZIndex),
 					]),
 				)
 			} else if (resized) {
 				pushAction(new ResizeWidgetAction(id, fromSize, toSize))
 			} else if (zIndexChanged) {
-				pushAction(new BringWidgetToFrontAction(widget))
+				pushAction(new ChangeZIndexAction(widget, newZIndex, startZIndex))
 			}
 		},
 	})
