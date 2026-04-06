@@ -190,6 +190,18 @@ export class EditWidgetAction<T extends Widget> implements Action {
 		this.afterUpdate?.(widget)
 	}
 }
+// ================================
+//     Z-INDEX STUFF 😥
+// ================================
+export function isWidgetCovered(widget: Widget, zIndex?: number) {
+	const widgetStore = useWidgetStore()
+	const testZIndex = zIndex ?? widget.zIndex
+
+	if (testZIndex == widgetStore.zIndexCount) return false
+	if (!widgetStore.getCollidingWidgets(widget.id).some((other) => other.zIndex > testZIndex)) return false
+
+	return true
+}
 
 export class BringWidgetToFrontAction implements Action {
 	private previousZIndex: number
