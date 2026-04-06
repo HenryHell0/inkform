@@ -5,12 +5,14 @@ import { useWidgetStore } from '@/stores/useWidgetStore'
 import {
 	ActionGroup,
 	ChangeZIndexAction,
+	ImportExpressionToGraphAction,
 	isWidgetCovered,
 	MoveWidgetAction,
 	pushAction,
 	ResizeWidgetAction,
 } from '@/utils/actions'
 import { useSessionStore } from '@/stores/useSessionStore'
+import { ExpressionData, GraphData } from '@/utils/widgetData'
 
 // PS eventually thsi may need to track pointerID for multi touch in the future PS
 // Description: computes a dx and dy for a pointer gesture, giving lifecycle hooks for it's movement
@@ -108,26 +110,29 @@ export function useWidgetDrag(id: string) {
 			const zIndexChanged = isWidgetCovered(widget, startZIndex)
 
 			// compute what actions actually happend
-			if (moved && zIndexChanged) {
-				pushAction(
-					new ActionGroup([
-						new MoveWidgetAction(id, to, from),
-						new ChangeZIndexAction(widget, newZIndex, startZIndex),
-					]),
-				)
-			} else if (moved) {
-				pushAction(new MoveWidgetAction(id, to, from))
-			} else if (zIndexChanged) {
-				pushAction(new ChangeZIndexAction(widget, newZIndex, startZIndex))
+			const actionGroup = new ActionGroup([])
+			if (moved) {
+				actionGroup.push(new MoveWidgetAction(id, to, from))
+			}
+			if (zIndexChanged) {
+				actionGroup.push(new ChangeZIndexAction(widget, newZIndex, startZIndex))
 			}
 
-			// * TEMPORARY EVIL HACKY DRAG AND DROP FIX
-			const elements = document.elementsFromPoint(event.clientX, event.clientY)
-			const dropTarget = elements.find(
-				(el) => el instanceof HTMLElement && el.hasAttribute('data-drop-type'),
-			) as HTMLElement
-			if (dropTarget?.dataset.dropType === 'graph') {
-				dropTarget.dispatchEvent(new CustomEvent('widget-drop'))
+			// DRAG & DROP onto graphs
+			// ! icky nesting
+			if (widget instanceof ExpressionData) {
+				const widgets = widgetStore.getWidgetsFromPoint(event.clientX, event.clientY)
+				const graph = widgets.find((widget) => widget instanceof GraphData)
+
+				if (graph) {
+					const action = new ImportExpressionToGraphAction(graph, id)
+					action.do()
+					actionGroup.push(action)
+				}
+			}
+
+			if (actionGroup.length > 0) {
+				pushAction(actionGroup)
 			}
 
 			// not temporary this is important state cleanup
@@ -153,8 +158,8 @@ export function useWidgetResize(id: string) {
 			newZIndex = widgetStore.bringWidgetToFrontSilently(widget)
 		},
 		onUp: (_, from, to) => {
-			const fromSize = {width: from.x, height: from.y}
-			const toSize = {width: to.x, height: to.y}
+			const fromSize = { width: from.x, height: from.y }
+			const toSize = { width: to.x, height: to.y }
 
 			const resized = fromSize.width !== toSize.width || fromSize.height !== toSize.height
 			const zIndexChanged = isWidgetCovered(widget, startZIndex)

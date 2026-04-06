@@ -97,14 +97,6 @@ export class GraphData extends WidgetData {
 		this.type = 'Graph'
 		this.expressions = [...expressions]
 	}
-	// could extract this to importExpression, and importHeldExpression
-	importHeldExpression() {
-		const expression = useWidgetStore().getHeldWidget()
-		if (!(expression instanceof ExpressionData)) return
-
-		const action = new ImportExpressionToGraphAction(this, expression.id)
-		executeAction(action)
-	}
 	exportExpression(expressionId: string) {
 		// calculate expression position
 		let position = { x: 0, y: 0 }

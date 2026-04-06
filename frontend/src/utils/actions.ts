@@ -41,6 +41,10 @@ export class ActionGroup implements Action {
 	push(action: Action) {
 		this.actions.push(action)
 	}
+
+	get length() {
+		return this.actions.length
+	}
 }
 
 // ================================
