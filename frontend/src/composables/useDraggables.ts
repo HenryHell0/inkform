@@ -4,7 +4,7 @@ import type { Position, Size } from '@/types/types'
 import { useWidgetStore } from '@/stores/useWidgetStore'
 import {
 	ActionGroup,
-	ChangeZIndexAction,
+	BringWidgetToFrontAction,
 	isWidgetCovered,
 	MoveWidgetAction,
 	pushAction,
@@ -107,20 +107,20 @@ export function useWidgetDrag(id: string) {
 		},
 		onUp: (event, from, to) => {
 			const moved = from.x !== to.x || from.y !== to.y
-			const zIdexChange = isWidgetCovered(widget, startZIndex)
+			const zIndexChanged = isWidgetCovered(widget, startZIndex)
 
 			// compute what actions actually happend
-			if (moved && zIdexChange) {
+			if (moved && zIndexChanged) {
 				pushAction(
 					new ActionGroup([
 						new MoveWidgetAction(id, to, from),
-						new ChangeZIndexAction(widget, newZIndex, startZIndex),
+						new BringWidgetToFrontAction(widget), // TEST from changeZIndexAction
 					]),
 				)
 			} else if (moved) {
 				pushAction(new MoveWidgetAction(id, to, from))
-			} else if (zIdexChange) {
-				pushAction(new ChangeZIndexAction(widget, newZIndex, startZIndex))
+			} else if (zIndexChanged) {
+				pushAction(new BringWidgetToFrontAction(widget)) // TEST from changeZIndexAction
 			}
 
 			// * TEMPORARY EVIL HACKY DRAG AND DROP FIX
@@ -146,13 +146,34 @@ export function useWidgetResize(id: string) {
 	const width = toRef(widget, 'width')
 	const height = toRef(widget, 'height')
 
-	const { start, isActive: isResizing } = usePointerGestureCoordinateOffset(width, height, {
-		onUp: (_, from, to) => {
-			if (from.x === to.x && from.y === to.y) return
+	let startZIndex = 0
+	let newZIndex = 0
 
-			pushAction(
-				new ResizeWidgetAction(id, { width: from.x, height: from.y }, { width: to.x, height: to.y }), // can I make this less ugly
-			)
+	const { start, isActive: isResizing } = usePointerGestureCoordinateOffset(width, height, {
+		onDown: () => {
+			startZIndex = widget.zIndex
+			newZIndex = widgetStore.bringWidgetToFrontSilently(widget)
+		},
+		onUp: (_, from, to) => {
+			const fromSize: Size = { width: from.x, height: from.y }
+			const toSize: Size = { width: to.x, height: to.y }
+
+			const resized = fromSize.width !== toSize.width || fromSize.height !== toSize.height
+			const zIndexChanged = isWidgetCovered(widget, startZIndex)
+
+			// compute what actions actually happend
+			if (resized && zIndexChanged) {
+				pushAction(
+					new ActionGroup([
+						new ResizeWidgetAction(id, fromSize, toSize),
+						new BringWidgetToFrontAction(widget), // TEST from changeZIndexAction
+					]),
+				)
+			} else if (resized) {
+				pushAction(new ResizeWidgetAction(id, fromSize, toSize))
+			} else if (zIndexChanged) {
+				pushAction(new BringWidgetToFrontAction(widget)) // TEST from changeZIndexAction
+			}
 		},
 	})
 
