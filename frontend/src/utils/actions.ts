@@ -129,16 +129,23 @@ export class ResizeWidgetAction implements Action {
 	}
 }
 
-export class AddWidgetAction implements Action {
-	constructor(private widget: Widget) {} // NOTE this is storing widgets twice in memory now, but we should really just have a list of them and then like enable/disable them or something
-	do() {
-		const widgetStore = useWidgetStore()
-		widgetStore.widgets.push(this.widget)
-	}
+export class AddWidgetAction extends ActionGroup {
+	constructor(widget: Widget) {
+		const addWidgetAction = new (class implements Action {
+			constructor(private widget: Widget) {} // NOTE this is storing widgets twice in memory now, but we should really just have a list of them and then like enable/disable them or something
+			do() {
+				const widgetStore = useWidgetStore()
+				widgetStore.widgets.push(this.widget)
+			}
 
-	undo() {
-		const widgetStore = useWidgetStore()
-		widgetStore.widgets = widgetStore.widgets.filter((e) => e.id != this.widget.id) // ! does reassigning break reactivity?
+			undo() {
+				const widgetStore = useWidgetStore()
+				widgetStore.widgets = widgetStore.widgets.filter((e) => e.id != this.widget.id)
+			}
+		})(widget)
+		const bringWidgetToFrontAction = new BringWidgetToFrontAction(widget)
+
+		super([addWidgetAction, bringWidgetToFrontAction])
 	}
 }
 
@@ -185,16 +192,23 @@ export class EditWidgetAction<T extends Widget> implements Action {
 	}
 }
 
+export class BringWidgetToFrontAction implements Action {
+	private previousZIndex: number
 
-// !! this is WRONG for a number of reasons. no 1) the widgetStore.zIndexCount isn't un-updating.. 2) much of this logic should be in do() not in the constructor
-	// 3) causes errors
-export class BringWidgetToFrontAction extends EditWidgetAction<Widget> {
-	constructor(widget: Widget) {
+	constructor(private widget: Widget) {
+		this.previousZIndex = widget.zIndex
+	}
+
+	do() {
 		const widgetStore = useWidgetStore()
-		// !!!!!! TODO this needs to only update the zindexcount if the view actually changes, otherwise return
-		if (widgetStore.zIndexCount == widget.zIndex) return // prevents actions that do nothing visually
 		widgetStore.zIndexCount++
-		super(widget.id, { zIndex: widgetStore.zIndexCount })
+		this.widget.zIndex = widgetStore.zIndexCount
+	}
+
+	undo() {
+		this.widget.zIndex = this.previousZIndex
+	}
+}
 	}
 }
 
