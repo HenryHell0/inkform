@@ -5,12 +5,11 @@ import { useWidgetStore } from '@/stores/useWidgetStore'
 import { useSessionStore } from '@/stores/useSessionStore'
 import { useWidgetStyles } from '@/composables/useWidgetStyles'
 import type { Widget } from '@/utils/widgetData'
-const widgetStore = useWidgetStore()
-const sessionStore = useSessionStore()
+import { bringWidgetToFrontIfNeeded } from '@/utils/actions'
 
 // ! NOTE: this REQUIRES widget to be provided... so we might want to do a require prop, and then wiget.vue provides it.
 // also, we might want to do some sort of useWidgetInject or something... or make another wrapper around widgets that provides.. or provide here... idk.
-const widget = inject<Widget>("widget")!
+const widget = inject<Widget>('widget')!
 
 const { start: dragStart, isDragging } = useWidgetDrag(widget.id)
 const { start: resizeStart, isResizing } = useWidgetResize(widget.id)
@@ -23,29 +22,25 @@ const classes = computed(() => {
 	}
 })
 
-// give children the widget id, dragging value, etc.
-provide("isDragging", isDragging)
+provide('isDragging', isDragging)
 
 function toolbarClicked(event: PointerEvent) {
 	dragStart(event)
-	sessionStore.heldWidgetId = widget.id
-	bringToFront()
 }
 
-// todo this should NOT be in-component. it should be a history action in bringWidgetToFront but i'll do that later
-function bringToFront() {
-	widgetStore.bringWidgetToFront(widget)
+function resizeDown(event: PointerEvent) {
+	resizeStart(event)
 }
 </script>
 <template>
-	<div v-drawing-opacity class="wrapper" :class="classes" :style="styles" >
+	<div v-drawing-opacity class="wrapper" :class="classes" :style="styles">
 		<!-- TOOLBAR -->
 		<div @pointerdown="toolbarClicked">
 			<slot name="toolbar" />
 		</div>
 
 		<!-- MAIN CONTENT -->
-		<div @click="bringToFront" style="height: 100%">
+		<div @pointerdown="() => bringWidgetToFrontIfNeeded(widget)" style="height: 100%">
 			<slot name="content"></slot>
 		</div>
 
@@ -53,7 +48,7 @@ function bringToFront() {
 		<img
 			class="resizer"
 			v-touch-prevent
-			@pointerdown="resizeStart"
+			@pointerdown="resizeDown"
 			:src="'./assets/resize.svg'"
 			draggable="false"
 		/>

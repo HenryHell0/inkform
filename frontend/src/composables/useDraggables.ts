@@ -2,7 +2,14 @@ import { onUnmounted, ref, toRef } from 'vue'
 import type { Ref } from 'vue'
 import type { Position, Size } from '@/types/types'
 import { useWidgetStore } from '@/stores/useWidgetStore'
-import { executeAction, MoveWidgetAction, ResizeWidgetAction } from '@/utils/actions'
+import {
+	ActionGroup,
+	ChangeZIndexAction,
+	isWidgetCovered,
+	MoveWidgetAction,
+	pushAction,
+	ResizeWidgetAction,
+} from '@/utils/actions'
 import { useSessionStore } from '@/stores/useSessionStore'
 
 // PS eventually thsi may need to track pointerID for multi touch in the future PS
@@ -89,17 +96,34 @@ export function useWidgetDrag(id: string) {
 	const x = toRef(widget, 'x')
 	const y = toRef(widget, 'y')
 
+	let startZIndex = 0
+	let newZIndex = 0
+
 	const { start, isActive: isDragging } = usePointerGestureCoordinateOffset(x, y, {
 		onDown: () => {
 			sessionStore.heldWidgetId = id
+			startZIndex = widget.zIndex
+			newZIndex = widgetStore.bringWidgetToFrontSilently(widget)
 		},
-		// TODO eventually this will also trigger drop events like dropping a widget onto a graph.. in the future
 		onUp: (event, from, to) => {
-			if (from.x !== to.x || from.y !== to.y) {
-				executeAction(new MoveWidgetAction(id, from, to))
+			const moved = from.x !== to.x || from.y !== to.y
+			const zIdexChange = isWidgetCovered(widget, startZIndex)
+
+			// compute what actions actually happend
+			if (moved && zIdexChange) {
+				pushAction(
+					new ActionGroup([
+						new MoveWidgetAction(id, to, from),
+						new ChangeZIndexAction(widget, newZIndex, startZIndex),
+					]),
+				)
+			} else if (moved) {
+				pushAction(new MoveWidgetAction(id, to, from))
+			} else if (zIdexChange) {
+				pushAction(new ChangeZIndexAction(widget, newZIndex, startZIndex))
 			}
 
-			// !!! TEMPORARY EVIL HACKY DRAG AND DROP FIX
+			// * TEMPORARY EVIL HACKY DRAG AND DROP FIX
 			const elements = document.elementsFromPoint(event.clientX, event.clientY)
 			const dropTarget = elements.find(
 				(el) => el instanceof HTMLElement && el.hasAttribute('data-drop-type'),
@@ -123,11 +147,10 @@ export function useWidgetResize(id: string) {
 	const height = toRef(widget, 'height')
 
 	const { start, isActive: isResizing } = usePointerGestureCoordinateOffset(width, height, {
-
 		onUp: (_, from, to) => {
 			if (from.x === to.x && from.y === to.y) return
 
-			executeAction(
+			pushAction(
 				new ResizeWidgetAction(id, { width: from.x, height: from.y }, { width: to.x, height: to.y }), // can I make this less ugly
 			)
 		},
