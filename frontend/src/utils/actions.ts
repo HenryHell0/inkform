@@ -203,6 +203,11 @@ export function isWidgetCovered(widget: Widget, zIndex?: number) {
 	return true
 }
 
+export function bringWidgetToFrontIfNeeded(widget: Widget) {
+	if (isWidgetCovered(widget))
+		executeAction(new BringWidgetToFrontAction(widget))
+}
+
 export class BringWidgetToFrontAction implements Action {
 	private previousZIndex: number
 
