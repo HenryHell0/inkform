@@ -1,10 +1,3 @@
-for this undo-redo fix thing:
-- make z-index only trigger an action when the view actually changes
-      - also zindex should update on drag
-      - and zindex should update when pointerdown, not pointerup
-- make moveWidetAction and ResizeWidgetAction NOT need a "before" property (potentially just extend editWidgetAction)
-- group moveWidgetAction with ImportExpressionToGraphAction so that it doesen't sit on the graph when you drop it. I may be able to like hack it and just delete the moveWidgetAction or something... or undo it? we'll see
-
 ## THE PLAN!!!:
 
 TODO TODO WEE WOO WEE WOO fix POPMENU Z INDEX
