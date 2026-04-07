@@ -129,7 +129,7 @@ export async function recognizeCanvas(canvas: HTMLCanvasElement): Promise<string
 	return latex
 }
 
-export function erasePathsInRect(x: number, y: number, width: number, height: number) {
+export function getPathsInRect(x: number, y: number, width: number, height: number) {
 	const canvasStore = useCanvasStore()
 	// this function also deletes something if you intersect the edge of a bbox, so it can erase things even if you aren't over it completely - especially if it is a diagonal.
 
@@ -138,7 +138,7 @@ export function erasePathsInRect(x: number, y: number, width: number, height: nu
 	const rectTop = y
 	const rectBottom = y + height
 
-	canvasStore.paths = canvasStore.paths.filter((path) => {
+	return canvasStore.paths.filter((path) => {
 		const element = document.querySelector(`[data-id="${path.id}"]`)
 		if (!element) return true
 		if (!(element instanceof SVGPathElement)) return true
@@ -166,8 +166,8 @@ export function erasePathsInRect(x: number, y: number, width: number, height: nu
 			rectLeft >= boxLeft && rectRight <= boxRight && rectTop >= boxTop && rectBottom <= boxBottom
 
 		// erase if fully inside or intersecting, but not if it contains selection
-		const shouldErase = (fullyInside || intersects) && !containsSelection
+		const inRect = (fullyInside || intersects) && !containsSelection
 
-		return !shouldErase
+		return inRect
 	})
 }

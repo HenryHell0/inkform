@@ -1,9 +1,18 @@
 import { onUnmounted, ref, toRef } from 'vue'
 import type { Ref } from 'vue'
-import type { Position, Size } from '@/types/types'
+import type { Position } from '@/types/types'
 import { useWidgetStore } from '@/stores/useWidgetStore'
-import { executeAction, MoveWidgetAction, ResizeWidgetAction } from '@/utils/actions'
+import {
+	ActionGroup,
+	ChangeZIndexAction,
+	ImportExpressionToGraphAction,
+	isWidgetCovered,
+	MoveWidgetAction,
+	pushAction,
+	ResizeWidgetAction,
+} from '@/utils/actions'
 import { useSessionStore } from '@/stores/useSessionStore'
+import { ExpressionData, GraphData } from '@/utils/widgetData'
 
 // PS eventually thsi may need to track pointerID for multi touch in the future PS
 // Description: computes a dx and dy for a pointer gesture, giving lifecycle hooks for it's movement
@@ -50,8 +59,6 @@ function usePointerDelta(hooks?: {
 	return { start, isActive }
 }
 
-// todo rename
-// usepointermove, usepointergesture, usedrag, .... idk
 export function usePointerGestureCoordinateOffset(
 	x: Ref<number>,
 	y: Ref<number>,
@@ -89,23 +96,42 @@ export function useWidgetDrag(id: string) {
 	const x = toRef(widget, 'x')
 	const y = toRef(widget, 'y')
 
+	let startZIndex = 0
+	let newZIndex = 0
+
 	const { start, isActive: isDragging } = usePointerGestureCoordinateOffset(x, y, {
 		onDown: () => {
 			sessionStore.heldWidgetId = id
+			startZIndex = widget.zIndex
+			newZIndex = widgetStore.bringWidgetToFrontSilently(widget)
 		},
-		// TODO eventually this will also trigger drop events like dropping a widget onto a graph.. in the future
 		onUp: (event, from, to) => {
-			if (from.x !== to.x || from.y !== to.y) {
-				executeAction(new MoveWidgetAction(id, from, to))
+			const moved = from.x !== to.x || from.y !== to.y
+			const zIndexChanged = isWidgetCovered(widget, startZIndex)
+
+			// compute what actions actually happend
+			const actionGroup = new ActionGroup([])
+			if (moved) {
+				actionGroup.push(new MoveWidgetAction(id, to, from))
+			}
+			if (zIndexChanged) {
+				actionGroup.push(new ChangeZIndexAction(widget, newZIndex, startZIndex))
 			}
 
-			// !!! TEMPORARY EVIL HACKY DRAG AND DROP FIX
-			const elements = document.elementsFromPoint(event.clientX, event.clientY)
-			const dropTarget = elements.find(
-				(el) => el instanceof HTMLElement && el.hasAttribute('data-drop-type'),
-			) as HTMLElement
-			if (dropTarget?.dataset.dropType === 'graph') {
-				dropTarget.dispatchEvent(new CustomEvent('widget-drop'))
+			// DRAG & DROP onto graphs
+			if (widget instanceof ExpressionData) {
+				const widgets = widgetStore.getWidgetsFromPoint(event.clientX, event.clientY)
+				const graph = widgets.find((widget) => widget instanceof GraphData)
+
+				if (graph) {
+					const action = new ImportExpressionToGraphAction(graph, id)
+					action.do()
+					actionGroup.push(action)
+				}
+			}
+
+			if (actionGroup.length > 0) {
+				pushAction(actionGroup)
 			}
 
 			// not temporary this is important state cleanup
@@ -122,14 +148,32 @@ export function useWidgetResize(id: string) {
 	const width = toRef(widget, 'width')
 	const height = toRef(widget, 'height')
 
+	let startZIndex = 0
+	let newZIndex = 0
+
 	const { start, isActive: isResizing } = usePointerGestureCoordinateOffset(width, height, {
-
+		onDown: () => {
+			startZIndex = widget.zIndex
+			newZIndex = widgetStore.bringWidgetToFrontSilently(widget)
+		},
 		onUp: (_, from, to) => {
-			if (from.x === to.x && from.y === to.y) return
+			const fromSize = { width: from.x, height: from.y }
+			const toSize = { width: to.x, height: to.y }
 
-			executeAction(
-				new ResizeWidgetAction(id, { width: from.x, height: from.y }, { width: to.x, height: to.y }), // can I make this less ugly
-			)
+			const resized = fromSize.width !== toSize.width || fromSize.height !== toSize.height
+			const zIndexChanged = isWidgetCovered(widget, startZIndex)
+
+			// compute what actions actually happend
+			const actionGroup = new ActionGroup([])
+			if (resized) {
+				actionGroup.push(new ResizeWidgetAction(id, fromSize, toSize))
+			}
+			if (zIndexChanged) {
+				actionGroup.push(new ChangeZIndexAction(widget, newZIndex, startZIndex))
+			}
+			if (actionGroup.length > 0) {
+				pushAction(actionGroup)
+			}
 		},
 	})
 

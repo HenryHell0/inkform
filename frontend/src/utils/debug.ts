@@ -18,7 +18,7 @@ export function addTestWidgets() {
 	const widgetStore = useWidgetStore()
 
 	if (DEBUG.createTestExpression) {
-		widgetStore.addWidget(new ExpressionData(100, 100, 515, 150, 'x^2+2x-1'))
+		widgetStore.widgets.push(new ExpressionData(100, 100, 515, 150, 'x^2+2x-1'))
 	}
 
 	if (DEBUG.createTestGraph) {

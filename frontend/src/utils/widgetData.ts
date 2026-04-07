@@ -1,5 +1,10 @@
-import { useWidgetStore } from '@/stores/useWidgetStore.js'
 import { clamp, copyText } from '@/utils/utils'
+import {
+	ChangeGraphColorAction,
+	executeAction,
+	ExportExpressionFromGraphAction,
+	RemoveExpressionFromGraphAction,
+} from './actions'
 
 export type WidgetName = 'Expression' | 'Graph'
 
@@ -82,12 +87,6 @@ export class ExpressionData extends WidgetData {
 	async copyLatex() {
 		copyText(await this.latex) // ! icky! all this await stuff should be cleaned up with the new system
 	}
-	convertToGraph() {
-		// this should use history actions in the future btw!
-		const widgetStore = useWidgetStore()
-		widgetStore.addWidget(new GraphData(this.x, this.y, this.width, this.width, [this])) // self.width twice is intentional
-		widgetStore.deleteWidget(this.id)
-	}
 }
 
 export class GraphData extends WidgetData {
@@ -99,24 +98,54 @@ export class GraphData extends WidgetData {
 		this.type = 'Graph'
 		this.expressions = [...expressions]
 	}
-	async addExpression(expression: ExpressionData) {
-		this.expressions.push(expression)
-		const graph = { latex: expression.latex, color: expression.graphColor, id: expression.id }
-		this.calculator.setExpression({ latex: await graph.latex, color: graph.color, id: graph.id })
-	}
-	deleteExpression(expression: ExpressionData) {
-		const widgetStore = useWidgetStore()
-
-		this.expressions = this.expressions.filter((e) => e.id != expression.id)
-		this.calculator.removeExpression({ id: expression.id })
-
-		if (this.expressions.length == 0) {
-			widgetStore.deleteWidget(this.id)
+	exportExpression(expressionId: string) {
+		// calculate expression position
+		let position = { x: 0, y: 0 }
+		position.x = this.x
+		position.y = this.y + this.height + 12
+		// if we removed all the expressions, put it at the top of the graph
+		if (this.expressions.length == 1 /* because it hasn't been removed yet */) {
+			position.x = this.x
+			position.y = this.y
 		}
+
+		const action = new ExportExpressionFromGraphAction(this, expressionId, position)
+		executeAction(action)
 	}
-	changeGraphColor(expression: ExpressionData, color: string) {
-		expression.graphColor = color
-		this.calculator.setExpression({ id: expression.id, color: color })
+	deleteExpression(expressionId: string) {
+		const action = new RemoveExpressionFromGraphAction(this, expressionId)
+		executeAction(action)
+	}
+	changeGraphColor(expressionId: string, color: string) {
+		const action = new ChangeGraphColorAction(this, expressionId, color)
+		executeAction(action)
+	}
+	async syncExpression(expressionId: string) {
+		// if the expression is in the calculator but not the list, remove it from calculator
+		if (
+			this.calculator
+				.getExpressions()
+				.map((expression) => expression.id)
+				.includes(expressionId) &&
+			!this.expressions.map((expression) => expression.id).includes(expressionId)
+		) {
+			this.calculator.removeExpression({ id: expressionId })
+			return
+		}
+
+		// otherwise, add/exit the expression
+		const expression = this.expressions.find((expression) => expression.id == expressionId)
+		if (!expression) throw new Error("This expression doesen't exist")
+		this.calculator.setExpression({
+			id: expressionId,
+			latex: await expression.latex,
+			color: expression.graphColor,
+		})
+	}
+	syncAllExpressions() {
+		for (let expression of this.expressions) {
+			this.syncExpression(expression.id)
+		}
 	}
 	copyExpression(expression: ExpressionData) {
 		expression.copyLatex()
