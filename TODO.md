@@ -1,7 +1,5 @@
 ## THE PLAN!!!:
-
-TODO TODO WEE WOO WEE WOO fix POPMENU Z INDEX
-
+PSPSPS IMPORTANT! get **google SEO** going! Also analytics. also Reka UI my new goat
 
 ### General
 
@@ -14,7 +12,7 @@ TODO TODO WEE WOO WEE WOO fix POPMENU Z INDEX
      - spacebar on laptop
 - 🗼 make a robust way to represent expressions with promises so the user can graph/solve them before they load
 - 😄 make intro dialog with GIFs!!!!!!!
-- ⚙️  add different settings for the tools that pop down in a different menu (stoke width, color, etc. ) - make it cute
+- ⚙️ add different settings for the tools that pop down in a different menu (stoke width, color, etc. ) - make it cute
 - ⭐ switch HMER select button to having a little AI star
 - make a logo
 

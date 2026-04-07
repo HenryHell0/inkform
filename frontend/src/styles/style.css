@@ -36,6 +36,8 @@
 	font-style: normal;
 	/* font-variation-settings:
     "wdth" 100; */
+
+	-webkit-tap-highlight-color: transparent !important;
 }
 
 textarea {
@@ -47,15 +49,37 @@ textarea {
 
 button {
 	all: unset;
+	-webkit-tap-highlight-color: transparent;
+}
+
+a {
+	-webkit-tap-highlight-color: transparent;
 }
 
 img {
-	/* who knows if this works or no */
+	/* who knows if this works or not but whatever */
 	-webkit-user-select: none; /* Safari */
 	user-select: none; /* Standard */
-	/* pointer-events: none; Disables click/long-press on mobile */
 	-webkit-touch-callout: none; /* Disables callout menu on iOS */
 	-webkit-user-drag: none; /* Safari, Chrome */
 	-moz-user-drag: none; /* Firefox (older versions) */
 	-ms-user-drag: none; /* Internet Explorer/Edge */
+}
+
+/* global reka stuff */
+.toast-viewport {
+	--viewport-padding: 20px;
+	position: fixed;
+	bottom: 0;
+	right: 0;
+
+	display: flex;
+	flex-direction: column;
+	padding: var(--viewport-padding);
+	gap: 10px;
+	max-width: 100vw;
+	margin: 0;
+	list-style: none;
+	z-index: 99999999;
+	outline: none;
 }

@@ -1,5 +1,5 @@
 import { useWidgetStore } from '@/stores/useWidgetStore.js'
-import { clamp } from '@/utils/utils'
+import { clamp, copyText } from '@/utils/utils'
 import {
 	ChangeGraphColorAction,
 	executeAction,
@@ -86,6 +86,9 @@ export class ExpressionData extends WidgetData {
 		if (!color) throw new Error('bad math')
 		this.graphColor = color
 	}
+	async copyLatex() {
+		copyText(await this.latex) // ! icky! all this await stuff should be cleaned up with the new system
+	}
 }
 
 export class GraphData extends WidgetData {
@@ -145,6 +148,9 @@ export class GraphData extends WidgetData {
 		for (let expression of this.expressions) {
 			this.syncExpression(expression.id)
 		}
+	}
+	copyExpression(expression: ExpressionData) {
+		expression.copyLatex()
 	}
 }
 

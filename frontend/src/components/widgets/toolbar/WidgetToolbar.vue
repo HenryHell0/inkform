@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { inject, type Ref } from 'vue';
+import { inject, type Ref } from 'vue'
 
-defineProps<{
-	close: () => void
+defineEmits<{
+	close: []
 }>()
 
-const isDragging = inject<Ref<boolean>>("isDragging")
-
+const isDragging = inject<Ref<boolean>>('isDragging')
 </script>
 <template>
 	<div class="toolbar" v-touch-prevent :style="{ cursor: isDragging ? 'grabbing' : 'grab' }">
@@ -21,12 +20,13 @@ const isDragging = inject<Ref<boolean>>("isDragging")
 		</div>
 
 		<!-- X BUTTON -->
-		<img @pointerdown.stop src="/assets/x.svg" @pointerup="close" class="x-button" draggable="false" />
+		<!-- TODO this should probably be wrapped in a <button> -->
+		<img @pointerdown.stop src="/assets/x.svg" @pointerup="$emit('close')" class="x-button" draggable="false" />
 	</div>
 </template>
 <style scoped>
 .toolbar {
-	width: 100%;
+      width: 100%;
 	position: relative;
 
 	border-top-left-radius: inherit;
@@ -36,6 +36,9 @@ const isDragging = inject<Ref<boolean>>("isDragging")
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+
+	padding-top: 4px;
+	padding-bottom: 4px;
 
 	cursor: grab;
 }
@@ -50,6 +53,9 @@ const isDragging = inject<Ref<boolean>>("isDragging")
 	display: flex;
 	gap: 5px;
 	align-items: center;
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
 }
 
 .x-button {
@@ -57,7 +63,9 @@ const isDragging = inject<Ref<boolean>>("isDragging")
 	box-sizing: border-box;
 	padding: 0.1em;
 	border-radius: 100px;
-	transition: background 0.3s ease, transform 0.1s ease-in-out;
+	transition:
+		background 0.3s ease,
+		transform 0.1s ease-in-out;
 	cursor: pointer;
 }
 

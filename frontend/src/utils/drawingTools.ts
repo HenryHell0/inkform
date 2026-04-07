@@ -118,7 +118,7 @@ export interface SelectorTool extends Tool {
 	endX: number
 	endY: number
 }
-// all the logic to recognize stuff should NOT be in selector. in reality it should just select a region of the canvas, return an image or something, and then recognition is handled elsewhere.
+// ! TODO these will be "useSelector" in the future and will manage pointer events, selection box, state, etc. so we can isolate canvussies
 export const selector: SelectorTool = reactive(
 	new (class implements SelectorTool {
 		startX: number
