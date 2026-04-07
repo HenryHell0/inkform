@@ -1,12 +1,6 @@
 <script setup lang="ts">
-import PopMenu from '@/components/ui/PopMenu.vue'
-import SwapImages from '@/components/ui/SwapImages.vue'
-import { useCopyTextWithUI } from '@/composables/useCopyTextWithUI'
-import { useCanvasStore } from '@/stores/useCanvasStore'
 import { useWidgetStore } from '@/stores/useWidgetStore'
-import { ChangeGraphColorAction, EditWidgetAction, executeAction } from '@/utils/actions';
-import { GraphData, ExpressionData, graphColors } from '@/utils/widgetData'
-import Graph from './Graph.vue'
+import { GraphData } from '@/utils/widgetData'
 import GraphBottomBarExpression from './GraphBottomBarExpression.vue'
 
 const props = defineProps<{

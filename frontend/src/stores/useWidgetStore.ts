@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import type { Widget, WidgetData } from '@/utils/widgetData.js'
+import type { Widget } from '@/utils/widgetData.js'
 import { useSessionStore } from './useSessionStore'
 import {
 	AddWidgetAction,

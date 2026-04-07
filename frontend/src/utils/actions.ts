@@ -5,7 +5,7 @@ import type { Path, Position, Size } from '@/types/types'
 import { GraphData, type ExpressionData, type Widget } from './widgetData'
 
 export function executeAction(action: Action | null) {
-	if (!action) return // do we need this?
+	if (!action) return
 	useHistoryStore().execute(action)
 }
 

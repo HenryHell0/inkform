@@ -1,6 +1,6 @@
 import { onUnmounted, ref, toRef } from 'vue'
 import type { Ref } from 'vue'
-import type { Position, Size } from '@/types/types'
+import type { Position } from '@/types/types'
 import { useWidgetStore } from '@/stores/useWidgetStore'
 import {
 	ActionGroup,
@@ -119,7 +119,6 @@ export function useWidgetDrag(id: string) {
 			}
 
 			// DRAG & DROP onto graphs
-			// ! icky nesting
 			if (widget instanceof ExpressionData) {
 				const widgets = widgetStore.getWidgetsFromPoint(event.clientX, event.clientY)
 				const graph = widgets.find((widget) => widget instanceof GraphData)

@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { useWidgetStore } from '@/stores/useWidgetStore'
-import { useSessionStore } from '@/stores/useSessionStore'
 import GraphBottomBar from './GraphBottomBar.vue'
 import GraphContent from './GraphContent.vue'
-import { ExpressionData, GraphData } from '@/utils/widgetData'
+import { GraphData } from '@/utils/widgetData'
 import Widget from '../Widget.vue'
 import { provide } from 'vue'
 import WidgetToolbar from '../toolbar/WidgetToolbar.vue'

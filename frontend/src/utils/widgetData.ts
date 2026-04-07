@@ -1,10 +1,8 @@
-import { useWidgetStore } from '@/stores/useWidgetStore.js'
 import { clamp, copyText } from '@/utils/utils'
 import {
 	ChangeGraphColorAction,
 	executeAction,
 	ExportExpressionFromGraphAction,
-	ImportExpressionToGraphAction,
 	RemoveExpressionFromGraphAction,
 } from './actions'
 
