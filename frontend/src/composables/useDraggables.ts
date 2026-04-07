@@ -164,17 +164,15 @@ export function useWidgetResize(id: string) {
 			const zIndexChanged = isWidgetCovered(widget, startZIndex)
 
 			// compute what actions actually happend
-			if (resized && zIndexChanged) {
-				pushAction(
-					new ActionGroup([
-						new ResizeWidgetAction(id, fromSize, toSize),
-						new ChangeZIndexAction(widget, newZIndex, startZIndex),
-					]),
-				)
-			} else if (resized) {
-				pushAction(new ResizeWidgetAction(id, fromSize, toSize))
-			} else if (zIndexChanged) {
-				pushAction(new ChangeZIndexAction(widget, newZIndex, startZIndex))
+			const actionGroup = new ActionGroup([])
+			if (resized) {
+				actionGroup.push(new ResizeWidgetAction(id, fromSize, toSize))
+			}
+			if (zIndexChanged) {
+				actionGroup.push(new ChangeZIndexAction(widget, newZIndex, startZIndex))
+			}
+			if (actionGroup.length > 0) {
+				pushAction(actionGroup)
 			}
 		},
 	})
