@@ -12,3 +12,11 @@ export interface Path {
 	d: string
 	id: string
 }
+
+declare global {
+	interface Window {
+		gtag: (string, string, ...args: any[]) => void
+	}
+}
+
+export {}
