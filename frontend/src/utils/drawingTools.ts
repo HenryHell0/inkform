@@ -5,10 +5,18 @@ import { getPathsInRect } from './svgCanvasUtils'
 import { useWidgetStore } from '@/stores/useWidgetStore'
 import { useCanvasStore } from '@/stores/useCanvasStore'
 import { useSessionStore } from '@/stores/useSessionStore'
-import { ActionGroup, AddPathAction, executeAction, pushAction, RecognizeCanvasAction, RemovePathAction } from './actions'
+import {
+	ActionGroup,
+	AddPathAction,
+	executeAction,
+	pushAction,
+	RecognizeCanvasAction,
+	RemovePathAction,
+} from './actions'
 import { DEBUG } from './debug'
 import { useHistoryStore } from '@/stores/useHistoryStore'
 import type { Path } from '@/types/types'
+import { useAnalytics } from '@/composables/useAnalytics'
 
 export interface Tool {
 	onDown?: (event: PointerEvent) => void
@@ -178,17 +186,19 @@ export const selector: SelectorTool = reactive(
 			// TODO this will be way more robust (bust)
 			const latex = recognizeCanvas(croppedCanvas)
 
+			// ======
+			// ANALYTICS!!!! WOO!
+			// ======
+			useAnalytics().logConvertExpression()
+
 			// perform actions (add widget, remove paths)
 			const pathsToRemove = getPathsInRect(this.x, this.y, this.width, this.height)
 			const widget = new ExpressionData(this.x, this.y, this.width, this.height, latex) // TODO latex will be robust promise thing later
 			const action = new RecognizeCanvasAction(widget, pathsToRemove)
 			executeAction(action)
 
-
 			// !! really we should have an empty string or our own object or something. we need to rebuild this callback system
 			;(widgetStore.widgets.at(-1) as ExpressionData).latex = await latex // update latex when its done
-
-
 
 			// debug stuff
 			if (DEBUG.downloadPNG) downloadCanvasPNG(croppedCanvas)
