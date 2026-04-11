@@ -1,6 +1,9 @@
+/* !! FYI!!! If you update background or theme colors, also change manifest.json!! */
+
+
 :root {
 	/* =========================================================
-	   SEMANTIC TOKENS (PRIMARY GLOBAL DESIGN SYSTEM)
+	   SEMANTIC TOKENS (PRIMARY GLOBAL DESIGN SYSTEM OR SOMETHING)
 	   Components should use THESE, not palette values.
 	========================================================= */
 
