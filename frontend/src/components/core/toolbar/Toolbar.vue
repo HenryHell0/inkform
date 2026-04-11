@@ -1,21 +1,21 @@
 <script setup lang="ts">
 import { useSessionStore } from '@/stores/useSessionStore'
 import { useHistoryStore } from '@/stores/useHistoryStore'
-import { useDialogStore } from '@/stores/useDialogStore'
+import { useViewDialogs } from '@/composables/useViewDialogs'
 import { toolList } from '@/utils/drawingTools'
 import ToolbarSection from './ToolbarSection.vue'
 import ToolbarButton from './ToolbarButton.vue'
-import RedoIcon from '@/components/images/RedoIcon.vue'
-import UndoIcon from '@/components/images/UndoIcon.vue'
+import RedoIcon from '@/components/icons/RedoIcon.vue'
+import UndoIcon from '@/components/icons/UndoIcon.vue'
 const sessionStore = useSessionStore()
 const historyStore = useHistoryStore()
-const dialogStore = useDialogStore()
+const { open: openViewDialog } = useViewDialogs()
 </script>
 <template>
 	<div ref="element" class="toolbar-container">
 		<ToolbarSection>
-			<ToolbarButton @click="dialogStore.openDialog('info')">
-				<img src="/assets/info.svg" style="transform:scale(1.45)" draggable="false">
+			<ToolbarButton @click="openViewDialog('info')">
+				<img src="/assets/info.svg" style="transform: scale(1.45)" draggable="false" />
 			</ToolbarButton>
 		</ToolbarSection>
 
@@ -37,7 +37,7 @@ const dialogStore = useDialogStore()
 					:active="sessionStore.activeTool === tool"
 					@click="sessionStore.activeTool = tool"
 				>
-					<img :src="`./assets/${tool}.svg`" draggable="false"/>
+					<img :src="`./assets/${tool}.svg`" draggable="false" />
 				</ToolbarButton>
 			</ToolbarSection>
 		</div>
@@ -45,15 +45,15 @@ const dialogStore = useDialogStore()
 		<!-- FEEDBACK -->
 		<div class="toolbar-group">
 			<ToolbarSection>
-				<ToolbarButton @click="dialogStore.openDialog('feedback')">
-					<img src="/assets/feedback.svg" draggable="false"/>
+				<ToolbarButton @click="openViewDialog('feedback')">
+					<img src="/assets/feedback.svg" draggable="false" />
 				</ToolbarButton>
 			</ToolbarSection>
 			<!-- GITHUB -->
 			<ToolbarSection>
 				<ToolbarButton>
 					<a href="https://github.com/henryhell0/inkform" target="_blank">
-						<img src="/assets/github.svg" style="transform: scale(1.5)" draggable="false"/>
+						<img src="/assets/github.svg" style="transform: scale(1.5)" draggable="false" />
 					</a>
 				</ToolbarButton>
 			</ToolbarSection>
