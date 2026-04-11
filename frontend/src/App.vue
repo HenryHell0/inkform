@@ -1,10 +1,15 @@
-<script setup>
+<script setup lang="ts">
 import Toolbar from '@/components/core/toolbar/Toolbar.vue'
 import WidgetContainer from '@/components/core/WidgetContainer.vue'
 import OverlaySvg from '@/components/core/OverlaySvg.vue'
 import MainCanvas from '@/components/core/MainCanvas.vue'
 import DialogHost from './components/core/DialogHost.vue'
 import { ToastProvider, ToastViewport, TooltipProvider } from 'reka-ui'
+import { onMounted } from 'vue'
+
+onMounted(() => {
+	document.title = 'Inkform'
+})
 </script>
 <template>
 	<div class="template">
