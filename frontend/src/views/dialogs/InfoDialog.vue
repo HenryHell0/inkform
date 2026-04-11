@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import FullscreenDialog from './templates/FullscreenDialog.vue'
-import { useDialogStore } from '@/stores/useDialogStore'
+import FullscreenDialog from '@/components/ui/FullscreenDialog.vue';
+import { useViewDialogs } from '@/composables/useViewDialogs'
 
-const dialogStore = useDialogStore()
+const { close } = useViewDialogs()
 </script>
 
 <template>
-	<FullscreenDialog class="dialog" @close="dialogStore.closeDialog('info')">
+	<FullscreenDialog class="dialog" @close="close">
 		<div class="about">
 			<header class="header">
 				<h1>About Inkform</h1>
@@ -170,6 +170,6 @@ a:hover {
 
 .legal {
 	font-size: 75%;
-	color: var(--color-zinc-600)
+	color: var(--color-zinc-600);
 }
 </style>

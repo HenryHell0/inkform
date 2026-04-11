@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useDialogStore } from '@/stores/useDialogStore'
 import { reactive } from 'vue'
-import FullscreenDialog from './templates/FullscreenDialog.vue'
-const dialogStore = useDialogStore()
+import FullscreenDialog from '@/components/ui/FullscreenDialog.vue'
+import { useViewDialogs } from '@/composables/useViewDialogs'
+const { close } = useViewDialogs()
 const API_BASE = import.meta.env.VITE_API_BASE
 
 const data = reactive({
@@ -24,11 +24,11 @@ function handleSubmit() {
 	})
 
 	alert('Yay! Thanks so much!')
-	dialogStore.closeDialog('feedback')
+	close()
 }
 </script>
 <template>
-	<FullscreenDialog @close="dialogStore.closeDialog('feedback')">
+	<FullscreenDialog @close="close">
 		<h1>Give Feedback!</h1>
 
 		<div class="form">
