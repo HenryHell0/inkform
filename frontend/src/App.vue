@@ -15,7 +15,7 @@ onMounted(() => {
 	<div class="template">
 		<TooltipProvider>
 			<ToastProvider>
-				<!-- dialog will be reka someday... -->
+				<!-- dialog will be reka someday... and route-based -->
 				<DialogHost></DialogHost>
 
 				<Toolbar></Toolbar>

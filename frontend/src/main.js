@@ -1,4 +1,4 @@
-import { createApp } from 'vue'
+import { ViteSSG } from 'vite-ssg'
 import App from './App.vue'
 import VueMathjax from 'vue-mathjax-next'
 import { createPinia } from 'pinia'
@@ -6,20 +6,35 @@ import { createPinia } from 'pinia'
 import { vTouchPrevent } from './directives/vTouchPrevent'
 import { vDrawingOpacity } from './directives/vDrawingOpacity'
 
-
 // import styles
 import './styles/pallete.css'
 import './styles/style.css'
 
-const pinia = createPinia()
-const app = createApp(App)
-app.use(VueMathjax)
-app.use(pinia)
+// TEMPORARY EVIL WRONG ROUTES!!
+const routes = [
+	{
+		path: '/',
+		component: () => import('./App.vue'),
+	},
+]
 
-// register custom directives
-app.directive('touch-prevent', vTouchPrevent)
-app.directive('drawing-opacity', vDrawingOpacity)
+export const createApp = ViteSSG(
+	App,
+	{
+		routes,
+	},
+	({ app, router, routes, initialState }) => {
+		// CONFIGURE PINIA
+		const pinia = createPinia()
+		app.use(pinia)
+		if (import.meta.env.SSR) initialState.pinia = pinia.state.value
+		else pinia.state.value = initialState.pinia || {}
 
+		// OTHER PLUGINS
+		app.use(VueMathjax)
 
-
-app.mount('#app')
+		// LOAD DIRECTIVES
+		app.directive('touch-prevent', vTouchPrevent)
+		app.directive('drawing-opacity', vDrawingOpacity)
+	},
+)

@@ -1,6 +1,42 @@
 ## THE PLAN!!!:
 PSPSPS IMPORTANT! get **google SEO** going! Also analytics. also Reka UI my new goat
 
+Google SEO TODO:
+- vue router and different pages (/about /feedback /tools /features etc)
+- alt text and stuff (different issue I think)
+- SSG
+
+
+**SSR STUFF**:
+all code runs TWICE!
+once on the server to generate dist/index.html
+once in the browser during runtime
+BUT:
+
+server has NO browser APIs - localStorage, fetch, window., document., etc.
+browser has everything
+
+Ex:
+❌
+const x = localStorage.getItem("x") // runs during SSR
+
+✅
+onMounted(() => {
+  localStorage.getItem("x") // ✔ only runs in browser
+})
+
+you can also use import.meta.client!
+
+Also check for:
+side effects in script setup
+- router.push 
+- store mutations during SSR
+- API calls
+anything that assumes browser exists
+- canvas
+- resize observers 
+- event listeners 
+
 ### General
 
 
@@ -11,6 +47,7 @@ PSPSPS IMPORTANT! get **google SEO** going! Also analytics. also Reka UI my new 
      - home icon tool that bring you to original position
      - spacebar on laptop
 - 🗼 make a robust way to represent expressions with promises so the user can graph/solve them before they load
+      - after this is done, we'll be able to add to GA whether recognition was successful or failed. and the average time!
 - 😄 make intro dialog with GIFs!!!!!!!
 - ⚙️ add different settings for the tools that pop down in a different menu (stoke width, color, etc. ) - make it cute
 - ⭐ switch HMER select button to having a little AI star

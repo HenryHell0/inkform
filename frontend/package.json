@@ -10,7 +10,7 @@
 		"dev": "concurrently -k -n \"FRONTEND,BACKEND\" -c \"cyan,magenta\" \"npm:dev:frontend\" \"npm:dev:backend\"",
 		"dev:frontend": "vite",
 		"dev:backend": "bash -c 'cd $INIT_CWD/../backend && docker compose up'",
-		"build": "vite build",
+		"build": "vite-ssg build",
 		"preview": "vite preview",
 		"lint": "eslint . --fix",
 		"format": "prettier --write src/",
