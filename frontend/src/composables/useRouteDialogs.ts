@@ -5,11 +5,11 @@ export function useRouteDialogs() {
 	const router = useRouter()
 
 	function open(name: RouteLocationNamedRaw['name']) {
-		router.push({ name })
+		router.push({ name }) // push DOES make a history (back button) entry
 	}
 
 	function close() {
-		router.replace({ name: 'home' })
+		router.replace({ name: 'home' }) // replace does NOT make a history (back button) entry
 	}
 
 	return { open, close }

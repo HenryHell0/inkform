@@ -6,37 +6,6 @@ Google SEO TODO:
 - alt text and stuff (different issue I think)
 - SSG
 
-
-**SSR STUFF**:
-all code runs TWICE!
-once on the server to generate dist/index.html
-once in the browser during runtime
-BUT:
-
-server has NO browser APIs - localStorage, fetch, window., document., etc.
-browser has everything
-
-Ex:
-❌
-const x = localStorage.getItem("x") // runs during SSR
-
-✅
-onMounted(() => {
-  localStorage.getItem("x") // ✔ only runs in browser
-})
-
-you can also use import.meta.client!
-
-Also check for:
-side effects in script setup
-- router.push 
-- store mutations during SSR
-- API calls
-anything that assumes browser exists
-- canvas
-- resize observers 
-- event listeners 
-
 ### General
 
 
