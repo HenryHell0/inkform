@@ -3,13 +3,21 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
+import Sitemap from 'vite-plugin-sitemap'
 import fs from 'fs'
 
 const useHttps = fs.existsSync('./keys/dev-key.pem') && fs.existsSync('./keys/dev-cert.pem')
 
 // https://vite.dev/config/
 export default defineConfig({
-	plugins: [vue(), vueDevTools()],
+	plugins: [
+		vue(),
+		vueDevTools(),
+		Sitemap({
+			hostname: 'https://inkform.io',
+			// dynamicRoutes: ['/path1', '/path2'], // Manually add dynamic paths if needed
+		}),
+	],
 	resolve: {
 		alias: {
 			'@': fileURLToPath(new URL('./src', import.meta.url)),

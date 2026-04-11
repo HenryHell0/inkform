@@ -40,6 +40,7 @@
 		"prettier": "3.6.2",
 		"typescript": "^5.9.3",
 		"vite": "^7.1.7",
+		"vite-plugin-sitemap": "^0.8.2",
 		"vite-plugin-vue-devtools": "^8.0.2",
 		"vite-ssg": "^28.3.0",
 		"vue-eslint-parser": "^10.2.0",
