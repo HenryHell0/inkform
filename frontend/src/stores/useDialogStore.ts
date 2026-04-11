@@ -1,3 +1,11 @@
+/*
+! NOTE
+despite the fact that we now have view-dialogs, this is still good for popup dialogs like "are you sure?"
+
+regiser UI dialogs somewhere centralized like `loadDialogs()` using dialogStore.registerDialog('feedback', FeedbackDialog),
+and then open/close them (& with props! (allowing for lots of reuseablility wowza!))
+*/
+
 import { defineStore } from 'pinia'
 import { ref, markRaw, type Component } from 'vue'
 
