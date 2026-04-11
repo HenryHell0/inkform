@@ -21,7 +21,8 @@
 		"pinia": "^3.0.4",
 		"reka-ui": "^2.9.2",
 		"vue": "^3.5.22",
-		"vue-mathjax-next": "^0.0.6"
+		"vue-mathjax-next": "^0.0.6",
+		"vue-router": "^4.6.4"
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.33.0",
