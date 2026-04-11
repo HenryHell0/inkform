@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useSessionStore } from '@/stores/useSessionStore'
 import { useHistoryStore } from '@/stores/useHistoryStore'
-import { useViewDialogs } from '@/composables/useViewDialogs'
+import { useRouteDialogs } from '@/composables/useRouteDialogs'
 import { toolList } from '@/utils/drawingTools'
 import ToolbarSection from './ToolbarSection.vue'
 import ToolbarButton from './ToolbarButton.vue'
@@ -9,12 +9,12 @@ import RedoIcon from '@/components/icons/RedoIcon.vue'
 import UndoIcon from '@/components/icons/UndoIcon.vue'
 const sessionStore = useSessionStore()
 const historyStore = useHistoryStore()
-const { open: openViewDialog } = useViewDialogs()
+const { open: openRouteDialog } = useRouteDialogs()
 </script>
 <template>
 	<div ref="element" class="toolbar-container">
 		<ToolbarSection>
-			<ToolbarButton @click="openViewDialog('info')">
+			<ToolbarButton @click="openRouteDialog('info')">
 				<img src="/assets/info.svg" style="transform: scale(1.45)" draggable="false" />
 			</ToolbarButton>
 		</ToolbarSection>
@@ -45,7 +45,7 @@ const { open: openViewDialog } = useViewDialogs()
 		<!-- FEEDBACK -->
 		<div class="toolbar-group">
 			<ToolbarSection>
-				<ToolbarButton @click="openViewDialog('feedback')">
+				<ToolbarButton @click="openRouteDialog('feedback')">
 					<img src="/assets/feedback.svg" draggable="false" />
 				</ToolbarButton>
 			</ToolbarSection>

@@ -1,7 +1,7 @@
 import { useRouter, type RouteLocationNamedRaw } from 'vue-router'
 
 // this will be useWhiteboardViewDialogs cause it's just for whiteboard .. since it goes to "home" which is the whiteboard page (for now, will be whiteboard:home in the future)
-export function useViewDialogs() {
+export function useRouteDialogs() {
 	const router = useRouter()
 
 	function open(name: RouteLocationNamedRaw['name']) {

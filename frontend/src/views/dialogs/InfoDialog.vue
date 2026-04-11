@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import FullscreenDialog from '@/components/ui/FullscreenDialog.vue';
-import { useViewDialogs } from '@/composables/useViewDialogs'
+import { useRouteDialogs } from '@/composables/useRouteDialogs'
 
-const { close } = useViewDialogs()
+const { close } = useRouteDialogs()
 </script>
 
 <template>

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
 import FullscreenDialog from '@/components/ui/FullscreenDialog.vue'
-import { useViewDialogs } from '@/composables/useViewDialogs'
-const { close } = useViewDialogs()
+import { useRouteDialogs } from '@/composables/useRouteDialogs'
+const { close } = useRouteDialogs()
 const API_BASE = import.meta.env.VITE_API_BASE
 
 const data = reactive({
