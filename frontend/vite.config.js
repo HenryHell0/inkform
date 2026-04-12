@@ -4,6 +4,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 import Sitemap from 'vite-plugin-sitemap'
+import { sitemapRoutes } from './src/routes/definitions'
 import fs from 'fs'
 
 const useHttps = fs.existsSync('./keys/dev-key.pem') && fs.existsSync('./keys/dev-cert.pem')
@@ -15,7 +16,7 @@ export default defineConfig({
 		vueDevTools(),
 		Sitemap({
 			hostname: 'https://inkform.io',
-			// dynamicRoutes: ['/path1', '/path2'], // Manually add dynamic paths if needed
+			dynamicRoutes: sitemapRoutes
 		}),
 	],
 	resolve: {

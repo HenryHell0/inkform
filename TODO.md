@@ -3,8 +3,8 @@ PSPSPS IMPORTANT! get **google SEO** going! Also analytics. also Reka UI my new 
 
 Google SEO TODO:
 - vue router and different pages (/about /feedback /tools /features etc)
-- alt text and stuff (different issue I think)
-- SSG
+      - give each page it's own title and meta description using unhead and titleTemplate
+- alt text and aria-labels
 
 ### General
 
@@ -52,3 +52,6 @@ for this undo-redo fix thing:
 - future "change" expression (like solving it or editing it. Action.before & Action.after) (also this will be used with Partials in TS and be useful for graph colors)
 - turn graph back into expression
 - remove expression from graph
+
+for SEO:
+- SSG
