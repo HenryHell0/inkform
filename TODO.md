@@ -2,9 +2,13 @@
 PSPSPS IMPORTANT! get **google SEO** going! Also analytics. also Reka UI my new goat
 
 Google SEO TODO:
-- vue router and different pages (/about /feedback /tools /features etc)
-      - give each page it's own title and meta description using unhead and titleTemplate
+- ✅vue router and different pages (/about /feedback /tools /features etc)
+      - ✅give each page it's own title and meta description using unhead and titleTemplate
+      - ⭐^have mom check these
+      - also add opengraph descriptions.
 - alt text and aria-labels
+- flesh out feedback dialog more
+- switch / to being a landing page (seperate route) and have /whiteboard or something be the whiteboard (and then /whiteboard/feedback is feedbakc or whatever)
 
 ### General
 
@@ -20,7 +24,7 @@ Google SEO TODO:
 - ⭐ switch HMER select button to having a little AI star
 - make a logo
 
-### Later:
+### Later:  
 
 - consider making it so that you can select a portion of the graph to set the bounds
 Analytics:

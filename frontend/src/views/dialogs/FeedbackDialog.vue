@@ -2,8 +2,19 @@
 import { reactive } from 'vue'
 import FullscreenDialog from '@/components/ui/FullscreenDialog.vue'
 import { useRouteDialogs } from '@/composables/useRouteDialogs'
+import { useHead } from '@unhead/vue'
 const { close } = useRouteDialogs()
 const API_BASE = import.meta.env.VITE_API_BASE
+
+useHead({
+	title: 'Feedback',
+	meta: [
+		{
+			name: 'description',
+			content: 'Give feedback on Inkform. I appreciate all feedback whether positive or negative and try to improve Inkform every day. Give feedback on uptime, tooling, UI, or general suggestions!',
+		},
+	],
+})
 
 const data = reactive({
 	userInfo: '',

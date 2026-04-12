@@ -1,8 +1,19 @@
 <script setup lang="ts">
-import FullscreenDialog from '@/components/ui/FullscreenDialog.vue';
+import FullscreenDialog from '@/components/ui/FullscreenDialog.vue'
 import { useRouteDialogs } from '@/composables/useRouteDialogs'
+import { useHead } from '@unhead/vue'
 
 const { close } = useRouteDialogs()
+
+useHead({
+	title: 'About',
+	meta: [
+		{
+			name: 'description',
+			content: 'Learn more about Inkform, an interactive math whiteboard with handwriting recognition input, making writing and solving math feel natural. Inkform aims to help both student and teachers in presenting and understanding math using advanced mathematics tools like Desmos.',
+		},
+	],
+})
 </script>
 
 <template>
