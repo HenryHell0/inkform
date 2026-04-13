@@ -126,7 +126,7 @@ useHead({
 }
 
 .tagline {
-	font-size: 0.85rem;
+	font-size: 0.9rem;
 	color: var(--color-zinc-500);
 }
 
@@ -167,16 +167,6 @@ li {
 
 .enjoy {
 	font-weight: bold;
-}
-
-a {
-	color: var(--color-submit);
-	text-decoration: none;
-	font-weight: 500;
-}
-
-a:hover {
-	text-decoration: underline;
 }
 
 .legal {

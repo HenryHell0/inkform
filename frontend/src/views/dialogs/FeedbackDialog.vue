@@ -40,16 +40,58 @@ function handleSubmit() {
 </script>
 <template>
 	<FullscreenDialog @close="close">
-		<h1>Give Feedback!</h1>
+		<div class="container">
+			<h1>Give Feedback</h1>
+			<div class="sub">I appreciate any and all feedback!</div>
+			<hr class="line-1"/>
 
-		<div class="form">
-			<input v-model="data.userInfo" type="text" placeholder="Name or Email" />
-			<textarea v-model="data.message" class="message" type="text" placeholder="Your feedback"></textarea>
+			<div class="form">
+				<input v-model="data.userInfo" type="text" placeholder="Name or Email" />
+				<textarea
+					v-model="data.message"
+					class="message"
+					type="text"
+					placeholder="Your feedback"
+				></textarea>
+			</div>
+
+			<hr class="line-2"/>
+
+			<div class="sub">
+				Or, contact me at
+				<a href="mailto:henry@inkform.io?subject=Inkform+Feedback">henry@inkform.io</a>
+			</div>
 			<button @click="handleSubmit"><b>Send</b></button>
 		</div>
 	</FullscreenDialog>
 </template>
 <style scoped>
+.container {
+	margin: 10px;
+	font-size: 110%;
+}
+
+h1 {
+	margin: 0px;
+}
+
+hr {
+	width: 80%;
+	height: 0px;
+	border: 1px solid var(--color-gray-400);
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+.line-1 {
+	margin-top: 2px;
+
+}
+
+.line-2 {
+	margin-bottom: 2px;
+}
+
 .form {
 	display: flex;
 	flex-direction: column;
@@ -73,7 +115,8 @@ button {
 	border: none;
 	border-radius: 5px;
 	width: 10em;
-	height: 2em;
+	height: 2.3em;
+	margin-top: 10px;
 
 	color: white;
 
@@ -86,5 +129,10 @@ button:hover {
 
 button:active {
 	transform: scale(0.9);
+}
+
+.sub {
+	font-size: 90%;
+	color: var(--color-zinc-600);
 }
 </style>

@@ -1,6 +1,5 @@
 /* !! FYI!!! If you update background or theme colors, also change manifest.json!! */
 
-
 :root {
 	/* =========================================================
 	   SEMANTIC TOKENS (PRIMARY GLOBAL DESIGN SYSTEM OR SOMETHING)
@@ -57,7 +56,15 @@ button {
 
 a {
 	-webkit-tap-highlight-color: transparent;
+	color: var(--color-submit);
+	text-decoration: none;
+	font-weight: 500;
 }
+
+a:hover {
+	text-decoration: underline;
+}
+
 
 img {
 	/* who knows if this works or not but whatever */
