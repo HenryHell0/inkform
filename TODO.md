@@ -9,6 +9,7 @@ Google SEO TODO:
 - alt text and aria-labels
 - flesh out feedback dialog more
 - switch / to being a landing page (seperate route) and have /whiteboard or something be the whiteboard (and then /whiteboard/feedback is feedbakc or whatever)
+- make a "copied email to clipabord 🎉" dialog on mailto failure (@click.prevent="...")- so make a scalable dialog opener w/ custom text... then do that.
 
 ### General
 

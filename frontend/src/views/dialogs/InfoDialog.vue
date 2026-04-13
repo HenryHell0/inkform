@@ -88,8 +88,11 @@ useHead({
 					suggestions, and contributions are always welcome.
 				</p>
 
+				<p>Feel free to contact me at <a href="mailto:henry@inkform.io">henry@inkform.io</a>!</p>
+
 				<p class="enjoy">Enjoy! 🎉</p>
 			</section>
+			<!-- TODO FIX MAILTO LINK -->
 
 			<footer class="legal">
 				<p>
@@ -154,7 +157,7 @@ ul {
 li {
 	background: var(--color-bg-1);
 	padding: 6px 10px;
-	margin: 0px 5em;
+	margin: 0px 3.5em;
 	border-radius: 4px;
 	border: 1px solid var(--color-zinc-400);
 }

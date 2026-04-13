@@ -42,7 +42,7 @@ function handleSubmit() {
 	<FullscreenDialog @close="close">
 		<div class="container">
 			<h1>Give Feedback</h1>
-			<div class="sub">I appreciate any and all feedback!</div>
+			<div class="text">I appreciate any and all feedback!</div>
 			<hr class="line-1"/>
 
 			<div class="form">
@@ -57,9 +57,9 @@ function handleSubmit() {
 
 			<hr class="line-2"/>
 
-			<div class="sub">
+			<div class="text">
 				Or, contact me at
-				<a href="mailto:henry@inkform.io?subject=Inkform+Feedback">henry@inkform.io</a>
+				<a href="mailto:henry@inkform.io?subject=Inkform%20Feedback">henry@inkform.io</a>
 			</div>
 			<button @click="handleSubmit"><b>Send</b></button>
 		</div>
@@ -67,7 +67,9 @@ function handleSubmit() {
 </template>
 <style scoped>
 .container {
-	margin: 10px;
+	margin: 0px;
+	margin-top: 30px;
+	margin-bottom: 30px;
 	font-size: 110%;
 }
 
@@ -131,8 +133,8 @@ button:active {
 	transform: scale(0.9);
 }
 
-.sub {
+.text {
 	font-size: 90%;
-	color: var(--color-zinc-600);
+	color: var(--color-zinc-700);
 }
 </style>

@@ -37,6 +37,7 @@ defineEmits<{
 	background: var(--color-bg-0);
 
 	text-align: center;
+	/* !this should NOT be giving this to children FYI */
 	padding: 20px;
 }
 </style>
