@@ -256,7 +256,6 @@ export class ChangeGraphColorAction extends EditWidgetAction<ExpressionData> {
 		const expression = graph.expressions.find((e) => e.id == expressionId)
 		if (!expression) throw new Error("the graph doesen't have this expression")
 
-
 		super(expression, { graphColor: newColor }, () => {
 			graph.syncExpression(expressionId)
 		})
@@ -285,16 +284,16 @@ export class ImportExpressionToGraphAction extends ActionGroup {
 }
 
 export class RemoveExpressionFromGraphAction extends ActionGroup {
-	constructor(graph: GraphData, expressionId: string) {
+	constructor(graph: GraphData, expression: ExpressionData) {
 		const actions: Action[] = []
 
 		// get the new expressions list
-		const newExpressions = graph.expressions.filter((expression) => expression.id != expressionId)
+		const newExpressions = graph.expressions.filter((e) => e.id != expression.id)
 
 		// update the graph's expressions
 		actions.push(
 			new EditWidgetAction<GraphData>(graph, { expressions: newExpressions }, (graph) => {
-				graph.syncExpression(expressionId)
+				graph.syncExpression(expression.id)
 			}),
 		)
 
@@ -308,10 +307,9 @@ export class RemoveExpressionFromGraphAction extends ActionGroup {
 }
 
 export class ExportExpressionFromGraphAction extends ActionGroup {
-	constructor(graph: GraphData, expressionId: string, newExpressionPosition: Position) {
-		const expression = graph.expressions.find((expression) => expression.id == expressionId)
+	constructor(graph: GraphData, expression: ExpressionData, newExpressionPosition: Position) {
 		if (!expression) throw new Error('expression not found when removing from graph')
-		const removeExpressionFromGraphAction = new RemoveExpressionFromGraphAction(graph, expressionId)
+		const removeExpressionFromGraphAction = new RemoveExpressionFromGraphAction(graph, expression)
 
 		const addExpressionAction = new AddWidgetAction(expression)
 		const moveExpressionAction = new MoveWidgetAction(expression, newExpressionPosition, {

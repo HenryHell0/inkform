@@ -19,8 +19,8 @@ function changeColor(expressionId: string, color: string) {
 			<GraphBottomBarExpression
 				:expression="expression"
 				@changeColor="(expression, color) => changeColor(expression.id, color)"
-				@convertToExpressionWidget="(expression) => widget.exportExpression(expression.id)"
-				@deleteExpression="(expression) => widget.deleteExpression(expression.id)"
+				@convertToExpressionWidget="(expression) => widget.exportExpression(expression)"
+				@deleteExpression="(expression) => widget.deleteExpression(expression)"
 			></GraphBottomBarExpression>
 		</div>
 	</div>

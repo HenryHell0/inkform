@@ -98,7 +98,7 @@ export class GraphData extends WidgetData {
 		this.type = 'Graph'
 		this.expressions = [...expressions]
 	}
-	exportExpression(expressionId: string) {
+	exportExpression(expression: ExpressionData) {
 		// calculate expression position
 		let position = { x: 0, y: 0 }
 		position.x = this.x
@@ -109,11 +109,11 @@ export class GraphData extends WidgetData {
 			position.y = this.y
 		}
 
-		const action = new ExportExpressionFromGraphAction(this, expressionId, position)
+		const action = new ExportExpressionFromGraphAction(this, expression, position)
 		executeAction(action)
 	}
-	deleteExpression(expressionId: string) {
-		const action = new RemoveExpressionFromGraphAction(this, expressionId)
+	deleteExpression(expression: ExpressionData) {
+		const action = new RemoveExpressionFromGraphAction(this, expression)
 		executeAction(action)
 	}
 	changeGraphColor(expressionId: string, color: string) {
