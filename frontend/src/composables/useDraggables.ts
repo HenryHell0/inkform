@@ -124,7 +124,7 @@ export function useWidgetDrag(id: string) {
 				const graph = widgets.find((widget) => widget instanceof GraphData)
 
 				if (graph) {
-					const action = new ImportExpressionToGraphAction(graph, id)
+					const action = new ImportExpressionToGraphAction(graph, widget)
 					action.do()
 					actionGroup.push(action)
 				}

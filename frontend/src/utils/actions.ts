@@ -265,21 +265,19 @@ export class ChangeGraphColorAction extends EditWidgetAction<ExpressionData> {
 
 // this does NOT delete the expression, just adds it.
 export class AddExpressionToGraphAction extends EditWidgetAction<GraphData> {
-	constructor(graph: GraphData, expressionId: string) {
+	constructor(graph: GraphData, expression: ExpressionData) {
 		// mutate graphData with new expression..
-		const expression = useWidgetStore().getWidgetById(expressionId) as ExpressionData
 		const newExpressions = [expression, ...graph.expressions]
 
 		super(graph, { expressions: newExpressions }, (graph) => {
-			graph.syncExpression(expressionId)
+			graph.syncExpression(expression.id)
 		})
 	}
 }
 
 export class ImportExpressionToGraphAction extends ActionGroup {
-	constructor(graph: GraphData, expressionId: string) {
-		const addExpressionAction = new AddExpressionToGraphAction(graph, expressionId)
-		const expression = useWidgetStore().getWidgetById(expressionId)
+	constructor(graph: GraphData, expression: ExpressionData) {
+		const addExpressionAction = new AddExpressionToGraphAction(graph, expression)
 		const deleteWidgetAction = new RemoveWidgetAction(expression)
 
 		super([addExpressionAction, deleteWidgetAction])
