@@ -168,29 +168,23 @@ export class EditWidgetAction<T extends Widget> implements Action {
 	private before: Partial<T> = {}
 
 	constructor(
-		private id: string,
+		private widget: T,
 		private edits: Partial<T>,
 		private afterUpdate?: (widget: T) => void,
 	) {
-		const widget = useWidgetStore().getWidgetById(this.id) as T
-
 		for (const key in edits) {
 			const k = key as keyof T
-			this.before[k] = widget[k] // could cause errors if widget[k] changes
+			this.before[k] = this.widget[k] // could cause errors if widget[k] changes
 		}
 	}
 	do() {
-		const widgetStore = useWidgetStore()
-		const widget = widgetStore.getWidgetById(this.id) as T
-		Object.assign(widget, this.edits) // object.assign preserves reactivity
-		this.afterUpdate?.(widget)
+		Object.assign(this.widget, this.edits) // object.assign preserves reactivity
+		this.afterUpdate?.(this.widget)
 	}
 
 	undo() {
-		const widgetStore = useWidgetStore()
-		const widget = widgetStore.getWidgetById(this.id) as T
-		Object.assign(widget, this.before) // object.assign preserves reactivity
-		this.afterUpdate?.(widget)
+		Object.assign(this.widget, this.before) // object.assign preserves reactivity
+		this.afterUpdate?.(this.widget)
 	}
 }
 // ================================
@@ -265,17 +259,13 @@ export class ConvertExpressionToGraphAction extends ActionGroup {
 //     GRAPHS
 // ================================
 // we could also just move this logic to GraphData instead of it's own action class
-export class ChangeGraphColorAction extends EditWidgetAction<GraphData> {
+export class ChangeGraphColorAction extends EditWidgetAction<ExpressionData> {
 	constructor(graph: GraphData, expressionId: string, newColor: string) {
-		const newExpressions = graph.expressions.map((expression) => {
-			if (expression.id != expressionId) return expression
-			return {
-				...expression,
-				graphColor: newColor,
-			}
-		}) as ExpressionData[]
+		const expression = graph.expressions.find((e) => e.id == expressionId)
+		if (!expression) throw new Error("the graph doesen't have this expression")
 
-		super(graph.id, { expressions: newExpressions }, (graph) => {
+
+		super(expression, { graphColor: newColor }, () => {
 			graph.syncExpression(expressionId)
 		})
 	}
@@ -288,7 +278,7 @@ export class AddExpressionToGraphAction extends EditWidgetAction<GraphData> {
 		const expression = useWidgetStore().getWidgetById(expressionId) as ExpressionData
 		const newExpressions = [expression, ...graph.expressions]
 
-		super(graph.id, { expressions: newExpressions }, (graph) => {
+		super(graph, { expressions: newExpressions }, (graph) => {
 			graph.syncExpression(expressionId)
 		})
 	}
@@ -313,7 +303,7 @@ export class RemoveExpressionFromGraphAction extends ActionGroup {
 
 		// update the graph's expressions
 		actions.push(
-			new EditWidgetAction<GraphData>(graph.id, { expressions: newExpressions }, (graph) => {
+			new EditWidgetAction<GraphData>(graph, { expressions: newExpressions }, (graph) => {
 				graph.syncExpression(expressionId)
 			}),
 		)
