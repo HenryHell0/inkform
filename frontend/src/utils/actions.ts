@@ -187,7 +187,7 @@ export function isWidgetCovered(widget: Widget, zIndex?: number) {
 	const testZIndex = zIndex ?? widget.zIndex
 
 	if (testZIndex == widgetStore.zIndexCount) return false
-	if (!widgetStore.getCollidingWidgets(widget.id).some((other) => other.zIndex > testZIndex)) return false
+	if (!widgetStore.getCollidingWidgets(widget).some((other) => other.zIndex > testZIndex)) return false
 
 	return true
 }
