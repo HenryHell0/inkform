@@ -112,7 +112,7 @@ export function useWidgetDrag(id: string) {
 			// compute what actions actually happend
 			const actionGroup = new ActionGroup([])
 			if (moved) {
-				actionGroup.push(new MoveWidgetAction(id, to, from))
+				actionGroup.push(new MoveWidgetAction(widget, to, from))
 			}
 			if (zIndexChanged) {
 				actionGroup.push(new ChangeZIndexAction(widget, newZIndex, startZIndex))

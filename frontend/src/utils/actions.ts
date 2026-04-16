@@ -91,22 +91,18 @@ export class RecognizeCanvasAction extends ActionGroup {
 // ================================
 export class MoveWidgetAction implements Action {
 	constructor(
-		private id: string,
+		private widget: Widget,
 		private to: Position,
 		private from: Position, // TODO we could make this optional if wanted
 	) {}
 
 	do() {
-		const widgetStore = useWidgetStore()
-		const widget = widgetStore.getWidgetById(this.id)
-		widget.x = this.to.x
-		widget.y = this.to.y
+		this.widget.x = this.to.x
+		this.widget.y = this.to.y
 	}
 	undo() {
-		const widgetStore = useWidgetStore()
-		const widget = widgetStore.getWidgetById(this.id)
-		widget.x = this.from.x
-		widget.y = this.from.y
+		this.widget.x = this.from.x
+		this.widget.y = this.from.y
 	}
 }
 // this also shouldn't require a "from" parameter
@@ -324,7 +320,7 @@ export class ExportExpressionFromGraphAction extends ActionGroup {
 		const removeExpressionFromGraphAction = new RemoveExpressionFromGraphAction(graph, expressionId)
 
 		const addExpressionAction = new AddWidgetAction(expression)
-		const moveExpressionAction = new MoveWidgetAction(expression.id, newExpressionPosition, {
+		const moveExpressionAction = new MoveWidgetAction(expression, newExpressionPosition, {
 			x: expression.x,
 			y: expression.y,
 		})
