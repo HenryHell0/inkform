@@ -166,7 +166,7 @@ export function useWidgetResize(id: string) {
 			// compute what actions actually happend
 			const actionGroup = new ActionGroup([])
 			if (resized) {
-				actionGroup.push(new ResizeWidgetAction(id, fromSize, toSize))
+				actionGroup.push(new ResizeWidgetAction(widget, fromSize, toSize))
 			}
 			if (zIndexChanged) {
 				actionGroup.push(new ChangeZIndexAction(widget, newZIndex, startZIndex))

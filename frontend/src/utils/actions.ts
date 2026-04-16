@@ -108,22 +108,18 @@ export class MoveWidgetAction implements Action {
 // this also shouldn't require a "from" parameter
 export class ResizeWidgetAction implements Action {
 	constructor(
-		private id: string,
+		private widget: Widget,
 		private from: Size, // eventually if we implement non-bottom-right resizing these will be Rect objects
 		private to: Size,
 	) {}
 
 	do() {
-		const widgetStore = useWidgetStore()
-		const widget = widgetStore.getWidgetById(this.id)
-		widget.width = this.to.width
-		widget.height = this.to.height
+		this.widget.width = this.to.width
+		this.widget.height = this.to.height
 	}
 	undo() {
-		const widgetStore = useWidgetStore()
-		const widget = widgetStore.getWidgetById(this.id)
-		widget.width = this.from.width
-		widget.height = this.from.height
+		this.widget.width = this.from.width
+		this.widget.height = this.from.height
 	}
 }
 
