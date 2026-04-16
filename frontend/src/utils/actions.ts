@@ -252,12 +252,9 @@ export class ConvertExpressionToGraphAction extends ActionGroup {
 // ================================
 // we could also just move this logic to GraphData instead of it's own action class
 export class ChangeGraphColorAction extends EditWidgetAction<ExpressionData> {
-	constructor(graph: GraphData, expressionId: string, newColor: string) {
-		const expression = graph.expressions.find((e) => e.id == expressionId)
-		if (!expression) throw new Error("the graph doesen't have this expression")
-
+	constructor(graph: GraphData, expression: ExpressionData, newColor: string) {
 		super(expression, { graphColor: newColor }, () => {
-			graph.syncExpression(expressionId)
+			graph.syncExpression(expression)
 		})
 	}
 }
@@ -269,7 +266,7 @@ export class AddExpressionToGraphAction extends EditWidgetAction<GraphData> {
 		const newExpressions = [expression, ...graph.expressions]
 
 		super(graph, { expressions: newExpressions }, (graph) => {
-			graph.syncExpression(expression.id)
+			graph.syncExpression(expression)
 		})
 	}
 }
@@ -293,7 +290,7 @@ export class RemoveExpressionFromGraphAction extends ActionGroup {
 		// update the graph's expressions
 		actions.push(
 			new EditWidgetAction<GraphData>(graph, { expressions: newExpressions }, (graph) => {
-				graph.syncExpression(expression.id)
+				graph.syncExpression(expression)
 			}),
 		)
 
