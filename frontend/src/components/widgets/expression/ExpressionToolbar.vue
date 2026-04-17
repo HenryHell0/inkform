@@ -7,12 +7,16 @@ import { inject } from 'vue'
 import { ConvertExpressionToGraphAction, executeAction } from '@/utils/actions'
 import { useCopyTextWithUI } from '@/composables/useCopyTextWithUI'
 import SwapImages from '@/components/ui/SwapImages.vue'
+import { logGraphExpression } from '@/utils/analytics'
 
 const expression = inject<Widget>('widget')! as ExpressionData
 const widgetStore = useWidgetStore()
 
 function convertToGraph(){
 	executeAction(new ConvertExpressionToGraphAction(expression))
+
+	// ====== log analytics for grahping expression
+	logGraphExpression()
 }
 
 const { copy, copyUIOpen } = useCopyTextWithUI(expression.latex)

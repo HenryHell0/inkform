@@ -13,6 +13,7 @@ import {
 } from '@/utils/actions'
 import { useSessionStore } from '@/stores/useSessionStore'
 import { ExpressionData, GraphData, type Widget } from '@/utils/widgetData'
+import { logGraphExpression } from '../utils/analytics'
 
 // PS eventually thsi may need to track pointerID for multi touch in the future PS
 // Description: computes a dx and dy for a pointer gesture, giving lifecycle hooks for it's movement
@@ -126,6 +127,9 @@ export function useWidgetDrag(widget: Widget) {
 					const action = new ImportExpressionToGraphAction(graph, widget)
 					action.do()
 					actionGroup.push(action)
+
+					// ==== LOG ANALYTICS for graphing expression
+					logGraphExpression()
 				}
 			}
 
