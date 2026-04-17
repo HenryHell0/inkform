@@ -18,7 +18,7 @@ function convertToGraph(){
 const { copy, copyUIOpen } = useCopyTextWithUI(expression.latex)
 </script>
 <template>
-	<WidgetToolbar @close="widgetStore.deleteWidget(expression.id)">
+	<WidgetToolbar @close="widgetStore.deleteWidget(expression)">
 		<template #title> Expression </template>
 		<template #content>
 			<WidgetToolbarButton @pointerup="convertToGraph()">

@@ -12,7 +12,7 @@ import {
 	ResizeWidgetAction,
 } from '@/utils/actions'
 import { useSessionStore } from '@/stores/useSessionStore'
-import { ExpressionData, GraphData } from '@/utils/widgetData'
+import { ExpressionData, GraphData, type Widget } from '@/utils/widgetData'
 
 // PS eventually thsi may need to track pointerID for multi touch in the future PS
 // Description: computes a dx and dy for a pointer gesture, giving lifecycle hooks for it's movement
@@ -89,10 +89,9 @@ export function usePointerGestureCoordinateOffset(
 	return { start, isActive }
 }
 
-export function useWidgetDrag(id: string) {
+export function useWidgetDrag(widget: Widget) {
 	const widgetStore = useWidgetStore()
 	const sessionStore = useSessionStore()
-	const widget = widgetStore.getWidgetById(id)
 	const x = toRef(widget, 'x')
 	const y = toRef(widget, 'y')
 
@@ -101,7 +100,7 @@ export function useWidgetDrag(id: string) {
 
 	const { start, isActive: isDragging } = usePointerGestureCoordinateOffset(x, y, {
 		onDown: () => {
-			sessionStore.heldWidgetId = id
+			sessionStore.heldWidgetId = widget.id
 			startZIndex = widget.zIndex
 			newZIndex = widgetStore.bringWidgetToFrontSilently(widget)
 		},
@@ -112,7 +111,7 @@ export function useWidgetDrag(id: string) {
 			// compute what actions actually happend
 			const actionGroup = new ActionGroup([])
 			if (moved) {
-				actionGroup.push(new MoveWidgetAction(id, to, from))
+				actionGroup.push(new MoveWidgetAction(widget, to, from))
 			}
 			if (zIndexChanged) {
 				actionGroup.push(new ChangeZIndexAction(widget, newZIndex, startZIndex))
@@ -124,7 +123,7 @@ export function useWidgetDrag(id: string) {
 				const graph = widgets.find((widget) => widget instanceof GraphData)
 
 				if (graph) {
-					const action = new ImportExpressionToGraphAction(graph, id)
+					const action = new ImportExpressionToGraphAction(graph, widget)
 					action.do()
 					actionGroup.push(action)
 				}
@@ -142,9 +141,8 @@ export function useWidgetDrag(id: string) {
 	return { start, isDragging }
 }
 
-export function useWidgetResize(id: string) {
+export function useWidgetResize(widget: Widget) {
 	const widgetStore = useWidgetStore()
-	const widget = widgetStore.getWidgetById(id)
 	const width = toRef(widget, 'width')
 	const height = toRef(widget, 'height')
 
@@ -166,7 +164,7 @@ export function useWidgetResize(id: string) {
 			// compute what actions actually happend
 			const actionGroup = new ActionGroup([])
 			if (resized) {
-				actionGroup.push(new ResizeWidgetAction(id, fromSize, toSize))
+				actionGroup.push(new ResizeWidgetAction(widget, fromSize, toSize))
 			}
 			if (zIndexChanged) {
 				actionGroup.push(new ChangeZIndexAction(widget, newZIndex, startZIndex))
