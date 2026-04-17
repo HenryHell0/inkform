@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useWidgetStore } from '@/stores/useWidgetStore'
-import { GraphData } from '@/utils/widgetData'
+import { ExpressionData, GraphData } from '@/utils/widgetData'
 import GraphBottomBarExpression from './GraphBottomBarExpression.vue'
 
 const props = defineProps<{
@@ -9,8 +9,8 @@ const props = defineProps<{
 const widgetStore = useWidgetStore()
 const widget = widgetStore.getWidgetById(props.id) as GraphData
 
-function changeColor(expressionId: string, color: string) {
-	widget.changeGraphColor(expressionId, color)
+function changeColor(expression: ExpressionData, color: string) {
+	widget.changeGraphColor(expression, color)
 }
 </script>
 <template>
@@ -18,9 +18,9 @@ function changeColor(expressionId: string, color: string) {
 		<div class="expression-container" v-for="expression in widget.expressions" :key="expression.id">
 			<GraphBottomBarExpression
 				:expression="expression"
-				@changeColor="(expression, color) => changeColor(expression.id, color)"
-				@convertToExpressionWidget="(expression) => widget.exportExpression(expression.id)"
-				@deleteExpression="(expression) => widget.deleteExpression(expression.id)"
+				@changeColor="(expression, color) => changeColor(expression, color)"
+				@convertToExpressionWidget="(expression) => widget.exportExpression(expression)"
+				@deleteExpression="(expression) => widget.deleteExpression(expression)"
 			></GraphBottomBarExpression>
 		</div>
 	</div>
