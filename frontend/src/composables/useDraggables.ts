@@ -105,6 +105,10 @@ export function useWidgetDrag(widget: Widget) {
 			startZIndex = widget.zIndex
 			newZIndex = widgetStore.bringWidgetToFrontSilently(widget)
 		},
+		onMove: (event) => {
+			// update widgets below cursor (only needed on drag)
+			sessionStore.hoveredWidgetsDuringDrag = widgetStore.getWidgetsFromPoint(event.clientX, event.clientY)
+		},
 		onUp: (event, from, to) => {
 			const moved = from.x !== to.x || from.y !== to.y
 			const zIndexChanged = isWidgetCovered(widget, startZIndex)
@@ -120,11 +124,11 @@ export function useWidgetDrag(widget: Widget) {
 
 			// DRAG & DROP onto graphs
 			if (widget instanceof ExpressionData) {
-				const widgets = widgetStore.getWidgetsFromPoint(event.clientX, event.clientY)
-				const graph = widgets.find((widget) => widget instanceof GraphData)
+				const hovered = sessionStore.hoveredWidgetsDuringDrag
+				const target = hovered[1]
 
-				if (graph) {
-					const action = new ImportExpressionToGraphAction(graph, widget)
+				if (target instanceof GraphData) {
+					const action = new ImportExpressionToGraphAction(target, widget)
 					action.do()
 					actionGroup.push(action)
 
@@ -137,8 +141,9 @@ export function useWidgetDrag(widget: Widget) {
 				pushAction(actionGroup)
 			}
 
-			// not temporary this is important state cleanup
-			queueMicrotask(() => (sessionStore.heldWidgetId = ''))
+			// state cleanup
+			sessionStore.hoveredWidgetsDuringDrag = []
+			sessionStore.heldWidget = null
 		},
 	})
 

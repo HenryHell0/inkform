@@ -35,26 +35,35 @@ export const useWidgetStore = defineStore('widgets', () => {
 	}
 
 	// we might want to change this to using bounding boxes and data directly for the pannable viewport
-	function getWidgetsFromPoint(clientX: number, clientY: number) {
-		const elements = document.elementsFromPoint(clientX, clientY)
+	// function getWidgetsFromPoint(clientX: number, clientY: number) {
+	// 	const elements = document.elementsFromPoint(clientX, clientY)
 
-		const widgets: Widget[] = []
-		const seenIds = new Set<string>()
+	// 	const widgets: Widget[] = []
+	// 	const seenIds = new Set<string>()
 
-		for (const el of elements) {
-			if (!(el instanceof HTMLElement)) continue
+	// 	for (const el of elements) {
+	// 		if (!(el instanceof HTMLElement)) continue
 
-			const id = el.dataset.widgetId
-			if (!id) continue
-			if (seenIds.has(id)) continue
+	// 		const widgetEl = el.closest('[data-widget-id]')
+	// 		if (!(widgetEl instanceof HTMLElement)) continue
 
-			const widget = getWidgetById(id)
+	// 		const id = el.dataset.widgetId
+	// 		if (!id) continue
+	// 		if (seenIds.has(id)) continue
 
-			seenIds.add(id)
-			widgets.push(widget)
-		}
+	// 		const widget = getWidgetById(id)
 
-		return widgets
+	// 	seenIds.add(id)
+	// 	widgets.push(widget)
+	// }
+
+	// 	return widgets
+	// }
+	function getWidgetsFromPoint(x: number, y: number) {
+		// this will break when we have pannable viewport, so we might want to use approach seen above in the comment
+		return widgets.value
+			.filter((w) => x >= w.x && x <= w.x + w.width && y >= w.y && y <= w.y + w.height)
+			.sort((a, b) => b.zIndex - a.zIndex) // top → bottom
 	}
 
 	function deleteWidget(widget: Widget) {
