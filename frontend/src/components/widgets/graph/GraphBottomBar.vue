@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { useWidgetStore } from '@/stores/useWidgetStore'
-import { ExpressionData, GraphData } from '@/utils/widgetData'
+import { ExpressionData, GraphData, type Widget } from '@/utils/widgetData'
 import GraphBottomBarExpression from './GraphBottomBarExpression.vue'
+import { inject } from 'vue'
 
-const props = defineProps<{
-	id: string
-}>()
-const widgetStore = useWidgetStore()
-const widget = widgetStore.getWidgetById(props.id) as GraphData
+// const widgetStore = useWidgetStore()
+
+const widget = inject<Widget>('widget') as GraphData
+
 
 function changeColor(expression: ExpressionData, color: string) {
 	widget.changeGraphColor(expression, color)

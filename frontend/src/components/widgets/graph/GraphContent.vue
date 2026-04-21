@@ -1,8 +1,12 @@
 <script setup lang="ts">
-import { inject, onMounted, ref } from 'vue'
-import { GraphData, type Widget } from '@/utils/widgetData'
+import { computed, inject, onMounted, ref } from 'vue'
+import { ExpressionData, GraphData, type Widget } from '@/utils/widgetData'
+import { useWidgetStore } from '@/stores/useWidgetStore'
+import { useSessionStore } from '@/stores/useSessionStore'
 
-const widget = inject<Widget>('widget')
+const widgetStore = useWidgetStore()
+const sessionStore = useSessionStore()
+const widget = inject<Widget>('widget') as GraphData
 const graphElement = ref<HTMLElement | null>(null)
 
 onMounted(async () => {
