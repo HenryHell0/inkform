@@ -1,8 +1,9 @@
 import { defineStore } from 'pinia'
-import { computed, ref } from 'vue'
+import { computed, ref, shallowRef } from 'vue'
 import type { ToolName } from '@/utils/drawingTools.js'
 import type { Position } from '@/types/types'
 import { strokeToPath } from '@/utils/svgCanvasUtils'
+import type { Widget } from '@/utils/widgetData'
 
 
 type InputModeName = 'idle' | 'drawing' | 'widget'
@@ -17,7 +18,8 @@ export const useSessionStore = defineStore('session', () => {
 	const activeTool = ref<ToolName>('pen')
 	const inputMode = ref<InputModeName>('idle')
 
-	const heldWidgetId = ref<string>('')
+	const heldWidget = shallowRef<null | Widget>(null)
+	const hoveredWidgetsDuringDrag: Widget[] = []
 
 	function updatePreviousMousePos(event: PointerEvent) {
 		previousMousePos.value.x = event.clientX
@@ -30,9 +32,8 @@ export const useSessionStore = defineStore('session', () => {
 		previousMousePos,
 		activeTool,
 		inputMode,
-		heldWidgetId,
-		// undos,
-		// redos,
+		heldWidget,
 		updatePreviousMousePos,
+		hoveredWidgetsDuringDrag
 	}
 })

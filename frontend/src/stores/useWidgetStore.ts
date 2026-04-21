@@ -22,12 +22,6 @@ export const useWidgetStore = defineStore('widgets', () => {
 		if (!widget) throw new Error("Widget not found, perhaps it doesen't exist yet?")
 		return widget as Widget
 	}
-	function getHeldWidget(): Widget {
-		const sessionStore = useSessionStore()
-		if (!sessionStore.heldWidgetId) throw new Error('no held widget')
-		const widget = getWidgetById(sessionStore.heldWidgetId)
-		return widget
-	}
 
 	function getCollidingWidgets(widget: Widget): Widget[] {
 		return widgets.value.filter((other): other is Widget => {
@@ -81,7 +75,6 @@ export const useWidgetStore = defineStore('widgets', () => {
 		widgets,
 		zIndexCount,
 		getWidgetById,
-		getHeldWidget,
 		getCollidingWidgets,
 		getWidgetsFromPoint,
 		deleteWidget,

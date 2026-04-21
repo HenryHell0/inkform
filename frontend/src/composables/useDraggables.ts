@@ -101,7 +101,7 @@ export function useWidgetDrag(widget: Widget) {
 
 	const { start, isActive: isDragging } = usePointerGestureCoordinateOffset(x, y, {
 		onDown: () => {
-			sessionStore.heldWidgetId = widget.id
+			sessionStore.heldWidget = widget
 			startZIndex = widget.zIndex
 			newZIndex = widgetStore.bringWidgetToFrontSilently(widget)
 		},
