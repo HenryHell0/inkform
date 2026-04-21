@@ -18,7 +18,7 @@ provide('widget', widget) // hmm this is repeat code and doesen't cause an error
 <template>
 	<Widget>
 		<template #toolbar>
-			<WidgetToolbar @close="widgetStore.deleteWidget(id)">
+			<WidgetToolbar @close="widgetStore.deleteWidget(widget)">
 				<template #title> Graph </template>
 			</WidgetToolbar>
 		</template>

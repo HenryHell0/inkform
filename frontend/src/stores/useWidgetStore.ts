@@ -14,8 +14,8 @@ export const useWidgetStore = defineStore('widgets', () => {
 	const widgets = ref<Widget[]>([])
 	const zIndexCount = ref<number>(2)
 
-	function addWidget(widgetData: Widget) {
-		executeAction(new AddWidgetAction(widgetData))
+	function addWidget(widget: Widget) {
+		executeAction(new AddWidgetAction(widget))
 	}
 	function getWidgetById(id: string): Widget {
 		const widget = widgets.value.find((e) => e.id === id)
@@ -29,15 +29,12 @@ export const useWidgetStore = defineStore('widgets', () => {
 		return widget
 	}
 
-	function getCollidingWidgets(widgetId: string): Widget[] {
-		const target = getWidgetById(widgetId)
-		if (!target) return []
-
+	function getCollidingWidgets(widget: Widget): Widget[] {
 		return widgets.value.filter((other): other is Widget => {
-			if (other.id === widgetId) return false
+			if (other.id === widget.id) return false
 
-			const overlapX = target.x < other.x + other.width && target.x + target.width > other.x
-			const overlapY = target.y < other.y + other.height && target.y + target.height > other.y
+			const overlapX = widget.x < other.x + other.width && widget.x + widget.width > other.x
+			const overlapY = widget.y < other.y + other.height && widget.y + widget.height > other.y
 
 			return overlapX && overlapY
 		})
@@ -66,8 +63,8 @@ export const useWidgetStore = defineStore('widgets', () => {
 		return widgets
 	}
 
-	function deleteWidget(id: string) {
-		executeAction(new RemoveWidgetAction(getWidgetById(id)))
+	function deleteWidget(widget: Widget) {
+		executeAction(new RemoveWidgetAction(widget))
 	}
 
 	function bringWidgetToFrontSilently(widget: Widget) {

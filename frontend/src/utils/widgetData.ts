@@ -98,7 +98,7 @@ export class GraphData extends WidgetData {
 		this.type = 'Graph'
 		this.expressions = [...expressions]
 	}
-	exportExpression(expressionId: string) {
+	exportExpression(expression: ExpressionData) {
 		// calculate expression position
 		let position = { x: 0, y: 0 }
 		position.x = this.x
@@ -109,42 +109,40 @@ export class GraphData extends WidgetData {
 			position.y = this.y
 		}
 
-		const action = new ExportExpressionFromGraphAction(this, expressionId, position)
+		const action = new ExportExpressionFromGraphAction(this, expression, position)
 		executeAction(action)
 	}
-	deleteExpression(expressionId: string) {
-		const action = new RemoveExpressionFromGraphAction(this, expressionId)
+	deleteExpression(expression: ExpressionData) {
+		const action = new RemoveExpressionFromGraphAction(this, expression)
 		executeAction(action)
 	}
-	changeGraphColor(expressionId: string, color: string) {
-		const action = new ChangeGraphColorAction(this, expressionId, color)
+	changeGraphColor(expression: ExpressionData, color: string) {
+		const action = new ChangeGraphColorAction(this, expression, color)
 		executeAction(action)
 	}
-	async syncExpression(expressionId: string) {
+	async syncExpression(expression: ExpressionData) {
 		// if the expression is in the calculator but not the list, remove it from calculator
 		if (
 			this.calculator
 				.getExpressions()
-				.map((expression) => expression.id)
-				.includes(expressionId) &&
-			!this.expressions.map((expression) => expression.id).includes(expressionId)
+				.map((e) => e.id)
+				.includes(expression.id) &&
+			!this.expressions.map((e) => e.id).includes(expression.id)
 		) {
-			this.calculator.removeExpression({ id: expressionId })
+			this.calculator.removeExpression({ id: expression.id })
 			return
 		}
 
 		// otherwise, add/exit the expression
-		const expression = this.expressions.find((expression) => expression.id == expressionId)
-		if (!expression) throw new Error("This expression doesen't exist")
 		this.calculator.setExpression({
-			id: expressionId,
+			id: expression.id,
 			latex: await expression.latex,
 			color: expression.graphColor,
 		})
 	}
 	syncAllExpressions() {
 		for (let expression of this.expressions) {
-			this.syncExpression(expression.id)
+			this.syncExpression(expression)
 		}
 	}
 	copyExpression(expression: ExpressionData) {

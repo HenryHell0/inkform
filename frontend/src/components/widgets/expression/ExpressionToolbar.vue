@@ -7,7 +7,7 @@ import { inject } from 'vue'
 import { ConvertExpressionToGraphAction, executeAction } from '@/utils/actions'
 import { useCopyTextWithUI } from '@/composables/useCopyTextWithUI'
 import SwapImages from '@/components/ui/SwapImages.vue'
-import { useAnalytics } from '@/composables/useAnalytics'
+import { logGraphExpression } from '@/utils/analytics'
 
 const expression = inject<Widget>('widget')! as ExpressionData
 const widgetStore = useWidgetStore()
@@ -16,13 +16,13 @@ function convertToGraph(){
 	executeAction(new ConvertExpressionToGraphAction(expression))
 
 	// ====== log analytics for grahping expression
-	useAnalytics().logGraphExpression()
+	logGraphExpression()
 }
 
 const { copy, copyUIOpen } = useCopyTextWithUI(expression.latex)
 </script>
 <template>
-	<WidgetToolbar @close="widgetStore.deleteWidget(expression.id)">
+	<WidgetToolbar @close="widgetStore.deleteWidget(expression)">
 		<template #title> Expression </template>
 		<template #content>
 			<WidgetToolbarButton @pointerup="convertToGraph()">

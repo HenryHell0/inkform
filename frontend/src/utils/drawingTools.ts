@@ -16,7 +16,7 @@ import {
 import { DEBUG } from './debug'
 import { useHistoryStore } from '@/stores/useHistoryStore'
 import type { Path } from '@/types/types'
-import { useAnalytics } from '@/composables/useAnalytics'
+import { logConvertExpression } from '@/utils/analytics'
 
 export interface Tool {
 	onDown?: (event: PointerEvent) => void
@@ -189,7 +189,7 @@ export const selector: SelectorTool = reactive(
 			// ======
 			// ANALYTICS!!!! WOO!
 			// ======
-			useAnalytics().logConvertExpression()
+			logConvertExpression()
 
 			// perform actions (add widget, remove paths)
 			const pathsToRemove = getPathsInRect(this.x, this.y, this.width, this.height)

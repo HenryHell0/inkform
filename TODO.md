@@ -24,6 +24,7 @@ Google SEO TODO:
 - ⚙️ add different settings for the tools that pop down in a different menu (stoke width, color, etc. ) - make it cute
 - ⭐ switch HMER select button to having a little AI star
 - make a logo
+- make google analytics mention "success" or "failure" when expression loads (needs new expression thing
 
 ### Later:  
 

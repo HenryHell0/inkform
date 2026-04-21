@@ -9,8 +9,8 @@ import type { Widget } from '@/utils/widgetData'
 // also, we might want to do some sort of useWidgetInject or something... or make another wrapper around widgets that provides.. or provide here... idk.
 const widget = inject<Widget>('widget')!
 
-const { start: dragStart, isDragging } = useWidgetDrag(widget.id)
-const { start: resizeStart, isResizing } = useWidgetResize(widget.id)
+const { start: dragStart, isDragging } = useWidgetDrag(widget)
+const { start: resizeStart, isResizing } = useWidgetResize(widget)
 
 const styles = useWidgetStyles(widget)
 const classes = computed(() => {
