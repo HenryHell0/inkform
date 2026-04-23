@@ -1,49 +1,42 @@
 <script setup lang="ts">
-import { computed, inject, provide, type Ref } from 'vue'
+import { computed, inject, provide, useTemplateRef, type Ref } from 'vue'
 import { useWidgetDrag, useWidgetResize } from '@/composables/useDraggables'
 import { useWidgetStyles } from '@/composables/useWidgetStyles'
 import { useWidgetStore } from '@/stores/useWidgetStore'
 import type { Widget } from '@/utils/widgetData'
+import { useDrawingHover } from '@/composables/useDrawingHover'
 
 // ! NOTE: this REQUIRES widget to be provided... so we might want to do a require prop, and then wiget.vue provides it.
 // also, we might want to do some sort of useWidgetInject or something... or make another wrapper around widgets that provides.. or provide here... idk.
 const widget = inject<Widget>('widget')!
+const widgetStore = useWidgetStore()
+const element = useTemplateRef('element')
 
 const { start: dragStart, isDragging } = useWidgetDrag(widget)
 const { start: resizeStart, isResizing } = useWidgetResize(widget)
+const { isActive: isDrawingBelow } = useDrawingHover(element)
 
 const styles = useWidgetStyles(widget)
 const classes = computed(() => {
 	return {
 		dragging: isDragging.value,
 		resizing: isResizing.value,
+		drawingBelow: isDrawingBelow.value
 	}
 })
 
 provide('isDragging', isDragging)
-
-function toolbarClicked(event: PointerEvent) {
-	dragStart(event)
-}
-
-function resizeDown(event: PointerEvent) {
-	resizeStart(event)
-}
-
-function contentClicked() {
-	useWidgetStore().bringWidgetToFrontIfNeeded(widget)
-}
 </script>
 <template>
 	<!-- we might want to change this to using bounding boxes and data directly instead of data-widget-id for the pannable viewport -->
-	<div :data-widget-id="widget.id" v-drawing-opacity class="wrapper" :class="classes" :style="styles">
+	<div ref="element" class="wrapper" :class="classes" :style="styles">
 		<!-- TOOLBAR -->
-		<div @pointerdown="toolbarClicked">
+		<div @pointerdown="dragStart">
 			<slot name="toolbar" />
 		</div>
 
 		<!-- MAIN CONTENT -->
-		<div @pointerdown="contentClicked" style="height: 100%">
+		<div @pointerdown="widgetStore.bringWidgetToFrontIfNeeded(widget)" style="height: 100%">
 			<slot name="content"></slot>
 		</div>
 
@@ -51,7 +44,7 @@ function contentClicked() {
 		<img
 			class="resizer"
 			v-touch-prevent
-			@pointerdown="resizeDown"
+			@pointerdown="resizeStart"
 			:src="'./assets/resize.svg'"
 			draggable="false"
 		/>
@@ -76,12 +69,16 @@ function contentClicked() {
 
 .dragging {
 	box-shadow: 10px 10px 15px var(--color-box-shadow);
-	/* TODO FIX the v-drawing-opacity composable (I think) */
-	opacity: 0.8;
+	opacity: 0.92;
 }
 
 .resizing {
+	opacity: 0.92;
+}
+
+.drawingBelow {
 	opacity: 0.8;
+	pointer-events: none;
 }
 
 .resizer {

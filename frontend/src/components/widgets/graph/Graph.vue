@@ -24,8 +24,8 @@ provide('widget', widget) // hmm this is repeat code and doesen't cause an error
 		</template>
 		<template #content>
 			<div class="content">
-				<GraphContent :id="props.id"></GraphContent>
-				<GraphBottomBar :id="props.id"></GraphBottomBar>
+				<GraphContent></GraphContent>
+				<GraphBottomBar></GraphBottomBar>
 			</div>
 		</template>
 	</Widget>
