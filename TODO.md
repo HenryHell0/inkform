@@ -1,6 +1,3 @@
-For graph hover thingy:
-also, this should make it so that when you drag a widget around it goes transparent!!!!!
-
 
 ### General
 

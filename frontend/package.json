@@ -17,7 +17,6 @@
 		"deploy": "npm run build && gh-pages -d dist"
 	},
 	"dependencies": {
-		"@vueuse/core": "^14.2.1",
 		"desmos": "^1.5.4",
 		"pinia": "^3.0.4",
 		"reka-ui": "^2.9.2",
