@@ -93,8 +93,8 @@ const showOverlay = computed(() => {
 
 	will-change: backdrop-filter;
 
-	 backdrop-filter: blur(6px);
-	background-color: rgba(184, 184, 184, 0.3);
+	 backdrop-filter: blur(4px);
+	background-color: rgba(184, 184, 184, 0.2);
 	/* background-color: red; */
 	mask-image: radial-gradient(circle, black clamp(37px, 30%, 30%), transparent clamp(60px, 60%, 60%));
 
