@@ -36,7 +36,7 @@ function contentClicked() {
 </script>
 <template>
 	<!-- we might want to change this to using bounding boxes and data directly instead of data-widget-id for the pannable viewport -->
-	<div :data-widget-id="widget.id" v-drawing-opacity class="wrapper" :class="classes" :style="styles">
+	<div v-drawing-opacity class="wrapper" :class="classes" :style="styles">
 		<!-- TOOLBAR -->
 		<div @pointerdown="toolbarClicked">
 			<slot name="toolbar" />

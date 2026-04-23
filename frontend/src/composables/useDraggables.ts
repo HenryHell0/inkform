@@ -108,6 +108,13 @@ export function useWidgetDrag(widget: Widget) {
 		onMove: (event) => {
 			// update widgets below cursor (only needed on drag)
 			sessionStore.hoveredWidgetsDuringDrag = widgetStore.getWidgetsFromPoint(event.clientX, event.clientY)
+
+			// const next = widgetStore.getWidgetsFromPoint(event.clientX, event.clientY)
+			// const prev = sessionStore.hoveredWidgetsDuringDrag
+
+			// if (!isSameArray(prev, next)) {
+			// 	sessionStore.hoveredWidgetsDuringDrag = next
+			// }
 		},
 		onUp: (event, from, to) => {
 			const moved = from.x !== to.x || from.y !== to.y
